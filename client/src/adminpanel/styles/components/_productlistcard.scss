@@ -1,0 +1,90 @@
+@media (min-width: $layout-breakpoint-xs) {
+
+}
+
+@media (min-width: $layout-breakpoint-rg) {
+
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  .productlistcard {
+
+    td {
+      height: 60px;
+      padding: 10px 0px;
+      border-bottom: 1px solid $border-grey;
+    }
+
+    .td-id {
+      @include font-size($font-size-sm, $font-weight-medium, $text-green-dark);
+    }
+
+    .td-image {
+      .image-wrapper {
+        @include flex-center;
+        width: 60px;
+        height: 60px;
+        border: 1px solid $border-grey;
+        border-radius: 5px;
+
+        img {
+          width: 50px;
+        }
+      }
+    }
+
+    .td-productname {
+      @include font-size($font-size-sm, $font-weight-medium, $text-dark);
+    }
+
+    .td-price {
+      @include font-size($font-size-sm, $font-weight-regular, $text-dark);
+    }
+
+    .td-category {
+      @include font-size($font-size-sm, $font-weight-regular, $text-dark);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .td-status {
+
+      .instock-true {
+        @include font-size($font-size-sm, $font-weight-medium, $text-green);
+      }
+
+      .instock-false {
+        @include font-size($font-size-sm, $font-weight-medium, $text-red);
+      }
+    }
+
+    .td-remove {
+
+      .delete-product-btn {
+        @include flex-center;
+        @include font-size($font-size-sm, $font-weight-regular, $text-grey);
+        background: none;
+        padding: 5px;
+        border: none;
+
+        &:hover {
+          @include font-size($font-size-sm, $font-weight-regular, #911704);
+        }
+      }
+    }
+
+    .link-button {
+      @include font-size($font-size-sm, $font-weight-medium, inherit);
+      text-align: start;
+      background: none;
+      padding: none;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

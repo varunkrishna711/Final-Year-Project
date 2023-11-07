@@ -1,0 +1,75 @@
+// Base & Abstracts
+@import '../abstracts/_global';
+@import '../base/_global';
+
+// Layout:
+@import '../layout/_adminnavbar';
+@import '../layout/_adminheader';
+
+//Modal:
+@import '../modal/_confirmmodal';
+
+// Components:
+@import '../components/_admindropdown';
+
+@media (min-width: $layout-breakpoint-xs) {
+  .adminpanel {
+    background: $grey-lightest;
+
+    .adminpanel-maincontent {
+
+      .adminnavbar-wrapper {
+        display: none;
+      }
+    
+      .pagecontent-wrapper {
+        width: 100%;
+        min-height: 100vh;
+      }
+    }
+  }
+}
+
+@media (min-width: $layout-breakpoint-rg) {
+  .adminpanel {
+    background: $grey-lightest;
+
+    .adminpanel-maincontent {
+
+      .adminnavbar-wrapper {
+        display: none;
+      }
+    
+      .pagecontent-wrapper {
+        width: 100%;
+        min-height: 100vh;
+      }
+    }
+  }
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  .adminpanel {
+    background: $grey-lightest;
+
+    .adminpanel-maincontent {
+      display: flex;
+
+      .adminnavbar-wrapper {
+        display: flex;
+        position: fixed;
+        box-sizing: border-box;
+        width: 230px;
+        height: calc(100vh - 60px);
+        background: $white;
+        border-right: 1px solid $border-grey;
+      }
+    
+      .pagecontent-wrapper {
+        margin-left: 230px;
+        width: calc(100vw - 230px);
+        min-height: 100vh;
+      }
+    }
+  }
+}

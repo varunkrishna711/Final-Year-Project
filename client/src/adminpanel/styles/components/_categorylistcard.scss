@@ -1,0 +1,36 @@
+@media (min-width: $layout-breakpoint-xs) {
+}
+
+@media (min-width: $layout-breakpoint-rg) {
+}
+  
+@media (min-width: $layout-breakpoint-md) {
+  .categorylistcard {
+
+    td {
+      height: 30px;
+      padding: 10px 0px;
+      border-bottom: 1px solid $border-grey;
+    }
+
+    .td-id {
+      @include font-size($font-size-sm, $font-weight-medium, $text-green-dark);
+    }
+
+    .td-categoryname {
+      @include font-size($font-size-sm, $font-weight-medium, $text-dark);
+    }
+
+    .link-button {
+      @include font-size($font-size-sm, $font-weight-medium, inherit);
+      background: none;
+      padding: none;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
