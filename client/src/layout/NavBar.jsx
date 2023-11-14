@@ -1,30 +1,24 @@
-import React from 'react';
-import Navlink from '../components/UI/Navlink.jsx';
-import NavDropdown from '../components/UI/NavDropdown.jsx';
-import OpenCartModal from '../components/common/OpenCartModal.jsx';
+import React from "react";
+import Navlink from "../components/UI/Navlink.jsx";
+import NavDropdown from "../components/UI/NavDropdown.jsx";
+import OpenCartModal from "../components/common/OpenCartModal.jsx";
 
 const NavBar = () => {
   return (
     <div className="navbar">
       <ul className="nav">
-        <Navlink 
-          value='Home' 
-          link='/'
-        />
-        <Navlink
-          value='Shop All' 
-          link='/shop'
-        />
+        <Navlink value="Home" link="/" />
+        <Navlink value="Shop All" link="/shop" />
         <NavDropdown
-          title='Categories' 
+          title="Categories"
           items={[
-            {text: 'Men health', link: '/shop?category_id=1'},
-            {text: 'Women health', link: '/shop?category_id=2'}, 
-            {text: 'Kids', link: '/shop?category_id=3'},
-            {text: 'Omega', link: '/shop?category_id=9'}
-          ]} 
+            { text: "Vegetables", link: "/shop?category_id=1" },
+            { text: "Fruits", link: "/shop?category_id=2" },
+            { text: "Cereals", link: "/shop?category_id=3" },
+            { text: "Others", link: "/shop?category_id=4" },
+          ]}
         />
-        <Navlink 
+        {/* <Navlink 
           value='Best offers' 
           link='/shop?order=rating'
         />
@@ -35,8 +29,8 @@ const NavBar = () => {
         <Navlink 
           value='For women' 
           link='/shop?category_id=2'
-        />
-        <Navlink 
+        /> */}
+        {/* <Navlink 
           value='Kids' 
           link='/shop?category_id=3'
         />
@@ -48,16 +42,16 @@ const NavBar = () => {
             {text: 'Vitamin C', link: '/shop?category_id=7'},
             {text: 'Vitamin D', link: '/shop?category_id=8'}
           ]}
-        />
-        <Navlink 
+        /> */}
+        {/* <Navlink 
           value='Omega' 
           link='/shop?category_id=9'
-        />
+        /> */}
       </ul>
 
       <OpenCartModal />
     </div>
-  )
-}
+  );
+};
 
 export default NavBar;
