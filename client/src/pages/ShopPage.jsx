@@ -113,7 +113,7 @@ const ShopPage = () => {
       );
     }
   };
-
+  console.log(products);
   return (
     <div className="shoppage">
       {/* <ShopBenefits /> */}

@@ -1,58 +1,30 @@
 import React from "react";
-import {Chart} from "react-chartjs-2"
+import Chart from "react-apexcharts";
 
 const OrdersPieChart = () => {
-
-  // const options = {
-  //   chart: {
-  //     width: '100%',
-  //     type: 'pie',
-  //     dataLabels: {
-  //       enabled: false
-  //     },
-  //   },
-  //   labels: ['No-account orders', 'Account orders'],
-  //   legend: {
-  //     show: false,
-  //     horizontalAlign: 'left'
-  //   },
-  //   colors: ['#05422C', '#84d18c']
-  // }
-
-  const data = {
-    labels: ["Red", "Green", "Blue"],
-    datasets: [{
-      label: "My Dataset",
-      data: [10, 20, 30],
-      backgroundColor: ["red", "green", "blue"]
-    }]
+  const options = {
+    chart: {
+      width: "100%",
+      type: "pie",
+      dataLabels: {
+        enabled: false,
+      },
+    },
+    labels: ["No-account orders", "Account orders"],
+    legend: {
+      show: false,
+      horizontalAlign: "left",
+    },
+    colors: ["#05422C", "#84d18c"],
   };
 
-  // const series = [44, 56];
+  const series = [44, 56];
 
   return (
     <div className="orderspiechart">
-      {/* <Chart 
-        type="pie" 
-        options={options} 
-        series={series}         
-      /> */}
-
-    <Chart
-      type="pie"
-      data={data}
-      options={{
-        title: {
-          display: true,
-          text: "My Pie Chart"
-        },
-        legend: {
-          display: true
-        }
-      }}
-    />
+      <Chart options={options} series={series} type="pie" />
     </div>
-  )
-}
+  );
+};
 
 export default OrdersPieChart;

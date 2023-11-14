@@ -355,6 +355,7 @@
 const ApiError = require("../error/ApiError");
 const ProductService = require("../services/product-service");
 const { Product } = require("../db/models/models");
+const axios = require("axios");
 
 class ProductController {
   async create(req, res, next) {
@@ -364,9 +365,9 @@ class ProductController {
       price,
       rating,
       sizes,
-      effects,
-      relieve,
-      ingridients,
+      // effects,
+      // relieve,
+      // ingridients,
       description,
       shortDescription,
       instock,
@@ -387,15 +388,15 @@ class ProductController {
     if (!sizes) {
       return next(ApiError.internal("Sizes cannot be null"));
     }
-    if (!effects) {
-      return next(ApiError.internal("Effects cannot be null"));
-    }
-    if (!relieve) {
-      return next(ApiError.internal("Relieve cannot be null"));
-    }
-    if (!ingridients) {
-      return next(ApiError.internal("Ingridients cannot be null"));
-    }
+    // if (!effects) {
+    //   return next(ApiError.internal("Effects cannot be null"));
+    // }
+    // if (!relieve) {
+    //   return next(ApiError.internal("Relieve cannot be null"));
+    // }
+    // if (!ingridients) {
+    //   return next(ApiError.internal("Ingridients cannot be null"));
+    // }
     if (!description) {
       return next(ApiError.internal("Description cannot be null"));
     }
@@ -431,33 +432,29 @@ class ProductController {
       let imgBuffer = img.data;
       let imgBase64 = imgBuffer.toString("base64");
 
-      let formData = new FormData();
-      formData.append("key", process.env.IMAGE_HOSTING_API_KEY);
-      formData.append("source", imgBase64);
-      formData.append("format", "json");
-
-      let { data } = await axios.post(
+      let res = await axios.post(
         process.env.IMAGE_API_UPLOAD_URL,
-        formData,
+        { image: imgBase64 },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.IMAGE_HOSTING_API_KEY}`,
           },
         }
       );
 
-      if (data.status_code !== 200) {
+      if (res.data.status !== 200) {
         return next(ApiError.internal(data.error.message));
       }
 
-      let imageurl = data.image.url;
+      let imageurl = res.data.data.link;
       images.push(imageurl);
     }
 
     sizes = sizes.split(",");
-    effects = effects.split(",");
-    relieve = relieve.split(",");
-    ingridients = ingridients.split(",");
+    // effects = effects.split(",");
+    // relieve = relieve.split(",");
+    // ingridients = ingridients.split(",");
     categoriesId = categoriesId.split(",");
     categoriesId = categoriesId.map((id) => parseInt(id));
     price = parseInt(price);
@@ -470,9 +467,9 @@ class ProductController {
         price,
         rating,
         sizes,
-        effects,
-        relieve,
-        ingridients,
+        // effects,
+        // relieve,
+        // ingridients,
         description,
         shortDescription,
         images,
@@ -492,9 +489,9 @@ class ProductController {
       price,
       rating,
       sizes,
-      effects,
-      relieve,
-      ingridients,
+      // effects,
+      // relieve,
+      // ingridients,
       description,
       shortDescription,
       instock,
@@ -518,15 +515,15 @@ class ProductController {
     if (!sizes) {
       return next(ApiError.internal("Sizes cannot be null"));
     }
-    if (!effects) {
-      return next(ApiError.internal("Effects cannot be null"));
-    }
-    if (!relieve) {
-      return next(ApiError.internal("Relieve cannot be null"));
-    }
-    if (!ingridients) {
-      return next(ApiError.internal("Ingridients cannot be null"));
-    }
+    // if (!effects) {
+    //   return next(ApiError.internal("Effects cannot be null"));
+    // }
+    // if (!relieve) {
+    //   return next(ApiError.internal("Relieve cannot be null"));
+    // }
+    // if (!ingridients) {
+    //   return next(ApiError.internal("Ingridients cannot be null"));
+    // }
     if (!description) {
       return next(ApiError.internal("Description cannot be null"));
     }
@@ -562,33 +559,29 @@ class ProductController {
       let imgBuffer = img.data;
       let imgBase64 = imgBuffer.toString("base64");
 
-      let formData = new FormData();
-      formData.append("key", process.env.IMAGE_HOSTING_API_KEY);
-      formData.append("source", imgBase64);
-      formData.append("format", "json");
-
-      let { data } = await axios.post(
+      let res = await axios.post(
         process.env.IMAGE_API_UPLOAD_URL,
-        formData,
+        { image: imgBase64 },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.IMAGE_HOSTING_API_KEY}`,
           },
         }
       );
 
-      if (data.status_code !== 200) {
+      if (res.data.status !== 200) {
         return next(ApiError.internal(data.error.message));
       }
 
-      let imageurl = data.image.url;
+      let imageurl = res.data.data.link;
       images.push(imageurl);
     }
 
     sizes = sizes.split(",");
-    effects = effects.split(",");
-    relieve = relieve.split(",");
-    ingridients = ingridients.split(",");
+    // effects = effects.split(",");
+    // relieve = relieve.split(",");
+    // ingridients = ingridients.split(",");
     categoriesId = categoriesId.split(",");
     categoriesId = categoriesId.map((id) => parseInt(id));
     price = parseInt(price);
@@ -602,9 +595,9 @@ class ProductController {
         price,
         rating,
         sizes,
-        effects,
-        relieve,
-        ingridients,
+        // effects,
+        // relieve,
+        // ingridients,
         description,
         shortDescription,
         images,
@@ -650,7 +643,6 @@ class ProductController {
   async getAllAdmin(req, res, next) {
     let { categoryId, name, page, limit, minPrice, maxPrice, inStock } =
       req.query;
-
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
     minPrice = parseInt(minPrice) || 0;
@@ -684,6 +676,7 @@ class ProductController {
 
     try {
       const product = await ProductService.getOne(id);
+      console.log(product);
       return res.json(product);
     } catch (error) {
       return next(error);

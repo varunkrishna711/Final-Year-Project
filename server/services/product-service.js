@@ -409,9 +409,9 @@ class ProductService {
     price,
     rating,
     sizes,
-    effects,
-    relieve,
-    ingridients,
+    // effects,
+    // relieve,
+    // ingridients,
     description,
     shortDescription,
     images,
@@ -422,16 +422,19 @@ class ProductService {
       price,
       rating,
       sizes,
-      effects,
-      relieve,
-      ingridients,
+      // effects,
+      // relieve,
+      // ingridients,
       description,
       shortDescription,
       images,
       instock,
+      categoriesId,
     });
 
     for (const categoryId of categoriesId) {
+      // console.log(categoryId);
+
       const productCategory = new ProductCategory({
         categoryId,
         productId: product._id,
@@ -449,9 +452,9 @@ class ProductService {
     price,
     rating,
     sizes,
-    effects,
-    relieve,
-    ingridients,
+    // effects,
+    // relieve,
+    // ingridients,
     description,
     shortDescription,
     images,
@@ -468,9 +471,9 @@ class ProductService {
       price,
       rating,
       sizes,
-      effects,
-      relieve,
-      ingridients,
+      // effects,
+      // relieve,
+      // ingridients,
       description,
       shortDescription,
       images,
@@ -534,9 +537,7 @@ class ProductService {
     const products = await Product.find(query)
       .sort(sortOptions[sortBy] || sortOptions.default)
       .limit(limit)
-      .skip(offset)
-      .populate("categories reviews");
-
+      .skip(offset);
     return { count: products.length, rows: products };
   }
 
@@ -553,6 +554,12 @@ class ProductService {
 
     if (categoryId) {
       const productCategoryArray = await ProductCategory.find({ categoryId });
+
+      console.log(
+        "=====================================s",
+        productCategoryArray
+      );
+
       const productsIdArray = productCategoryArray.map(
         (item) => item.productId
       );
@@ -574,14 +581,13 @@ class ProductService {
     const products = await Product.find(query)
       .sort({ _id: -1 })
       .limit(limit)
-      .skip(offset)
-      .populate("categories");
+      .skip(offset);
 
     return { count: products.length, rows: products };
   }
 
   async getOne(id) {
-    const product = await Product.findById(id).populate("categories");
+    const product = await Product.findById(id);
 
     if (!product) {
       throw ApiError.badRequest("Product does not exist");

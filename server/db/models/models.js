@@ -208,19 +208,22 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   rating: { type: Number, default: 5 },
-  effects: [String],
-  relieve: [String],
-  ingredients: [String],
+  // effects: [String],
+  // relieve: [String],
+  // ingredients: [String],
   sizes: [String],
   description: { type: String, required: true },
   shortDescription: { type: String, required: true },
   instock: { type: Boolean, default: true },
+  categoriesId: [{ type: Number }],
   // Add any other fields you need
 });
 
 const categorySchema = new mongoose.Schema({
+  id: { type: Number, unique: true, required: true },
   name: { type: String, unique: true, required: true },
   description: { type: String, required: true },
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   // Add any other fields you need
 });
 
@@ -274,6 +277,8 @@ const usedPromoSchema = new mongoose.Schema({
 
 const productCategory = new mongoose.Schema({
   // fields
+  categoryId: { type: Number },
+  productId: { type: mongoose.Schema.Types.ObjectId },
 });
 
 // Create Mongoose Models

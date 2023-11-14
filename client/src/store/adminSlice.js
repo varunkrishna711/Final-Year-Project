@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { 
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
   adminLogin,
   adminCheck,
   fetchOrderStatistic,
@@ -21,7 +21,8 @@ import {
   fetchPromocodeInfo,
   createPromocode,
   updatePromocode,
-  fetchCategories } from '../api/adminApi';
+  fetchCategories,
+} from "../api/adminApi";
 
 const initialState = {
   isAdminLogin: false,
@@ -65,335 +66,323 @@ const initialState = {
   isAddNewPromocodeLoading: false,
   isEditPromocodeLoading: false,
   isCategoriesLoading: false,
-}
+};
 
 export const adminSignIn = createAsyncThunk(
-  'admin/adminSignIn',
+  "admin/adminSignIn",
   async (arg) => {
     try {
       const response = await adminLogin(arg.email, arg.password);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const adminLoginCheck = createAsyncThunk(
-  'admin/adminLoginCheck',
+  "admin/adminLoginCheck",
   async () => {
     try {
       const response = await adminCheck();
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
-export const adminLogout = createAsyncThunk(
-  'admin/adminLogout',
-  async () => {
-    localStorage.removeItem('adminToken');
-  }
-)
+export const adminLogout = createAsyncThunk("admin/adminLogout", async () => {
+  localStorage.removeItem("adminToken");
+});
 
 export const loadOrderStatistic = createAsyncThunk(
-  'admin/loadOrderStatistic',
+  "admin/loadOrderStatistic",
   async (arg) => {
     try {
       const response = await fetchOrderStatistic(arg.startDate, arg.lastDate);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadSaleStatistic = createAsyncThunk(
-  'admin/loadSalesStatistic',
+  "admin/loadSalesStatistic",
   async (arg) => {
     try {
       const response = await fetchSaleStatistic(arg.startDate, arg.lastDate);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadLifetimeOrders = createAsyncThunk(
-  'admin/loadLifetimeOrders',
+  "admin/loadLifetimeOrders",
   async () => {
     try {
       const response = await fetchLifetimeOrders();
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadLifetimeSales = createAsyncThunk(
-  'admin/loadLifetimeSales',
+  "admin/loadLifetimeSales",
   async () => {
     try {
       const response = await fetchLifetimeSales();
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadUserStatistic = createAsyncThunk(
-  'admin/loadUserStatistic',
+  "admin/loadUserStatistic",
   async (arg) => {
     try {
       const response = await fetchUserStatistic(arg.startDate, arg.lastDate);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
-export const loadUsers = createAsyncThunk(
-  'admin/loadUsers',
-  async (arg) => {
-    try {
-      const response = await fetchUsers(
-        arg.userId, arg.name, arg.email, arg.limit, arg.page
-      );
-      return response;
-    }
-    catch (error) {
-      throw error.response.data
-    }
+export const loadUsers = createAsyncThunk("admin/loadUsers", async (arg) => {
+  try {
+    const response = await fetchUsers(
+      arg.userId,
+      arg.name,
+      arg.email,
+      arg.limit,
+      arg.page
+    );
+    return response;
+  } catch (error) {
+    throw error.response.data;
   }
-)
+});
 
 export const loadUserInfo = createAsyncThunk(
-  'admin/loadUserInfo',
+  "admin/loadUserInfo",
   async (userId) => {
     try {
       const response = await fetchUserInfo(userId);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadUserOrders = createAsyncThunk(
-  'admin/loadUserOrders',
+  "admin/loadUserOrders",
   async (userId) => {
     try {
       const response = await fetchUserOrders(userId);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
-export const loadOrders = createAsyncThunk(
-  'admin/loadOrders',
-  async (arg) => {
-    try {
-      const response = await fetchOrders(arg.id, arg.email, arg.limit, arg.page);
-      return response;
-    }
-    catch (error) {
-      throw error.response.data
-    }
+export const loadOrders = createAsyncThunk("admin/loadOrders", async (arg) => {
+  try {
+    const response = await fetchOrders(arg.id, arg.email, arg.limit, arg.page);
+    return response;
+  } catch (error) {
+    throw error.response.data;
   }
-)
+});
 
 export const loadOrderInfo = createAsyncThunk(
-  'admin/loadOrderInfo',
+  "admin/loadOrderInfo",
   async (id) => {
     try {
       const response = await fetchOrderInfo(id);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadProducts = createAsyncThunk(
-  'admin/loadProducts',
+  "admin/loadProducts",
   async (arg) => {
     try {
       const response = await fetchProducts(
-        arg.categoryId, arg.name, arg.page, arg.limit, arg.minPrice, arg.maxPrice, arg.inStock
+        arg.categoryId,
+        arg.name,
+        arg.page,
+        arg.limit,
+        arg.minPrice,
+        arg.maxPrice,
+        arg.inStock
       );
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadProductInfo = createAsyncThunk(
-  'admin/loadProductInfo',
+  "admin/loadProductInfo",
   async (id) => {
     try {
       const response = await fetchProductInfo(id);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const addNewProduct = createAsyncThunk(
-  'admin/addNewProduct',
+  "admin/addNewProduct",
   async (arg) => {
     try {
-      console.log('image gallery api: ' + arg.imageGallery);
+      console.log("image gallery api: " + arg.imageGallery);
       const response = await createProduct(
-        arg.categoriesId, 
-        arg.name, 
-        arg.price, 
-        arg.rating, 
-        arg.sizes, 
-        arg.effects, 
-        arg.relieve, 
-        arg.ingridients, 
-        arg.description, 
-        arg.shortDescription, 
+        arg.categoriesId,
+        arg.name,
+        arg.price,
+        arg.rating,
+        arg.sizes,
+        // arg.effects,
+        // arg.relieve,
+        // arg.ingridients,
+        arg.description,
+        arg.shortDescription,
         arg.instock,
         arg.imageGallery
       );
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const editProduct = createAsyncThunk(
-  'admin/editProduct',
+  "admin/editProduct",
   async (arg) => {
     try {
       const response = await updateProduct(
         arg.id,
-        arg.categoriesId, 
-        arg.name, 
-        arg.price, 
-        arg.rating, 
-        arg.sizes, 
-        arg.effects, 
-        arg.relieve, 
-        arg.ingridients, 
-        arg.description, 
-        arg.shortDescription, 
+        arg.categoriesId,
+        arg.name,
+        arg.price,
+        arg.rating,
+        arg.sizes,
+        arg.effects,
+        arg.relieve,
+        arg.ingridients,
+        arg.description,
+        arg.shortDescription,
         arg.instock,
         arg.imageGallery
       );
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const deleteProduct = createAsyncThunk(
-  'admin/deleteProduct',
+  "admin/deleteProduct",
   async (id) => {
     try {
       const response = await removeProduct(id);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadPromocodes = createAsyncThunk(
-  'admin/loadPromocodes',
+  "admin/loadPromocodes",
   async (arg) => {
     try {
       const response = await fetchPromocodes(arg.limit, arg.page);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadPromocodeInfo = createAsyncThunk(
-  'admin/loadPromocodeInfo',
+  "admin/loadPromocodeInfo",
   async (promocode) => {
     try {
       const response = await fetchPromocodeInfo(promocode);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const addNewPromocode = createAsyncThunk(
-  'admin/addNewPromocode',
+  "admin/addNewPromocode",
   async (arg) => {
     try {
-      const response = await createPromocode(arg.promocode, arg.percentDiscount, arg.expirationDate);
+      const response = await createPromocode(
+        arg.promocode,
+        arg.percentDiscount,
+        arg.expirationDate
+      );
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const editPromocode = createAsyncThunk(
-  'admin/editPromocode',
+  "admin/editPromocode",
   async (arg) => {
     try {
-      const response = await updatePromocode(arg.id, arg.promocode, arg.percentDiscount, arg.expirationDate);
+      const response = await updatePromocode(
+        arg.id,
+        arg.promocode,
+        arg.percentDiscount,
+        arg.expirationDate
+      );
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadCategories = createAsyncThunk(
-  'admin/loadCategories',
+  "admin/loadCategories",
   async (arg) => {
     try {
       const response = await fetchCategories(arg.limit, arg.page);
       return response;
-    }
-    catch (error) {
-      throw error.response.data
+    } catch (error) {
+      throw error.response.data;
     }
   }
-)
+);
 
 const adminSlice = createSlice({
-  name: 'admin',
+  name: "admin",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -661,8 +650,8 @@ const adminSlice = createSlice({
         state.errorMessage = action.error.message;
         state.categories = null;
         state.isCategoriesLoading = false;
-      })
+      });
   },
-})
+});
 
 export default adminSlice.reducer;

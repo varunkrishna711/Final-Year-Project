@@ -78,7 +78,7 @@
 // module.exports = new CategoryController()
 
 const ApiError = require("../error/ApiError");
-const { Category, Product } = require("../db/models/models"); // Assuming these are now Mongoose models
+const { Category, Product, ProductCategory } = require("../db/models/models"); // Assuming these are now Mongoose models
 
 class CategoryController {
   async create(req, res, next) {
@@ -102,16 +102,18 @@ class CategoryController {
 
   async getAll(req, res, next) {
     try {
-      const categories = await Category.find({})
-        .sort({ id: "asc" })
-        .populate({
-          path: "products",
-          select: "id",
-        })
-        .exec();
+      let categories = await Category.find({}).sort({ id: "asc" }).exec();
+      const productCategories = await ProductCategory.find({}).exec();
+      categories = categories.map((c) => {
+        productCategories.map((pc) => {
+          pc.categoryId == c.id && c.products.push(pc.productId);
+        });
+        return c;
+      });
 
       return res.json(categories);
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
