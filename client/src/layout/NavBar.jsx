@@ -15,8 +15,8 @@ const NavBar = () => {
             { text: "Vegetables", link: "/shop?category_id=1" },
             { text: "Fruits", link: "/shop?category_id=2" },
             { text: "Spices", link: "/shop?category_id=3" },
-            { text: "Spices", link: "/shop?category_id=4" },
-            { text: "Cereals", link: "/shop?category_id=5" },
+            { text: "Cereals", link: "/shop?category_id=4" },
+            { text: "Others", link: "/shop?category_id=5" },
           ]}
         />
         {/* <Navlink 

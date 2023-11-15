@@ -45,7 +45,8 @@ const LoginPage = () => {
     <div className="loginpage">
       <div className="login-container">
         <div className="login-image">
-          <img src={logo} alt="logo" />
+          {/* <img src={logo} alt="logo" /> */}
+          <span className="font-bold text-3xl">StreetNet</span>
         </div>
         <div className="login-inputs">
           <div>

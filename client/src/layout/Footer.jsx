@@ -1,32 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/images/logo-white.png'
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/images/logo-white.png";
 
 const Footer = () => {
   return (
     <footer>
       <div className="footer-main">
         <div className="footer-info">
-          <img src={logo} alt="logo" width="165px"/>
+          {/* <img src="" alt="logo" width="165px" /> */}
+          <span className="font-bold text-lg">StreetNet</span>
           <div className="footer-info-text">
-            #1 top rated online vitamin shop 
-            that meets the customers needs in every 
-            single aspect. We strive to 
-            provide the top quality products, service and 
-            care at the lowest prices you'll ever find.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident
+            laborum sunt unde fugit cumque quam explicabo officiis magnam ab hic
+            ratione exercitationem accusamus consectetur rem possimus, maiores,
+            temporibus quia. Atque ab, eum temporibus odit officia aut
           </div>
         </div>
         <div className="footer-links">
           <p>QUICK LINK</p>
           <ul>
             <li>
-              <Link to='/'>Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to='/shop'>Shop All</Link>
+              <Link to="/shop">Shop All</Link>
             </li>
             <li>
-              <Link to='/shop?order=rating'>Best Offers</Link>
+              <Link to="/shop?order=rating">Best Offers</Link>
             </li>
           </ul>
         </div>
@@ -34,32 +34,35 @@ const Footer = () => {
           <p>CATEGORIES</p>
           <ul>
             <li>
-              <Link to='/shop?category_id=1'>For Men</Link>
+              <Link to="/shop?category_id=1">Vegetables</Link>
             </li>
             <li>
-              <Link to='/shop?category_id=2'>For Women</Link>
+              <Link to="/shop?category_id=2">Fruits</Link>
             </li>
             <li>
-              <Link to='/shop?category_id=3'>For Kids</Link>
+              <Link to="/shop?category_id=3">Spices</Link>
             </li>
             <li>
-              <Link to='/shop?category_id=4'>Multivitamin</Link>
+              <Link to="/shop?category_id=4">Cereals</Link>
+            </li>
+            <li>
+              <Link to="/shop?category_id=5">Others</Link>
             </li>
           </ul>
         </div>
         <div className="footer-contact">
           <p>CONTACT US</p>
           <ul>
-            <li>vitaminshop@gmail.com</li>
-            <li>+1 XXX-XXX-XXXX</li>
+            <li>streetnet@gmail.com</li>
+            <li>+91 XXX-XXX-XXXX</li>
           </ul>
         </div>
       </div>
       <div className="footer-bottom">
-        © 2023 Vitamin Shop. All Rights Reserved. 
+        © 2023 Street Net. All Rights Reserved.
       </div>
     </footer>
-  )
-}
+  );
+};
 
 export default Footer;

@@ -29,7 +29,7 @@
   
       .freeshipping {
         @include font-size($font-size-sm, $font-weight-regular, $text-white);
-        margin-top: 35px;
+        margin-top: 30px;
       }
   
       span {
@@ -93,7 +93,7 @@
   
       .freeshipping {
         @include font-size($font-size-md, $font-weight-regular, $text-white);
-        margin-top: 55px;
+        margin-top: 50px;
       }
   
       span {
@@ -161,7 +161,7 @@
   
       .freeshipping {
         @include font-size(22px, $font-weight-regular, $text-white);
-        margin-top: 95px;
+        margin-top: 90px;
       }
   
       span {
@@ -229,7 +229,7 @@
   
       .freeshipping {
         @include font-size(22px, $font-weight-regular, $text-white);
-        margin-top: 95px;
+        margin-top: 90px;
       }
   
       span {

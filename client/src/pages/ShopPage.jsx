@@ -67,9 +67,7 @@ const ShopPage = () => {
         }
       });
       dispatch(setCategoryName("All categories"));
-      dispatch(
-        setCategoryDescription("Shop all categories at The Vitamin Shop")
-      );
+      dispatch(setCategoryDescription("Shop all categories"));
       dispatch(setTotalPages(Math.floor(totalCount / limit)));
       dispatch(setCurrentPage(1));
     } else {

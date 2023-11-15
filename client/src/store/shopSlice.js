@@ -16,7 +16,7 @@ const initialState = {
   totalResults: 100,
   currentCategory: "all",
   categoryName: "All Categories",
-  categoryDescription: "Shop all categories at The Vitamin Shop",
+  categoryDescription: "Shop all categories",
   priceRange: [0, 100],
   priceRangeUI: [0, 100],
   ratingFilter: [1, 2, 3, 4, 5],

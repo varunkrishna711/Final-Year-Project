@@ -1,49 +1,49 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import NavBarModal from '../components/modal/NavBarModal';
-import Search from '../components/common/Search';
-import LoginToggle from '../components/common/LoginToggle';
-import OpenCartModal from '../components/common/OpenCartModal.jsx';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
-import logo from '../assets/images/logo.png';
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import NavBarModal from "../components/modal/NavBarModal";
+import Search from "../components/common/Search";
+import LoginToggle from "../components/common/LoginToggle";
+import OpenCartModal from "../components/common/OpenCartModal.jsx";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import logo from "../assets/images/logo.png";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-
   const navigate = useNavigate();
-  const isLogin = useSelector(state => state.user.isLogin);
+  const isLogin = useSelector((state) => state.user.isLogin);
 
   const [isNavBarModalOpen, setIsNavBarModalOpen] = useState(false);
 
   const openNavBarModal = () => {
-    setIsNavBarModalOpen(true)
-  }
+    setIsNavBarModalOpen(true);
+  };
   const closeNavBarModal = () => {
-    setIsNavBarModalOpen(false)
-  }
+    setIsNavBarModalOpen(false);
+  };
   const handleClickLogo = () => {
-    navigate('/')
-  }
+    navigate("/");
+  };
 
   return (
     <>
       <header>
         <div className="header-content">
           <div className="logo-wrapper">
-            <button 
-              className="navmobile-btn"
-              onClick={openNavBarModal}
-            >
-              <MenuOutlinedIcon 
-                sx={{fontSize: '30px'}}
-              />
+            <button className="navmobile-btn" onClick={openNavBarModal}>
+              <MenuOutlinedIcon sx={{ fontSize: "30px" }} />
             </button>
-            <img 
+            {/* <img 
               className="header-logo"
               src={logo} 
               alt="logo"
               onClick={handleClickLogo}
-            />
+            /> */}
+            <span
+              className="font-bold text-5x text-green-800"
+              onClick={handleClickLogo}
+            >
+              StreetNet
+            </span>
           </div>
           <div className="search-wrapper">
             <Search />
@@ -62,12 +62,12 @@ const Header = () => {
         </div>
       </header>
 
-      <NavBarModal 
+      <NavBarModal
         isNavBarModalOpen={isNavBarModalOpen}
         closeNavBarModal={closeNavBarModal}
       />
     </>
-  )
-}
+  );
+};
 
 export default Header;
