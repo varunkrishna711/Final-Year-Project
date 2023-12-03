@@ -600,9 +600,7 @@ class ProductService {
   async search(text) {
     const products = await Product.find({
       name: { $regex: new RegExp(text, "i") },
-    })
-      .limit(3)
-      .populate("categories");
+    }).limit(3);
 
     return products;
   }

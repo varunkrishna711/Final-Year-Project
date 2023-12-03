@@ -9,14 +9,13 @@ const SearchResults = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const searchResults = useSelector(state => state.search.searchResults);
-
   const handleClickShopAll = () => {
     props.hideResults()
     dispatch(setSearchResults(null))
     navigate('/shop')
   }
 
-  if (searchResults === null) return ''
+  if (!searchResults) return null; // or return an appropriate loading state
   return (
     <div className="search-results">
 
@@ -30,8 +29,8 @@ const SearchResults = (props) => {
         {
           searchResults.map((product) => 
             <SearchResult 
-              key={product.id}
-              productId={product.id}
+              key={product._id}
+              productId={product._id}
               image={product.images[0]}
               name={product.name}
               price={product.price}

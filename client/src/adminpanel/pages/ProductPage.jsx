@@ -175,7 +175,7 @@ const ProductPage = () => {
                     <button
                       className="px-4 py-2 font-bold text-white transition-all bg-red-700 rounded-md hover:py-3 hover:px-5"
                       onClick={() => {
-                        if (confirm("Are you sure to stop bidding?"))
+                        if (window.confirm("Are you sure to stop bidding?"))
                           stopBidding();
                       }}
                     >
@@ -239,7 +239,7 @@ const ProductPage = () => {
                         <button
                           className="px-4 py-2 text-white bg-blue-500 rounded-md "
                           onClick={() => {
-                            if (confirm("Are you sure to start bidding?"))
+                            if (window.confirm("Are you sure to start bidding?"))
                               startBidding();
                           }}
                         >
