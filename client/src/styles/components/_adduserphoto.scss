@@ -27,7 +27,7 @@
           @include flex-center;
           @include font-size($font-size-xs, $font-weight-regular, $text-white);
           width: 110px;
-          height: 25px;
+          height: 55px !important;
           border: none;
           border-radius: 3px;
           background: #3bb54a;

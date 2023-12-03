@@ -16,7 +16,7 @@ const ProductMainInfo = () => {
       <h2>{productName}</h2>
       <div className="product-categories">
         {
-          categories.map(category =>
+          categories?.map(category =>
             <div key={category.id} className="product-category">{category.name}</div>
           )
         }

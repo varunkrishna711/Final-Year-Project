@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="footer-main">
         <div className="footer-info">
           {/* <img src="" alt="logo" width="165px" /> */}
-          <span className="font-bold text-lg">StreetNet</span>
+          <span className="text-lg font-bold">StreetNet</span>
           <div className="footer-info-text">
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident
             laborum sunt unde fugit cumque quam explicabo officiis magnam ab hic
