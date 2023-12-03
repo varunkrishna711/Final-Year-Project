@@ -83,30 +83,9 @@ const ProductAdd = () => {
           onClick={addToCart}
         >
           { isLoading ? <ButtonLoader /> : 
-            <div>Add To Cart <span className="divider">|</span> ${totalPrice}.00</div>
+            <div>Add To Cart <span className="divider">|</span> ₹{totalPrice}.00</div>
           }
         </button>
-      </div>
-
-      <div className="order-info">
-        <div className="order-info-item">
-          <img src={checkicon} alt="checkicon" />
-          <span className="order-info-text">
-            Free Shipping on order over <span className="span-100">$100</span>
-          </span>
-        </div>
-        <div className="order-info-item">
-          <img src={checkicon} alt="checkicon" />
-          <span className="order-info-text">
-            Same day shipping if ordered before 8 p.m.
-          </span>
-        </div>
-        <div className="order-info-item">
-          <img src={checkicon} alt="checkicon" />
-          <span className="order-info-text">
-            Support available 7 days a week
-          </span>
-        </div>
       </div>
 
     </div>

@@ -12,7 +12,7 @@ const ProductMainInfo = () => {
 
   return (
     <div className="productmaininfo">
-      <div className="text-vitamins">VITAMINS</div>
+      {/* <div className="text-vitamins">VITAMINS</div> */}
       <h2>{productName}</h2>
       <div className="product-categories">
         {

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProductImages from '../components/common/ProductImages';
 import ProductMainInfo from '../components/common/ProductMainInfo';
-import ProductEffects from '../components/common/ProductEffects';
+// import ProductEffects from '../components/common/ProductEffects';
 import ProductShortDescription from '../components/common/ProductShortDescription';
 import ProductSizes from '../components/common/ProductSizes';
 import ProductAdd from '../components/common/ProductAdd';
@@ -47,7 +47,6 @@ const ProductPage = () => {
         </div>
         <div className="product-info">
           <ProductMainInfo />
-          <ProductEffects />
           <ProductShortDescription />
           <ProductSizes />
           <ProductAdd />
