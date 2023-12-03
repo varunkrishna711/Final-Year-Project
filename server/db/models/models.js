@@ -192,7 +192,6 @@ const addressSchema = new mongoose.Schema({
 
 const cartSchema = new mongoose.Schema({
   subTotal: { type: Number, default: 0 },
-  // Add any other fields you need
 });
 
 const cartProductSchema = new mongoose.Schema({
@@ -200,7 +199,6 @@ const cartProductSchema = new mongoose.Schema({
   selectedSize: { type: String, required: true },
   price: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
-  // Add any other fields you need
 });
 
 const productSchema = new mongoose.Schema({
@@ -208,15 +206,16 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   rating: { type: Number, default: 5 },
-  // effects: [String],
-  // relieve: [String],
-  // ingredients: [String],
   sizes: [String],
   description: { type: String, required: true },
   shortDescription: { type: String, required: true },
   instock: { type: Boolean, default: true },
   categoriesId: [{ type: Number }],
-  // Add any other fields you need
+  userId: { type: mongoose.Schema.ObjectId },
+  isBidding: { type: Boolean },
+  bidStart: { type: Date },
+  bidEnd: { type: Date },
+  bids: { type: Array },
 });
 
 const categorySchema = new mongoose.Schema({
@@ -224,12 +223,10 @@ const categorySchema = new mongoose.Schema({
   name: { type: String, unique: true, required: true },
   description: { type: String, required: true },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-  // Add any other fields you need
 });
 
 const ratingSchema = new mongoose.Schema({
   rate: { type: Number, required: true },
-  // Add any other fields you need
 });
 
 const reviewSchema = new mongoose.Schema(
@@ -257,7 +254,6 @@ const orderSchema = new mongoose.Schema({
   notes: { type: String },
   shippingCost: { type: Number, default: 50, required: true },
   total: { type: Number, required: true },
-  // Add any other fields you need
 });
 
 const orderedProductSchema = new mongoose.Schema({
@@ -265,14 +261,12 @@ const orderedProductSchema = new mongoose.Schema({
   selectedSize: { type: String, required: true },
   price: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
-  // Add any other fields you need
 });
 
 const promoCodeSchema = new mongoose.Schema({
   promocode: { type: String, required: true },
   percentDiscount: { type: Number, required: true },
   expirationDate: { type: Date },
-  // Add any other fields you need
 });
 
 const usedPromoSchema = new mongoose.Schema({

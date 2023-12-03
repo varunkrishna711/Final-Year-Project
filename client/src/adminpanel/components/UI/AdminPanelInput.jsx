@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 
 const AdminPanelInput = (props) => {
   const [inputValue, setInputValue] = useState(props.defaultValue);
-
-  console.log(props);
   useEffect(() => {
     if (props.defaultValue) {
       setInputValue(props.defaultValue);

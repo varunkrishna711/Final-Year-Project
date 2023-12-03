@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import NewProduct from "../components/common/NewProduct";
 import NewProductImages from "../components/common/NewProductImages";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addNewProduct } from "../../store/adminSlice";
 import {
   openSuccessSnackbar,
@@ -26,6 +26,7 @@ const ProductNewPage = () => {
   const [shortDescription, setShortDescription] = useState(null);
   const [instock, setInstock] = useState(true);
   const [imageGallery, setImageGallery] = useState(null);
+  const { id: userId } = useSelector((state) => state.admin.adminInfo);
 
   const createNewProduct = () => {
     dispatch(
@@ -35,9 +36,7 @@ const ProductNewPage = () => {
         price: price,
         rating: rating,
         sizes: sizes,
-        // effects: effects,
-        // relieve: relieve,
-        // ingridients: ingridients,
+        userId: userId,
         description: description,
         shortDescription: shortDescription,
         instock: instock,

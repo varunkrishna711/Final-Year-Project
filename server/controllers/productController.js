@@ -354,7 +354,7 @@
 
 const ApiError = require("../error/ApiError");
 const ProductService = require("../services/product-service");
-const { Product } = require("../db/models/models");
+const { Product, ProductCategory } = require("../db/models/models");
 const axios = require("axios");
 
 class ProductController {
@@ -365,9 +365,7 @@ class ProductController {
       price,
       rating,
       sizes,
-      // effects,
-      // relieve,
-      // ingridients,
+      userId,
       description,
       shortDescription,
       instock,
@@ -388,15 +386,9 @@ class ProductController {
     if (!sizes) {
       return next(ApiError.internal("Sizes cannot be null"));
     }
-    // if (!effects) {
-    //   return next(ApiError.internal("Effects cannot be null"));
-    // }
-    // if (!relieve) {
-    //   return next(ApiError.internal("Relieve cannot be null"));
-    // }
-    // if (!ingridients) {
-    //   return next(ApiError.internal("Ingridients cannot be null"));
-    // }
+    if (!userId) {
+      return next(ApiError.internal("UserId cannot be null"));
+    }
     if (!description) {
       return next(ApiError.internal("Description cannot be null"));
     }
@@ -467,9 +459,7 @@ class ProductController {
         price,
         rating,
         sizes,
-        // effects,
-        // relieve,
-        // ingridients,
+        userId,
         description,
         shortDescription,
         images,
@@ -683,6 +673,38 @@ class ProductController {
     }
   }
 
+  async startBidding(req, res, next) {
+    const { id } = req.body;
+
+    if (!id) {
+      return next(ApiError.internal("Id cannot be null"));
+    }
+
+    try {
+      const product = await ProductService.startBidding(id);
+      console.log(product);
+      return res.json(product);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async stopBidding(req, res, next) {
+    const { id } = req.body;
+
+    if (!id) {
+      return next(ApiError.internal("Id cannot be null"));
+    }
+
+    try {
+      const product = await ProductService.stopBidding(id);
+      console.log(product);
+      return res.json(product);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   async search(req, res, next) {
     const { text } = req.params;
 
@@ -716,6 +738,7 @@ class ProductController {
 
     try {
       const product = await Product.findByIdAndDelete(id);
+      await ProductCategory.deleteMany({ productId: id });
       return res.json(product);
     } catch (error) {
       return next(error);

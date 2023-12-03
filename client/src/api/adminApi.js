@@ -16,6 +16,22 @@ export const adminCheck = async () => {
   return jwt_decode(data.token);
 };
 
+export const startBidding = async (id) => {
+  const { isBidding } = await $authAdminHost.put("api/product/start_bidding", {
+    id,
+  });
+  localStorage.setItem("isBidding", isBidding);
+  return true;
+};
+
+export const stopBidding = async (id) => {
+  const { isBidding } = await $authAdminHost.put("api/product/stop_bidding", {
+    id,
+  });
+  localStorage.setItem("isBidding", isBidding);
+  return false;
+};
+
 export const fetchOrderStatistic = async (startDate, lastDate) => {
   const { data } = await $authAdminHost.get("api/order/orderstatistic", {
     params: { startDate, lastDate },
@@ -121,9 +137,7 @@ export const createProduct = async (
   price,
   rating,
   sizes,
-  // effects,
-  // relieve,
-  // ingridients,
+  userId,
   description,
   shortDescription,
   instock,
@@ -136,9 +150,7 @@ export const createProduct = async (
   formData.append("price", price);
   formData.append("rating", rating);
   formData.append("sizes", sizes);
-  // formData.append("effects", effects);
-  // formData.append("relieve", relieve);
-  // formData.append("ingridients", ingridients);
+  formData.append("userId", userId);
   formData.append("description", description);
   formData.append("shortDescription", shortDescription);
   formData.append("instock", instock);

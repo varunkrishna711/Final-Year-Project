@@ -20,7 +20,7 @@ const EditProduct = (props) => {
     categoriesId.push(category);
   });
 
-  console.log(categories, categoriesId);
+  // console.log(categories, categoriesId);
   const handleNameInput = (value) => {
     props.setName(value);
   };

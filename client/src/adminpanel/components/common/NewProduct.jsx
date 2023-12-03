@@ -93,27 +93,6 @@ const NewProduct = (props) => {
           onChange={handleSizesInput}
         />
       </div>
-      {/* <div className="product-effects">
-        <AdminPanelChipsInput
-          label="Effects"
-          placeholder="Effect"
-          onChange={handleEffectsInput}
-        />
-      </div>
-      <div className="product-relieve">
-        <AdminPanelChipsInput
-          label="Relieve"
-          placeholder="Relieve"
-          onChange={handleRelieveInput}
-        />
-      </div>
-      <div className="product-ingridients">
-        <AdminPanelChipsInput
-          label="Ingridients"
-          placeholder="Ingridient"
-          onChange={handleIngridientsInput}
-        />
-      </div> */}
       <div className="product-shortdescription">
         <AdminPanelTextArea
           label="Short Description"

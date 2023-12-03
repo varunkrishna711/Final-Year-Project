@@ -1,43 +1,47 @@
-import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import ProductImages from '../components/common/ProductImages';
-import ProductMainInfo from '../components/common/ProductMainInfo';
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import ProductImages from "../components/common/ProductImages";
+import ProductMainInfo from "../components/common/ProductMainInfo";
 // import ProductEffects from '../components/common/ProductEffects';
-import ProductShortDescription from '../components/common/ProductShortDescription';
-import ProductSizes from '../components/common/ProductSizes';
-import ProductAdd from '../components/common/ProductAdd';
-import ProductInfoReviews from '../layout/ProductInfoReviews';
-import FeaturedProducts from '../components/common/FeaturedProducts';
-import { loadOneProduct, loadProductReviews, loadFeaturedProducts } from '../store/productSlice';
-import { useSelector, useDispatch } from 'react-redux';
-import '../styles/pages/productpage.scss';
+import ProductShortDescription from "../components/common/ProductShortDescription";
+import ProductSizes from "../components/common/ProductSizes";
+import ProductAdd from "../components/common/ProductAdd";
+import ProductInfoReviews from "../layout/ProductInfoReviews";
+import FeaturedProducts from "../components/common/FeaturedProducts";
+import {
+  loadOneProduct,
+  loadProductReviews,
+  loadFeaturedProducts,
+} from "../store/productSlice";
+import { useSelector, useDispatch } from "react-redux";
+import "../styles/pages/productpage.scss";
 
 const ProductPage = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const reviewsCount = useSelector(state => state.product.reviewsCount);
-  const featuredProducts = useSelector(state => state.product.featuredProducts);
-  const {id} = useParams();
+  const reviewsCount = useSelector((state) => state.product.reviewsCount);
+  // const product = useSelector((state) => state.product);
+  const featuredProducts = useSelector(
+    (state) => state.product.featuredProducts
+  );
+  const { id } = useParams();
 
   useEffect(() => {
-    dispatch(loadOneProduct(id))
-      .then((data) => {
-        if (data.type === 'product/loadOneProduct/rejected') {
-          navigate('/error')
-        }
-      })
-    dispatch(loadProductReviews(id))
-      .then((data) => {
-        if (data.type === 'product/loadProductReviews/rejected') {
-          navigate('/error')
-        }
-      })
-  }, [reviewsCount])
+    dispatch(loadOneProduct(id)).then((data) => {
+      if (data.type === "product/loadOneProduct/rejected") {
+        navigate("/error");
+      }
+    });
+    dispatch(loadProductReviews(id)).then((data) => {
+      if (data.type === "product/loadProductReviews/rejected") {
+        navigate("/error");
+      }
+    });
+  }, [reviewsCount]);
 
   useEffect(() => {
     dispatch(loadFeaturedProducts());
-  }, [])
+  }, []);
 
   return (
     <div className="productpage">
@@ -56,12 +60,10 @@ const ProductPage = () => {
         <ProductInfoReviews />
       </div>
       <div className="featured-products">
-        <FeaturedProducts 
-          featuredProducts={featuredProducts}
-        />
+        <FeaturedProducts featuredProducts={featuredProducts} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ProductPage;

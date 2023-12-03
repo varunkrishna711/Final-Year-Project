@@ -399,6 +399,7 @@ const {
   Category,
   ProductCategory,
   Review,
+  User,
 } = require("../db/models/models");
 const mongoose = require("mongoose");
 
@@ -409,9 +410,7 @@ class ProductService {
     price,
     rating,
     sizes,
-    // effects,
-    // relieve,
-    // ingridients,
+    userId,
     description,
     shortDescription,
     images,
@@ -422,9 +421,7 @@ class ProductService {
       price,
       rating,
       sizes,
-      // effects,
-      // relieve,
-      // ingridients,
+      userId,
       description,
       shortDescription,
       images,
@@ -506,7 +503,9 @@ class ProductService {
     const query = {};
 
     if (categoryId) {
-      const productCategoryArray = await ProductCategory.find({ categoryId });
+      const productCategoryArray = await ProductCategory.find({
+        categoryId,
+      });
       const productsIdArray = productCategoryArray.map(
         (item) => item.productId
       );
@@ -553,7 +552,9 @@ class ProductService {
     const query = {};
 
     if (categoryId) {
-      const productCategoryArray = await ProductCategory.find({ categoryId });
+      const productCategoryArray = await ProductCategory.find({
+        categoryId,
+      });
 
       console.log(
         "=====================================s",
@@ -604,6 +605,28 @@ class ProductService {
       .populate("categories");
 
     return products;
+  }
+
+  async startBidding(id) {
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        isBidding: true,
+        bidStart: Date.now(),
+      }
+    );
+    return product;
+  }
+
+  async stopBidding(id) {
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        isBidding: false,
+        bidEnd: Date.now(),
+      }
+    );
+    return product;
   }
 }
 

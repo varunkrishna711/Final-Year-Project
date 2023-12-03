@@ -175,7 +175,7 @@ const AdminNavBar = () => {
               <div className="icon-wrapper">
                 <PeopleAltIcon fontSize="24" />
               </div>
-              <span>Users</span>
+              <span>Profile</span>
             </div>
           </li>
         </div>

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
 import { deleteProduct } from "../../../store/adminSlice";
 import {
@@ -16,6 +17,9 @@ const ProductListCard = (props) => {
 
   const goToProductEditPage = () => {
     navigate(`edit/${props._id}`);
+  };
+  const goToProductPage = () => {
+    navigate(`${props._id}`);
   };
 
   const handleDelete = () => {
@@ -44,21 +48,21 @@ const ProductListCard = (props) => {
     <tr className="productlistcard">
       <td>
         <div className="td-content td-id">
-          <button className="link-button" onClick={goToProductEditPage}>
+          <button className="link-button" onClick={goToProductPage}>
             #{props.id}
           </button>
         </div>
       </td>
       <td>
         <div className="td-content td-image">
-          <div className="image-wrapper">
+          <div className="overflow-hidden image-wrapper">
             <img src={props.image} alt="productimg" />
           </div>
         </div>
       </td>
       <td>
         <div className="td-content td-productname">
-          <button className="link-button" onClick={goToProductEditPage}>
+          <button className="link-button" onClick={goToProductPage}>
             {props.name}
           </button>
         </div>
@@ -85,9 +89,12 @@ const ProductListCard = (props) => {
         </div>
       </td>
       <td>
-        <div className="td-content td-remove">
+        <div className="flex flex-row td-content td-remove">
           <button className="delete-product-btn" onClick={onClickDelete}>
             <DeleteIcon sx={{ fontSize: "20px" }} />
+          </button>
+          <button className="delete-product-btn" onClick={goToProductEditPage}>
+            <EditIcon sx={{ fontSize: "20px" }} />
           </button>
         </div>
       </td>

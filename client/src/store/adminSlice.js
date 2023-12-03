@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   adminLogin,
   adminCheck,
+  startBidding,
+  stopBidding,
   fetchOrderStatistic,
   fetchSaleStatistic,
   fetchLifetimeOrders,
@@ -247,6 +249,23 @@ export const loadProductInfo = createAsyncThunk(
     }
   }
 );
+export const startBid = createAsyncThunk("admin/startBidding", async (id) => {
+  try {
+    const response = await startBidding(id);
+    return response;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
+export const stopBid = createAsyncThunk("admin/stopBidding", async (id) => {
+  try {
+    const response = await stopBidding(id);
+    return response;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
 
 export const addNewProduct = createAsyncThunk(
   "admin/addNewProduct",
@@ -259,9 +278,7 @@ export const addNewProduct = createAsyncThunk(
         arg.price,
         arg.rating,
         arg.sizes,
-        // arg.effects,
-        // arg.relieve,
-        // arg.ingridients,
+        arg.userId,
         arg.description,
         arg.shortDescription,
         arg.instock,

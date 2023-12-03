@@ -7,7 +7,7 @@ const MainSection = () => {
     <section>
       <div className="mainsection-text">
         {/* <p className="bestseller"></p> */}
-        <h1>CONNECTING VENDORS & PRODCUERS NEARBY</h1>
+        <h1>CONNECTING VENDORS & PRODUCERS NEARBY</h1>
         <p className="vitamins-supplements">Fruits, Vegetables & more</p>
         <p className="freeshipping">
           Get your bonus<span>|</span>Free shipping

@@ -8,6 +8,7 @@ import AdminErrorSnackbar from "../adminpanel/components/modal/AdminErrorSnackba
 import LoginPage from "../adminpanel/pages/LoginPage";
 import DashboardPage from "../adminpanel/pages/DashboardPage";
 import ProductListPage from "../adminpanel/pages/ProductListPage";
+import ProductPage from "../adminpanel/pages/ProductPage";
 import ProductNewPage from "../adminpanel/pages/ProductNewPage";
 import ProductEditPage from "../adminpanel/pages/ProductEditPage";
 import UserListPage from "../adminpanel/pages/UserListPage";
@@ -24,7 +25,7 @@ import "../adminpanel/styles/globalstyles/adminpanel.scss";
 
 const AdminRouter = () => {
   const isAdminLogin = useSelector((state) => {
-    console.log(state);
+    // console.log(state);
     return state.admin.isAdminLogin;
   });
   const screenWidth = window.innerWidth;
@@ -62,6 +63,7 @@ const AdminRouter = () => {
         {/* <Route path='login' element={<LoginPage/>} /> */}
         <Route path="products" element={<ProductListPage />} />
         <Route path="products/new" element={<ProductNewPage />} />
+        <Route path="products/:id" element={<ProductPage />} />
         <Route path="products/edit/:id" element={<ProductEditPage />} />
         <Route path="users" element={<UserListPage />} />
         <Route path="users/:id" element={<UserInfoPage />} />
