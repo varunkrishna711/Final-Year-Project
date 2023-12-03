@@ -232,12 +232,16 @@ const ratingSchema = new mongoose.Schema({
   // Add any other fields you need
 });
 
-const reviewSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  rate: { type: Number, required: true },
-  review: { type: String, required: true },
-  // Add any other fields you need
-});
+const reviewSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    rate: { type: Number, required: true },
+    review: { type: String, required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  },
+  { timestamps: true }
+);
 
 const orderSchema = new mongoose.Schema({
   email: { type: String, required: true },

@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { 
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
   registration,
   login,
   check,
@@ -9,7 +9,8 @@ import {
   deleteUserImage,
   updatePassword,
   createAddress,
-  fetchAddress } from '../api/userApi';
+  fetchAddress,
+} from "../api/userApi";
 
 const initialState = {
   isLogin: false,
@@ -27,165 +28,166 @@ const initialState = {
   isChangePasswordLoading: false,
   isLoadAddressLoading: false,
   isCreateAddressLoading: false,
-  loginError: '',
-  registrationError: '',
-  changePasswordError: '',
-  changeAccountDetailsError: '',
-  createAddressError: '',
-}
+  loginError: "",
+  registrationError: "",
+  changePasswordError: "",
+  changeAccountDetailsError: "",
+  createAddressError: "",
+};
 
-export const userCheck = createAsyncThunk(
-  'user/auth',
-  async () => {
-    try {
-      const response = await check();
-      return response
-    } catch (error) {
-      throw error.response.data
-    }
+export const userCheck = createAsyncThunk("user/auth", async () => {
+  try {
+    const response = await check();
+    return response;
+  } catch (error) {
+    throw error.response.data;
   }
-)
+});
 
 export const userRegistration = createAsyncThunk(
-  'user/userRegistration',
+  "user/userRegistration",
   async (arg) => {
     try {
       const response = await registration(arg.email, arg.password);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
-export const userLogin = createAsyncThunk(
-  'user/userLogin',
-  async (arg) => {
-    try {
-      const response = await login(arg.email, arg.password);
-      return response;
-    } catch (error) {
-      throw error.response.data
-    }
+export const userLogin = createAsyncThunk("user/userLogin", async (arg) => {
+  try {
+    const response = await login(arg.email, arg.password);
+    return response;
+  } catch (error) {
+    throw error.response.data;
   }
-)
+});
 
-export const userLogout = createAsyncThunk(
-  'user/userLogout',
-  async () => {
-    localStorage.removeItem('token');
-  }
-)
+export const userLogout = createAsyncThunk("user/userLogout", async () => {
+  localStorage.removeItem("token");
+});
 
 export const loadUserInfo = createAsyncThunk(
-  'user/loadUserInfo',
+  "user/loadUserInfo",
   async (userId) => {
     try {
       const response = await fetchUserInfo(userId);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const updateUserInfo = createAsyncThunk(
-  'user/updateUserInfo',
+  "user/updateUserInfo",
   async (arg) => {
     try {
-      const response = await updateUser(arg.userId, arg.email, arg.firstName, arg.lastName);
+      const response = await updateUser(
+        arg.userId,
+        arg.email,
+        arg.firstName,
+        arg.lastName
+      );
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const changeUserImage = createAsyncThunk(
-  'user/changeUserImage',
+  "user/changeUserImage",
   async (arg) => {
     try {
       const response = await updateUserImage(arg.userId, arg.userImage);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const removeUserImage = createAsyncThunk(
-  'user/removeUserImage',
+  "user/removeUserImage",
   async (userId) => {
     try {
       const response = await deleteUserImage(userId);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const changePassword = createAsyncThunk(
-  'user/changePassword',
+  "user/changePassword",
   async (arg) => {
     try {
-      const response = await updatePassword(arg.userId, arg.currentPassword, arg.newPassword, arg.passwordRepeat);
+      const response = await updatePassword(
+        arg.userId,
+        arg.currentPassword,
+        arg.newPassword,
+        arg.passwordRepeat
+      );
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const createUserAddress = createAsyncThunk(
-  'user/createUserAddress',
+  "user/createUserAddress",
   async (arg) => {
     try {
       const response = await createAddress(
-        arg.userId, 
-        arg.firstName, 
-        arg.lastName, 
-        arg.country, 
-        arg.addressLineOne, 
-        arg.addressLineTwo, 
-        arg.city, 
-        arg.state, 
+        arg.userId,
+        arg.firstName,
+        arg.lastName,
+        arg.country,
+        arg.addressLineOne,
+        arg.addressLineTwo,
+        arg.city,
+        arg.state,
         arg.zip
       );
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadUserAddress = createAsyncThunk(
-  'user/loadUserAddress',
+  "user/loadUserAddress",
   async (userId) => {
     try {
       const response = await fetchAddress(userId);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setIsLogin: (state, action) => {
-      state.isLogin = action.payload
+      state.isLogin = action.payload;
     },
     setLoginError: (state, action) => {
-      state.loginError = action.payload
+      state.loginError = action.payload;
     },
     setRegistrationError: (state, action) => {
-      state.registrationError = action.payload
+      state.registrationError = action.payload;
     },
     setUserImage: (state, action) => {
-      state.userImage = action.payload
+      state.userImage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -209,14 +211,14 @@ const userSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(userRegistration.pending, (state) => {
-       state.isLoading = true;
+        state.isLoading = true;
       })
       .addCase(userRegistration.fulfilled, (state, action) => {
         state.isLogin = true;
         state.userId = action.payload.id;
         state.email = action.payload.email;
         state.address = null;
-        state.registrationError = '';
+        state.registrationError = "";
         state.isLoading = false;
       })
       .addCase(userRegistration.rejected, (state, action) => {
@@ -228,7 +230,7 @@ const userSlice = createSlice({
         state.userId = action.payload.id;
         state.email = action.payload.email;
         state.role = action.payload.role;
-        state.loginError = '';
+        state.loginError = "";
         state.isLoading = false;
       })
       .addCase(userLogin.rejected, (state, action) => {
@@ -238,11 +240,11 @@ const userSlice = createSlice({
       .addCase(userLogout.fulfilled, (state, action) => {
         state.isLogin = false;
         state.address = null;
-        state.loginError = '';
-        state.registrationError = '';
-        state.changeAccountDetailsError = '';
-        state.changePasswordError = '';
-        state.createAddressError = '';
+        state.loginError = "";
+        state.registrationError = "";
+        state.changeAccountDetailsError = "";
+        state.changePasswordError = "";
+        state.createAddressError = "";
       })
       .addCase(loadUserInfo.pending, (state, action) => {
         state.isLogin = false;
@@ -250,13 +252,13 @@ const userSlice = createSlice({
       })
       .addCase(loadUserInfo.fulfilled, (state, action) => {
         state.isLogin = true;
-        state.userId = action.payload.id;
+        state.userId = action.payload._id;
         state.email = action.payload.email;
         state.firstName = action.payload.firstname;
         state.lastName = action.payload.lastname;
         state.userImage = action.payload.image;
         state.role = action.payload.role;
-        state.loginError = '';
+        state.loginError = "";
         state.isLoading = false;
       })
       .addCase(updateUserInfo.pending, (state, action) => {
@@ -271,10 +273,10 @@ const userSlice = createSlice({
         state.role = action.payload.role;
         state.isLoading = false;
         state.isUpdateInfoLoading = false;
-        state.changeAccountDetailsError = '';
+        state.changeAccountDetailsError = "";
       })
       .addCase(updateUserInfo.rejected, (state, action) => {
-        state.changeAccountDetailsError = action.error.message
+        state.changeAccountDetailsError = action.error.message;
         state.isLoading = false;
         state.isUpdateInfoLoading = false;
       })
@@ -303,8 +305,8 @@ const userSlice = createSlice({
         state.role = action.payload.role;
         state.isLoading = false;
         state.isChangePasswordLoading = false;
-        state.changePasswordError = '';
-        state.loginError = '';
+        state.changePasswordError = "";
+        state.loginError = "";
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.changePasswordError = action.error.message;
@@ -336,10 +338,11 @@ const userSlice = createSlice({
         state.createAddressError = action.error.message;
         state.isLoading = false;
         state.isCreateAddressLoading = false;
-      })
+      });
   },
-})
+});
 
-export const { setLoginError, setRegistrationError, setUserImage } = userSlice.actions
+export const { setLoginError, setRegistrationError, setUserImage } =
+  userSlice.actions;
 
 export default userSlice.reducer;

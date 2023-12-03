@@ -2,6 +2,7 @@ import React from "react";
 import ProductCard from "../cards/ProductCard";
 
 const ShopGallery = (props) => {
+  console.log(props.products)
   return (
     <div className="shopgallery">
       {props.products.map((product) => (

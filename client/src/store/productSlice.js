@@ -1,23 +1,28 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchOneProduct, fetchProductReviews, createReview, fetchProducts } from '../api/productsApi';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  fetchOneProduct,
+  fetchProductReviews,
+  createReview,
+  fetchProducts,
+} from "../api/productsApi";
 
 const initialState = {
   product: null,
   productId: 1,
   productImages: [],
-  productName: '',
+  productName: "",
   categories: [],
   price: 0,
   totalPrice: 0,
   rating: 5,
-  effects: '',
-  relieve: '',
-  ingridients: '',
-  sizes: ['', '', ''],
+  effects: "",
+  relieve: "",
+  ingridients: "",
+  sizes: ["", "", ""],
   selectedSize: null,
   productCount: 1,
-  shortDescription: '',
-  description: '',
+  shortDescription: "",
+  description: "",
   selectedRating: 0,
   reviews: [],
   reviewsCount: 0,
@@ -27,80 +32,93 @@ const initialState = {
   featuredProducts: [],
   isAddReviewLoading: false,
   isLoading: false,
-}
+};
 
 export const loadOneProduct = createAsyncThunk(
-  'product/loadOneProduct',
+  "product/loadOneProduct",
   async (id) => {
     try {
       const response = await fetchOneProduct(id);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadProductReviews = createAsyncThunk(
-  'product/loadProductReviews',
+  "product/loadProductReviews",
   async (id) => {
     try {
       const response = await fetchProductReviews(id);
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const addProductReview = createAsyncThunk(
-  'product/addReview',
+  "product/addReview",
   async (arg) => {
     try {
-      const response = await createReview(arg.userId, arg.productId, arg.name, arg.rate, arg.review);
+      const response = await createReview(
+        arg.userId,
+        arg.productId,
+        arg.name,
+        arg.rate,
+        arg.review
+      );
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 export const loadFeaturedProducts = createAsyncThunk(
-  'shop/loadFeaturedProducts',
+  "shop/loadFeaturedProducts",
   async () => {
     try {
-      const response = await fetchProducts(1, 4, 0, 1000, [1, 2, 3, 4, 5], 'rating');
+      const response = await fetchProducts(
+        1,
+        4,
+        0,
+        1000,
+        [1, 2, 3, 4, 5],
+        "rating"
+      );
       return response;
     } catch (error) {
-      throw error.response.data
+      throw error.response.data;
     }
   }
-)
+);
 
 const productSlice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
     setProductId: (state, action) => {
-      state.productId = action.payload
+      state.productId = action.payload;
     },
     setSelectedSize: (state, action) => {
-      state.selectedSize = action.payload
+      state.selectedSize = action.payload;
     },
     setProductCount: (state, action) => {
-      state.productCount = action.payload
+      state.productCount = action.payload;
     },
     setTotalPrice: (state, action) => {
-      state.totalPrice = action.payload
+      state.totalPrice = action.payload;
     },
     setReviewError: (state, action) => {
-      state.reviewError = action.payload
+      state.reviewError = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loadOneProduct.pending, (state) => {
-       state.isLoading = true;
+        state.isLoading = true;
       })
       .addCase(loadOneProduct.fulfilled, (state, action) => {
         state.product = action.payload;
@@ -113,7 +131,7 @@ const productSlice = createSlice({
         state.relieve = action.payload.relieve;
         state.ingridients = action.payload.ingridients;
         state.sizes = action.payload.sizes;
-        state.selectedSize = action.payload.sizes[0]
+        state.selectedSize = action.payload.sizes[0];
         state.description = action.payload.description;
         state.shortDescription = action.payload.shortDescription;
         state.instock = action.payload.instock;
@@ -131,7 +149,7 @@ const productSlice = createSlice({
       })
       .addCase(addProductReview.fulfilled, (state, action) => {
         state.reviewsCount++;
-        state.reviewAddedText = 'Review added successfully!';
+        state.reviewAddedText = "Review added successfully!";
         state.reviewError = null;
         state.isAddReviewLoading = false;
       })
@@ -142,10 +160,16 @@ const productSlice = createSlice({
       })
       .addCase(loadFeaturedProducts.fulfilled, (state, action) => {
         state.featuredProducts = action.payload.rows;
-      })
+      });
   },
-})
+});
 
-export const { setProductId, setSelectedSize, setProductCount, setTotalPrice, setReviewError } = productSlice.actions
+export const {
+  setProductId,
+  setSelectedSize,
+  setProductCount,
+  setTotalPrice,
+  setReviewError,
+} = productSlice.actions;
 
 export default productSlice.reducer;

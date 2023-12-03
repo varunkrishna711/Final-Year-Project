@@ -56,26 +56,29 @@ class ReviewService {
       review,
     });
 
-    const [rateSum, reviewCount] = await Promise.all([
-      Review.aggregate([
-        { $match: { productId: mongoose.Types.ObjectId(productId) } },
-        { $group: { _id: null, sum: { $sum: "$rate" }, count: { $sum: 1 } } },
-      ]),
-      Review.countDocuments({ productId }),
+    const aggr = await Review.aggregate([
+      { $match: { productId: new mongoose.Types.ObjectId(`${productId}`) } },
+      {
+        $group: {
+          _id: null,
+          sumOfRates: { $sum: "$rate" },
+          countOfReviews: { $sum: 1 },
+        },
+      },
     ]);
-
-    const newRating = Math.round(rateSum.sum / reviewCount.count);
+    const { sumOfRates, countOfReviews } = aggr[0];
+    const newRating = Math.round(sumOfRates / countOfReviews);
 
     await Product.findByIdAndUpdate(productId, { rating: newRating });
 
-    const reviewWithUser = await Review.findById(createdReview._id).populate(
-      "user"
-    );
-    return reviewWithUser;
+    // const reviewWithUser = await Review.findById(createdReview._id).populate(
+    //   "user"
+    // );
+    // return reviewWithUser;
   }
 
   async getProductReviews(productId) {
-    const reviews = await Review.find({ productId }).populate("user");
+    const reviews = await Review.find({ productId });
     return reviews;
   }
 

@@ -7,10 +7,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addProductReview, setReviewError } from '../../store/productSlice';
 import { openLoginModal, openSignUpModal, openSuccessSnackbar, openErrorSnackbar } from '../../store/modalSlice';
 
-const AddReview = () => {
+const AddReview = (e) => {
 
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.user.userId);
+  const userId = useSelector(state => state.user.userId);  
   const isLogin = useSelector(state => state.user.isLogin);
   const reviewAddedText = useSelector(state => state.product.reviewAddedText);
   const reviewError = useSelector(state => state.product.reviewError);
@@ -52,6 +52,7 @@ const AddReview = () => {
       e.preventDefault();
     }
     e.preventDefault()
+    
     if (isLoading) return
     if (rate === null) {
       ratingRef.current.style.color = '#EB2606';

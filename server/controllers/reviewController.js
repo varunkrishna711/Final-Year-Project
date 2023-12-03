@@ -64,12 +64,14 @@
 
 // module.exports = new ReviewController()
 
+const { User } = require("../db/models/models");
 const ApiError = require("../error/ApiError");
 const ReviewService = require("../services/review-service");
 
 class ReviewController {
   async create(req, res, next) {
     let { userId, productId, name, rate, review } = req.body;
+    console.log("Received userId: ", userId);
 
     if (!userId) {
       return next(ApiError.internal("User not authorized"));
@@ -97,6 +99,7 @@ class ReviewController {
       );
       return res.json(createdReview);
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }
@@ -110,8 +113,16 @@ class ReviewController {
 
     try {
       const reviews = await ReviewService.getProductReviews(product_id);
+      // const userIds = reviews.map((review) => review.userId);
+      // const users = await User.find({ _id: { $in: userIds } });
+      // const userMap = {};
+      // users.forEach((user) => {
+      //   console.log(user._id.toString());
+      //   userMap[user._id.toString()] = user;
+      // });
       return res.json(reviews);
     } catch (error) {
+      console.log(error);
       return next(error);
     }
   }

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 const ProductReviews = () => {
 
   const reviews = useSelector(state => state.product.reviews);
+  console.log(reviews)
   const productName = useSelector(state => state.product.productName);
 
   return (
@@ -16,7 +17,7 @@ const ProductReviews = () => {
             reviews.map(review => 
               <ProductReviewCard 
                 key={review.id}
-                image={review.user.image}
+                image={"https://as2.ftcdn.net/v2/jpg/03/32/59/65/1000_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg"}
                 name={review.name}
                 createdAt={review.createdAt}
                 rate={review.rate}
