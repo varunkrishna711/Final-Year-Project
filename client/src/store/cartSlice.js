@@ -5,6 +5,7 @@ import {
   updateCartProductCount,
   deleteCartProduct,
   deleteCart,
+  placeBid,
 } from "../api/cartApi";
 
 const initialState = {
@@ -48,6 +49,15 @@ export const addProductToCart = createAsyncThunk(
     }
   }
 );
+
+export const placingBid = createAsyncThunk("cart/placingBid", async (arg) => {
+  try {
+    const response = await placeBid(arg);
+    return response;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
 
 export const changeCartProductCount = createAsyncThunk(
   "cart/changeCartProductCount",
@@ -295,6 +305,20 @@ const cartSlice = createSlice({
         state.isAddToCartLoading = false;
       })
       .addCase(addProductToCart.rejected, (state, action) => {
+        state.isAddToCartLoading = false;
+      })
+      .addCase(placingBid.pending, (state) => {
+        state.isLoading = true;
+        state.isAddToCartLoading = true;
+      })
+      .addCase(placingBid.fulfilled, (state, action) => {
+        state.cartProducts = action.payload?.products;
+        state.count = action.payload?.products?.length;
+        state.subTotal = action.payload?.subTotal;
+        state.isLoading = false;
+        state.isAddToCartLoading = false;
+      })
+      .addCase(placingBid.rejected, (state, action) => {
         state.isAddToCartLoading = false;
       })
       .addCase(removeCartProduct.fulfilled, (state, action) => {

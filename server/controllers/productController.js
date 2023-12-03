@@ -744,6 +744,21 @@ class ProductController {
       return next(error);
     }
   }
+  async bid(req, res, next) {
+    const { price, productId, selectedCount, userId, email, count } = req.body;
+
+    try {
+      const product = await Product.findOneAndUpdate(
+        { _id: productId },
+        {
+          $push: { bids: { price, selectedCount, userId, email, count } },
+        }
+      );
+      return res.json(product);
+    } catch (error) {
+      return next(error);
+    }
+  }
 }
 
 module.exports = new ProductController();

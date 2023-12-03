@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ProductImages from "../components/common/ProductImages";
 import ProductMainInfo from "../components/common/ProductMainInfo";
@@ -20,12 +20,14 @@ const ProductPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const reviewsCount = useSelector((state) => state.product.reviewsCount);
-  // const product = useSelector((state) => state.product);
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const product = useSelector((state) => state.product);
   const featuredProducts = useSelector(
     (state) => state.product.featuredProducts
   );
+  const [highestBid, setHighestBid] = useState(0);
+  // const [refresh,setRefresh]
   const { id } = useParams();
-
   useEffect(() => {
     dispatch(loadOneProduct(id)).then((data) => {
       if (data.type === "product/loadOneProduct/rejected") {
@@ -37,7 +39,13 @@ const ProductPage = () => {
         navigate("/error");
       }
     });
-  }, [reviewsCount]);
+    const highestBid =
+      product?.product?.bids?.length > 0
+        ? product.product.bids.sort((a, b) => b.price - a.price)[0]?.price
+        : 0;
+
+    setHighestBid(highestBid);
+  }, [id, reviewsCount]);
 
   useEffect(() => {
     dispatch(loadFeaturedProducts());
@@ -52,7 +60,17 @@ const ProductPage = () => {
         <div className="product-info">
           <ProductMainInfo />
           <ProductShortDescription />
-          <ProductSizes />
+          <div className="flex flex-row items-center justify-between">
+            <ProductSizes />
+            <div className="flex-1 productsizes">
+              <div className="flex justify-end !text-red-600 opacity-90 maintext">
+                HIGHEST BID
+              </div>
+              <div className="flex justify-end h-9 size-buttons !text-red-700">
+                ₹ {highestBid || product.price}
+              </div>
+            </div>
+          </div>
           <ProductAdd />
         </div>
       </div>

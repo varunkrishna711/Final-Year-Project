@@ -39,7 +39,7 @@ const ProductPage = () => {
   const [name, setName] = useState(null);
   const [bids, setBids] = useState([]);
   const [isBidding, setIsBidding] = useState(false);
-  const [autoupdate, refresh] = useState(0);
+  const [autoupdate, refresh] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -93,13 +93,13 @@ const ProductPage = () => {
   const startBidding = () => {
     console.log(selectedDate.toString());
     dispatch(startBid(id));
-    refresh(autoupdate + 1);
+    refresh(!autoupdate);
     handleClose();
   };
 
   const stopBidding = () => {
     dispatch(stopBid(id));
-    refresh(autoupdate + 1);
+    refresh(!autoupdate);
   };
 
   const indicators = [];

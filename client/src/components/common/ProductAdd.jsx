@@ -1,30 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductCounter from "./ProductCounter";
 import ButtonLoader from "../loaders/ButtonLoader";
 import checkicon from "../../assets/icons/check.svg";
-import { setProductCount, setTotalPrice } from "../../store/productSlice";
-import { addProductToCart, localAddProductToCart } from "../../store/cartSlice";
+import {
+  setProductCount,
+  setTotalPrice,
+  setBidPrice,
+} from "../../store/productSlice";
+import { placingBid, localAddProductToCart } from "../../store/cartSlice";
 import { openSuccessSnackbar } from "../../store/modalSlice";
 import { useSelector, useDispatch } from "react-redux";
+import TextField from "@mui/material/TextField";
 
 const ProductAdd = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLogin);
   const userId = useSelector((state) => state.user.userId);
+  const email = useSelector((state) => state.user.email);
   const product = useSelector((state) => state.product.product);
   const price = useSelector((state) => state.product.price);
   const totalPrice = useSelector((state) => state.product.totalPrice);
   const selectedSize = useSelector((state) => state.product.selectedSize);
   const productCount = useSelector((state) => state.product.productCount);
   const productName = useSelector((state) => state.product.productName);
-  const instock = useSelector((state) => state.product.instock);
+  const isBidding = useSelector((state) => state.product?.product?.isBidding);
   const isLoading = useSelector((state) => state.user.isAddToCartLoading);
   const { id } = useParams();
+  const bidPrice = useSelector((state) => state.product?.bidPrice);
 
   useEffect(() => {
-    dispatch(setTotalPrice(productCount * price));
-  }, [productCount, price]);
+    dispatch(setTotalPrice(productCount * bidPrice));
+  }, [productCount, bidPrice]);
 
   const increaseCount = () => {
     dispatch(setProductCount(productCount + 1));
@@ -36,15 +43,17 @@ const ProductAdd = () => {
     }
   };
 
-  const addToCart = () => {
-    if (!instock) return;
+  const placeBid = () => {
+    if (!isBidding) return;
     if (isLogin) {
       dispatch(
-        addProductToCart({
+        placingBid({
           userId,
+          email,
           productId: id,
           selectedSize,
           count: productCount,
+          price: bidPrice,
         })
       ).then((data) => {
         if (data.type === "cart/addProductToCart/fulfilled") {
@@ -65,6 +74,20 @@ const ProductAdd = () => {
 
   return (
     <div className="productadd">
+      <div className={"instock mb-4"}>
+        {isLogin ? (
+          <TextField
+            id="standard-basic"
+            label="Bidding Price"
+            variant="standard"
+            type="number"
+            disabled={!isBidding}
+            onChange={(e) => dispatch(setBidPrice(e.target.value))}
+          />
+        ) : (
+          <span>Login or Signup to make Bid</span>
+        )}
+      </div>
       <div className="productadd-info">
         <div className="info-name-size-count">
           <span className="info-name">{productName}</span>:
@@ -74,26 +97,23 @@ const ProductAdd = () => {
         <div className="info-totalprice">₹{totalPrice}.00</div>
       </div>
       <div className="counter-add">
-        <div className="counter">
+        <div className="counter !max-w-full flex flex-row justify-between">
           <ProductCounter
             productCount={productCount}
             increaseCount={increaseCount}
             decreaseCount={decreaseCount}
           />
-          <div className="divider"></div>
-          <div className={instock ? "instock" : "instock-false"}>
-            {instock ? "In Stock" : "Out of Stock"}
-          </div>
         </div>
+        <div className="divider"></div>
         <button
-          className={instock ? "button-add" : "button-add-disabled"}
-          onClick={addToCart}
+          className={isBidding ? "button-add" : "button-add-disabled"}
+          onClick={placeBid}
         >
           {isLoading ? (
             <ButtonLoader />
           ) : (
             <div>
-              Add To Cart <span className="divider">|</span> ₹{totalPrice}.00
+              Place Bid <span className="divider">|</span> ₹{totalPrice}.00
             </div>
           )}
         </button>

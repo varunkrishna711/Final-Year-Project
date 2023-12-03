@@ -12,6 +12,7 @@ router.put(
   productController.startBidding
 );
 router.put("/stop_bidding", checkRoleMiddleware, productController.stopBidding);
+router.put("/bid", productController.bid);
 router.get("/all", productController.getAll);
 router.get("/all-admin", checkRoleMiddleware, productController.getAllAdmin);
 router.get("/product/:id", productController.getOne);

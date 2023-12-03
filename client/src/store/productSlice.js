@@ -20,6 +20,7 @@ const initialState = {
   ingridients: "",
   sizes: ["", "", ""],
   selectedSize: null,
+  bidPrice: null,
   productCount: 1,
   shortDescription: "",
   description: "",
@@ -105,6 +106,9 @@ const productSlice = createSlice({
     setSelectedSize: (state, action) => {
       state.selectedSize = action.payload;
     },
+    setBidPrice: (state, action) => {
+      state.bidPrice = action.payload;
+    },
     setProductCount: (state, action) => {
       state.productCount = action.payload;
     },
@@ -168,6 +172,7 @@ export const {
   setProductId,
   setSelectedSize,
   setProductCount,
+  setBidPrice,
   setTotalPrice,
   setReviewError,
 } = productSlice.actions;

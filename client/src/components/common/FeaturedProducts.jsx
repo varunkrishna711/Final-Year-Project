@@ -9,9 +9,9 @@ const FeaturedProducts = (props) => {
         <div className="featuredproducts-cards">
           {props.featuredProducts.map((product) => (
             <ProductCard
-              key={product.id}
+              key={product._id}
               product={product}
-              productId={product.id}
+              productId={product._id}
               productimage={product.images[0]}
               name={product.name}
               rating={product.rating}
