@@ -2,7 +2,7 @@ import React from "react";
 import ProductCard from "../cards/ProductCard";
 
 const ShopGallery = (props) => {
-  console.log(props.products)
+  console.log(props.products);
   return (
     <div className="shopgallery">
       {props.products.map((product) => (
@@ -11,6 +11,7 @@ const ShopGallery = (props) => {
             key={product._id}
             product={product}
             productId={product._id}
+            isBidding={product.isBidding}
             productimage={product.images[0]}
             name={product.name}
             rating={product.rating}

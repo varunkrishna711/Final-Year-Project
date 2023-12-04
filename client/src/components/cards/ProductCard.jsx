@@ -81,7 +81,13 @@ const ProductCard = (props) => {
       <div className="productcard-info">
         {/* <div className="text-vitamins">VITAMINS</div> */}
 
-        <div className="product-name" onClick={goToProductPage}>
+        <div className="flex flex-row items-center justify-center product-name" onClick={goToProductPage}>
+          {props.isBidding && (
+            <span class="relative flex h-4 w-4 mr-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-4 w-4 bg-red-700"></span>
+            </span>
+          )}{" "}
           {capitalise(props.name)}
         </div>
 
