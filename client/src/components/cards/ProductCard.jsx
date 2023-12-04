@@ -107,7 +107,7 @@ const ProductCard = (props) => {
           ))}
         </div>
 
-        <div className="product-price">${props.price}.00</div>
+        <div className="product-price">₹{props.price}.00</div>
 
         <div className="product-sizes">
           {props.sizes.map((size, index) => (

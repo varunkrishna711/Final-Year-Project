@@ -17,11 +17,11 @@ const OrderItemCard = (props) => {
         </div>
       </div>
       <div className="orderitem-price">
-        ${props.price}.00
+        ₹{props.price}.00
         <span>x{props.count}</span>
       </div>
       <div className="orderitem-total">
-        ${props.total}.00
+        ₹{props.total}.00
       </div>
     </div>
   )

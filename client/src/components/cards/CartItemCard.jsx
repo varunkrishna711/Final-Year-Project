@@ -68,7 +68,7 @@ const CartItemCard = (props) => {
               <div className="cartitem-productprice">${props.price}.00</div>
             </div>
             <div className="cartitem-totalprice">
-              ${props.totalPrice}.00
+              ₹{props.totalPrice}.00
             </div>
           </div>
         </div>

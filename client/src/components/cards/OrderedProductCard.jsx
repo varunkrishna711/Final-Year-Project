@@ -25,11 +25,11 @@ const OrderedProductCard = (props) => {
               x{props.count}
             </div>
             <div className="product-price">
-              ${props.price}.00
+              ₹{props.price}.00
             </div>
           </div>
           <div className="product-totalprice">
-            ${props.totalPrice}.00
+            ₹{props.totalPrice}.00
           </div>
         </div>
       </div>

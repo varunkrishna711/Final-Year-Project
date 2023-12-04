@@ -60,7 +60,7 @@ const NewProduct = (props) => {
       <div className="product-price-instock">
         <AdminPanelInput
           label="Price"
-          suffix=".00 USD"
+          suffix=".00 INR"
           placeholder="Product Price"
           onChange={handlePriceInput}
         />

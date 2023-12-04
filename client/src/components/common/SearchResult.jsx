@@ -23,7 +23,7 @@ const SearchResult = (props) => {
           {capitalise(props.name)}
         </div>
         <div className="result-price">
-          ${props.price}.00
+          ₹{props.price}.00
         </div>
       </div>
     </li>

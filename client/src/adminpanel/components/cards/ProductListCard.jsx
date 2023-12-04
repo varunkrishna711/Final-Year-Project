@@ -69,7 +69,7 @@ const ProductListCard = (props) => {
       </td>
       <td>
         <div className="td-content td-price">
-          $<span>{props.price}</span>.00
+          ₹<span>{props.price}</span>.00
         </div>
       </td>
       <td>

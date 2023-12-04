@@ -25,7 +25,7 @@ const ProductAdd = () => {
   const productCount = useSelector((state) => state.product.productCount);
   const productName = useSelector((state) => state.product.productName);
   const isBidding = useSelector((state) => state.product?.product?.isBidding);
-  const isLoading = useSelector((state) => state.user.isAddToCartLoading);
+  const [isLoading,setIsLoading] = useState(false);
   const { id } = useParams();
   const bidPrice = useSelector((state) => state.product?.bidPrice);
 
@@ -45,6 +45,7 @@ const ProductAdd = () => {
 
   const placeBid = () => {
     if (!isBidding) return;
+    setIsLoading(true)
     if (isLogin) {
       dispatch(
         placingBid({
@@ -56,6 +57,8 @@ const ProductAdd = () => {
           price: bidPrice,
         })
       ).then((data) => {
+        setIsLoading(false)
+
         if (data.type === "cart/addProductToCart/fulfilled") {
           dispatch(openSuccessSnackbar("Prodduct added to cart!"));
         }
