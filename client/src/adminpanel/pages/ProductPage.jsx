@@ -61,7 +61,11 @@ const ProductPage = () => {
     dispatch(loadProductInfo(id));
     console.log(productInfo);
     setIsBidding(productInfo?.isBidding);
-    setBids(productInfo?.bids?.sort((a, b) => a.price - b.price));
+    setBids(
+      productInfo?.bids
+        ?.slice()
+        .sort((a, b) => b.price * b.count - a.price * a.count)
+    );
   }, [autoupdate]);
 
   const editProductInfo = () => {
@@ -109,8 +113,6 @@ const ProductPage = () => {
     imageGallery.push(image);
     indicators.push(<img width="48px" src={image} />);
   });
-
-  console.log(productInfo);
 
   return (
     <div className="producteditpage">
@@ -191,12 +193,14 @@ const ProductPage = () => {
                           <TableRow>
                             <TableCell align="center">Vendor</TableCell>
                             <TableCell align="center">Price</TableCell>
+                            <TableCell align="center">Quantity</TableCell>
+                            <TableCell align="center">Total</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
                           {bids?.map((bid) => (
                             <TableRow
-                              key={bid.vendor_id}
+                              key={bid?.userId}
                               sx={{
                                 "&:last-child td, &:last-child th": {
                                   border: 0,
@@ -204,9 +208,13 @@ const ProductPage = () => {
                               }}
                             >
                               <TableCell component="th" scope="row">
-                                {bid.vendor}
+                                {bid?.email}
                               </TableCell>
-                              <TableCell align="right">{bid.price}</TableCell>
+                              <TableCell align="center">{bid?.price}</TableCell>
+                              <TableCell align="center">{bid?.count}</TableCell>
+                              <TableCell align="center">
+                                {bid?.count * bid?.price}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

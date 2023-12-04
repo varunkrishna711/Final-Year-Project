@@ -110,7 +110,7 @@ const AdminNavBar = () => {
               <span>Products</span>
             </div>
           </li>
-          <li className="list-item" onClick={goToCategoryList}>
+          {/* <li className="list-item" onClick={goToCategoryList}>
             <div
               className={
                 currentLocation === "/admin/categories" ? "left-mark" : ""
@@ -128,7 +128,7 @@ const AdminNavBar = () => {
               </div>
               <span>Categories</span>
             </div>
-          </li>
+          </li> */}
           {/* <li
             className="list-item"
             onClick={goToPromocodeList}

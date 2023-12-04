@@ -39,12 +39,12 @@ const ProductPage = () => {
         navigate("/error");
       }
     });
-    const highestBid =
-      product?.product?.bids?.length > 0
-        ? product.product.bids.sort((a, b) => b.price - a.price)[0]?.price
-        : 0;
+    const bids = product?.product?.bids;
+    let highestBid =
+      bids?.length > 0 ? bids.slice().sort((a, b) => b.price - a.price) : null;
+    console.log(highestBid);
 
-    setHighestBid(highestBid);
+    setHighestBid(highestBid?.length > 0 && highestBid[0]?.price);
   }, [id, reviewsCount]);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const ProductPage = () => {
                 HIGHEST BID
               </div>
               <div className="flex justify-end h-9 size-buttons !text-red-700">
-                ₹ {highestBid || product.price}
+                ₹ {highestBid}
               </div>
             </div>
           </div>
