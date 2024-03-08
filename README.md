@@ -10,3 +10,8 @@ cd Final-Year-Project
 npm run setup
 ```
 Update `client/.env` and `server/.env`
+
+### 3. Starting Project
+```
+npm run dev
+```
