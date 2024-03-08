@@ -1,0 +1,15 @@
+{
+  "name": "streetnet",
+  "version": "1.0.0",
+  "description": "streetnet",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dep": "npm i && npm i --prefix server && npm i --prefix client",
+    "setup": "npm run dep && concurrently \"cd server && touch .env\" \"cd client && touch .env\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

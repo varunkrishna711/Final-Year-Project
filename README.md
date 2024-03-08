@@ -2,32 +2,11 @@
 ### 1. Clone GitHub repository
 ```
 git clone https://github.com/varunkrishna711/Final-Year-Project.git
+cd Final-Year-Project
 ```
 
-### 2. Add .env file for backend
+### 2. Install dependencies and configure environment variables
 ```
-cd server
-touch .env
+npm run setup
 ```
-
-
-### 3. Start backend server
-```
-npm run devStart
-```
-
-### 4. Add .env file for React App
-```
-cd client
-touch .env
-```
-
-frontend/.env
-```
-REACT_APP_API_URL = 'Backend server URL'
-```
-
-### 5. Run React App
-```
-npm start
-```
+Update `client/.env` and `server/.env`
