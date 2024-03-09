@@ -4,9 +4,7 @@ const { validateEmail } = require("../helpers/validateEmail");
 
 class UserController {
   async registration(req, res, next) {
-    const { email, password } = req.body;
-
-    const role = "ADMIN";
+    const { email, password, role, location } = req.body;
 
     if (!email || !password) {
       return next(ApiError.badRequest("Incorrect email or password"));
@@ -24,7 +22,12 @@ class UserController {
     }
 
     try {
-      const token = await UserService.registration(email, password, role);
+      const token = await UserService.registration(
+        email,
+        password,
+        role ? role : "USER",
+        location
+      );
       return res.json({ token });
     } catch (error) {
       return next(error);
@@ -380,6 +383,20 @@ class UserController {
         lastDate
       );
       return res.json(userStatistic);
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+  async getProducersNearby(req, res, next) {
+    const { lat, lgt } = req.query;
+    if (!lat || !lgt) {
+      return next(ApiError.internal("Lattitude and Longitude cannot be null"));
+    }
+
+    try {
+      const producers = await UserService.getProducersNearby(lat, lgt);
+      return res.json(producers);
     } catch (error) {
       return next(error);
     }

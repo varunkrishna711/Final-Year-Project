@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { calculatePageCount } from "../utils/calculatePageCount";
-import ShopBenefits from "../components/common/ShopBenefits";
 import FilterSection from "../components/common/FilterSection";
 import ShopFilter from "../components/common/ShopFilter";
 import ShopHeader from "../components/common/ShopHeader";
@@ -111,7 +110,7 @@ const ShopPage = () => {
       );
     }
   };
-  console.log(products);
+  // console.log(products);
   return (
     <div className="shoppage">
       {/* <ShopBenefits /> */}

@@ -177,6 +177,7 @@ const userSchema = new mongoose.Schema({
   lastname: { type: String },
   image: { type: String },
   role: { type: String, default: "USER" },
+  location: { type: [Number] },
 });
 
 const addressSchema = new mongoose.Schema({

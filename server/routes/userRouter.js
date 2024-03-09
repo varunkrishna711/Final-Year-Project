@@ -20,5 +20,6 @@ router.put('/update', userController.updateUser)
 router.put('/update-image', userController.updateUserImage)
 router.delete('/delete-image/:userId', userController.deleteUserImage)
 router.put('/newpassword', userController.changePassword)
+router.get('/get-producers-nearby', userController.getProducersNearby);
 
 module.exports = router;

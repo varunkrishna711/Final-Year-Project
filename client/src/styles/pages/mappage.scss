@@ -1,0 +1,14 @@
+@import url("https://unpkg.com/leaflet@1.0.1/dist/leaflet.css");
+
+.leaflet-container {
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+}
+
+.leaflet-routing-container {
+  background-color: hsla(0, 0%, 0%, 0);
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  margin-right: 10px;
+}

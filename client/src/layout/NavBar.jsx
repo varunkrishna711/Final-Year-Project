@@ -9,6 +9,7 @@ const NavBar = () => {
       <ul className="nav">
         <Navlink value="Home" link="/" />
         <Navlink value="Shop All" link="/shop" />
+        <Navlink value="Map" link="/map" />
         <NavDropdown
           title="Categories"
           items={[

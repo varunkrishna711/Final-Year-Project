@@ -3,12 +3,12 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import AuthModal from "../components/modal/AuthModal";
 import SuccessSnackbar from "../components/modal/SuccessSnackbar";
 import ErrorSnackbar from "../components/modal/ErrorSnackbar";
-import Promo from "../layout/Promo";
 import Header from "../layout/Header";
 import NavBar from "../layout/NavBar";
 import Footer from "../layout/Footer";
 import HomePage from "../pages/HomePage";
 import ShopPage from "../pages/ShopPage";
+import MapPage from "../pages/MapPage";
 import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
 import CheckoutPage from "../pages/CheckoutPage";
@@ -38,6 +38,7 @@ const UserRouter = () => {
       >
         <Route path="/" element={<HomePage />} />
         <Route path="/shop" element={<ShopPage />} />
+        <Route path="/map" element={<MapPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />

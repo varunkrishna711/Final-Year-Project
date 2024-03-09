@@ -9,6 +9,7 @@ import orderSlice from "./orderSlice";
 import promoSlice from "./promoSlice";
 import searchSlice from "./searchSlice";
 import adminSlice from "./adminSlice";
+import mapSlice from "./mapSlice";
 
 export default configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export default configureStore({
     home: homeSlice,
     user: userSlice,
     shop: shopSlice,
+    map: mapSlice,
     product: productSlice,
     cart: cartSlice,
     order: orderSlice,

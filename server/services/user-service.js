@@ -576,15 +576,50 @@ const generateAdminJwt = (id, email, role) => {
   });
 };
 
+const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  // Radius of the Earth in kilometers
+  const R = 6371;
+
+  // Convert latitude and longitude from degrees to radians
+  const radLat1 = (Math.PI / 180) * lat1;
+  const radLon1 = (Math.PI / 180) * lon1;
+  const radLat2 = (Math.PI / 180) * lat2;
+  const radLon2 = (Math.PI / 180) * lon2;
+
+  // Differences between coordinates
+  const dLat = radLat2 - radLat1;
+  const dLon = radLon2 - radLon1;
+
+  // Haversine formula
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(radLat1) *
+      Math.cos(radLat2) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  // Distance in kilometers
+  const distance = R * c;
+
+  return distance;
+};
+
 class UserService {
-  async registration(email, password, role) {
+  async registration(email, password, role, location) {
     const userExists = await User.findOne({ email });
     if (userExists) {
       throw new Error("User already exists");
     }
 
     const hashPassword = await bcrypt.hash(password, 5);
-    const user = await User.create({ email, password: hashPassword, role });
+    const user = await User.create({
+      email,
+      password: hashPassword,
+      role,
+      location,
+    });
     await Cart.create({ userId: user._id });
     const token = generateJwt(user._id.toString(), user.email, user.role);
 
@@ -828,6 +863,26 @@ class UserService {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  async getProducersNearby(lat, lgt) {
+    const producers = await User.find({ role: "ADMIN" }, {}, { lean: true });
+    // var sortedList = producers.sort(
+    //   (a, b) =>
+    //     calculateDistance(lat, lgt, a.location[0], a.location[1]) -
+    //     calculateDistance(lat, lgt, b.location[0], b.location[1])
+    // );
+    // var sortedListDist = sortedList.map((s) => ({
+    //   ...s,
+    //   distance: calculateDistance(lat, lgt, s.location[0], s.location[1]),
+    // }));
+    const sortedListDist = producers
+      .map((s) => ({
+        ...s,
+        distance: calculateDistance(lat, lgt, s.location[0], s.location[1]),
+      }))
+      .sort((a, b) => a.distance - b.distance);
+    return sortedListDist;
   }
 
   async deleteUser(userId) {
