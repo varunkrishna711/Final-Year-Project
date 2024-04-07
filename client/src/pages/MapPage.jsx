@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "../styles/pages/mappage.scss";
 import {
@@ -20,6 +20,8 @@ const MapPage = () => {
   const currentPosition = useSelector((state) => state.map.currentPosition);
   const selectedLocation = useSelector((state) => state.map.selectedLocation);
   const routingLocation = useSelector((state) => state.map.routingLocation);
+
+  const [selectedProducerIndex, setSelectedProducerIndex] = useState(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -50,8 +52,9 @@ const MapPage = () => {
     return null;
   };
 
-  const handleNameClick = (coordinates) => {
+  const handleNameClick = (coordinates, index) => {
     dispatch(setSelectedLocation(coordinates));
+    setSelectedProducerIndex(index); // Update the selected producer index
   };
 
   const handleDirectionClick = (coordinates) => {
@@ -87,8 +90,12 @@ const MapPage = () => {
         </div>
         {nearbyProducers.map((p, i) => (
           <div
-            className="flex flex-row items-center justify-between p-4 transition-colors cursor-pointer details hover:bg-slate-100 hover:text-green-900"
-            onClick={() => handleNameClick([p.location[0], p.location[1]])}
+            className={`flex flex-row items-center justify-between p-4 transition-colors cursor-pointer details ${
+              i === selectedProducerIndex
+                ? "bg-blue-100 text-blue-900"
+                : "hover:bg-slate-100 hover:text-green-900"
+            }`}
+            onClick={() => handleNameClick([p.location[0], p.location[1]], i)}
             key={i}
           >
             <div className="flex flex-col">
