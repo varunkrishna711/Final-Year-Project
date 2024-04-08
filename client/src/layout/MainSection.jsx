@@ -10,7 +10,8 @@ const MainSection = () => {
         <h1>CONNECTING VENDORS & PRODUCERS NEARBY</h1>
         <p className="vitamins-supplements">Fruits, Vegetables & more</p>
         <p className="freeshipping">
-          Get your bonus<span>|</span>Free shipping
+          Find producers Easily<span>|</span> Broadcast your goods 
+           
         </p>
         <Link to="shop">
           <button>Shop All</button>
