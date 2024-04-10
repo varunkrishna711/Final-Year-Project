@@ -113,13 +113,6 @@ class ReviewController {
 
     try {
       const reviews = await ReviewService.getProductReviews(product_id);
-      // const userIds = reviews.map((review) => review.userId);
-      // const users = await User.find({ _id: { $in: userIds } });
-      // const userMap = {};
-      // users.forEach((user) => {
-      //   console.log(user._id.toString());
-      //   userMap[user._id.toString()] = user;
-      // });
       return res.json(reviews);
     } catch (error) {
       console.log(error);
