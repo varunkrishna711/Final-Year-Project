@@ -5,6 +5,7 @@ import {
   createReview,
   fetchProducts,
 } from "../api/productsApi";
+import { createProductRequest } from "../api/productRequestApi";
 
 const initialState = {
   product: null,
@@ -69,6 +70,24 @@ export const addProductReview = createAsyncThunk(
         arg.name,
         arg.rate,
         arg.review
+      );
+      return response;
+    } catch (error) {
+      throw error.response.data;
+    }
+  }
+);
+
+export const addProductRequest = createAsyncThunk(
+  "product/addProductRequest",
+  async (arg) => {
+    try {
+      const response = await createProductRequest(
+        arg.userId,
+        arg.productName,
+        arg.quantity,
+        arg.deliveryDate,
+        arg.location
       );
       return response;
     } catch (error) {

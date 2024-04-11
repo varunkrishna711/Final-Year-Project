@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { capitalise } from "../../utils/capitaliseFirstLetter";
 import { useSelector, useDispatch } from "react-redux";
@@ -48,6 +49,13 @@ const AccountDropdown = () => {
           <li className="link" onClick={() => navigate("/myaccount")}>
             <SettingsOutlinedIcon sx={{ fontSize: "16px" }} />{" "}
             <span>Account settings</span>
+          </li>
+          <li
+            className="link"
+            onClick={() => navigate("/product-request-history")}
+          >
+            <HistoryIcon sx={{ fontSize: "16px" }} />{" "}
+            <span>Request History</span>
           </li>
           <li className="logout" onClick={handleLogout}>
             <LogoutIcon sx={{ fontSize: "16px" }} /> <span>Logout</span>

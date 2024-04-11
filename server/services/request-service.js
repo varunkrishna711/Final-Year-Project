@@ -6,12 +6,9 @@ class RequestService {
     return await VendorRequirement.create(payload);
   }
 
-  //   async getAll(limit) {
-  //     const requests = await VendorRequirement.find()
-  //       .sort({ createdAt: -1 })
-  //       .limit(limit);
-  //     return requests;
-  //   }
+  async get(id) {
+    return await VendorRequirement.find({ vendorId: id });
+  }
 }
 
 module.exports = new RequestService();

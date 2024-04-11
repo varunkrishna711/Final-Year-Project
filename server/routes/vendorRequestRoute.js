@@ -5,4 +5,6 @@ const router = new Router();
 
 router.post("/", requestController.create);
 
+router.get("/:vendorId", requestController.get);
+
 module.exports = router;

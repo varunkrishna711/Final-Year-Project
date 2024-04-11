@@ -111,6 +111,7 @@ const productCategory = new mongoose.Schema({
 });
 
 const vendorRequirement = new mongoose.Schema({
+  vendorId: { type: mongoose.Schema.Types.ObjectId },
   vendorName: { type: String },
   vendorDescirption: { type: String },
   itemRequired: { type: String },

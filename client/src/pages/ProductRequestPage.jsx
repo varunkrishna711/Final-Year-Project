@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   MapContainer,
   Marker,
@@ -10,8 +10,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPosition } from "../store/mapSlice";
 import { useEffect } from "react";
+import { addProductRequest } from "../store/productSlice";
 
 const ProductRequestPage = () => {
+  const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   const [productName, setProductName] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -21,12 +23,32 @@ const ProductRequestPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Do something with the form data, like sending it to the server
+
     console.log({
+      userId,
       productName,
       quantity,
       deliveryDate,
       location,
+    });
+
+    dispatch(
+      addProductRequest({
+        userId,
+        productName,
+        quantity,
+        deliveryDate,
+        location,
+      })
+    ).then((data) => {
+      if (data.type === "product/addRequest/fulfilled") {
+        // dispatch(openSuccessSnackbar("Request added succesfully!"));
+        console.log("Success");
+      }
+      if (data.type === "product/addRequest/rejected") {
+        // dispatch(openErrorSnackbar(data.error.message));
+        console.log("failed");
+      }
     });
   };
 
@@ -65,9 +87,10 @@ const ProductRequestPage = () => {
           className="w-full max-w-lg p-8 bg-white rounded shadow-lg"
           onSubmit={handleSubmit}
         >
-          <h2 className="mb-4 text-2xl font-bold text-green-800">
-            Request a product
-          </h2>
+          <div className="flex items-center justify-between mb-2 text-xl font-semibold text-green-800">
+            <span className="text-2xl">Request a product</span>
+          </div>
+
           <div className="mb-4">
             <label
               htmlFor="productName"
@@ -78,7 +101,7 @@ const ProductRequestPage = () => {
             <input
               type="text"
               id="productName"
-              className="block w-full p-2 mt-1 border-gray-400 rounded-md focus:ring-green-500 focus:border-green-500"
+              className="block w-full p-2 mt-1 border border-black rounded-md focus:ring-green-500 focus:border-green-500"
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
               required
@@ -94,7 +117,7 @@ const ProductRequestPage = () => {
             <input
               type="number"
               id="quantity"
-              className="block w-full p-2 mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              className="block w-full p-2 mt-1 border border-black rounded-md focus:ring-green-500 focus:border-green-500"
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
               required
@@ -110,9 +133,10 @@ const ProductRequestPage = () => {
             <input
               type="date"
               id="deliveryDate"
-              className="block w-full p-2 mt-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              className="block w-full p-2 mt-1 border border-black rounded-md focus:ring-green-500 focus:border-green-500"
               value={deliveryDate}
               onChange={(e) => setDeliveryDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
               required
             />
           </div>
