@@ -13,20 +13,15 @@ class RequestController {
     }
   }
 
-  // async getAll(req, res, next) {
-  //   let { limit } = req.params;
-
-  //   if (!limit) {
-  //     return next(ApiError.internal("Limit Id cannot be null"));
-  //   }
-
-  //   try {
-  //     const reviews = await ReviewService.getAll(limit);
-  //     return res.json(reviews);
-  //   } catch (error) {
-  //     return next(error);
-  //   }
-  // }
+  async get(req, res, next) {
+    try {
+      const requestHistory = await RequestService.get(req.params.vendorId);
+      return res.json(requestHistory);
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
+  }
 }
 
 module.exports = new RequestController();
