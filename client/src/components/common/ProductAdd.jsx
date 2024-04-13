@@ -30,7 +30,6 @@ const ProductAdd = () => {
   const { id } = useParams();
   const bidPrice = useSelector((state) => state.product?.bidPrice);
 
-
   useEffect(() => {
     dispatch(setTotalPrice(productCount * bidPrice));
   }, [productCount, bidPrice]);
@@ -49,18 +48,20 @@ const ProductAdd = () => {
     if (!isBidding) return;
     setIsLoading(true);
     if (isLogin) {
-      dispatch(
-        placingBid({
-          userId,
-          email,
-          productId: id,
-          selectedSize,
-          count: productCount,
-          price: bidPrice,
-        })
-      ).then((data) => {
+      const bidData = {
+        userId,
+        email,
+        productId: id,
+        selectedSize,
+        count: productCount,
+        price: bidPrice,
+      };
+      dispatch(placingBid(bidData)).then((data) => {
         setIsLoading(false);
-        socket.emit("bid", id);
+        socket.emit("bid", {
+          productId: id,
+          price: bidPrice,
+        });
         if (data.type === "cart/addProductToCart/fulfilled") {
           dispatch(openSuccessSnackbar("Prodduct added to cart!"));
         }

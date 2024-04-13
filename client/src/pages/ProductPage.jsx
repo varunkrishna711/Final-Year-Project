@@ -26,7 +26,7 @@ const ProductPage = () => {
   const featuredProducts = useSelector(
     (state) => state.product.featuredProducts
   );
-  const [highestBid, setHighestBid] = useState();
+  const [highestBid, setHighestBid] = useState(0);
   // const [refresh,setRefresh]
   const { id } = useParams();
   useEffect(() => {
@@ -43,29 +43,23 @@ const ProductPage = () => {
     const bids = product?.product?.bids;
     let highestBid =
       bids?.length > 0 ? bids.slice().sort((a, b) => b.price - a.price) : null;
-    console.log(highestBid);
 
     setHighestBid(highestBid?.length > 0 && highestBid[0]?.price);
   }, [id, reviewsCount]);
 
   useEffect(() => {
-    console.log("inside socket use effect");
-    socket.on("updatedBid", ({ message }) => {
-      console.log("updatedBid socket response : ", message);
-    });
+    dispatch(loadFeaturedProducts());
+    socket.emit("createProdBidRoom", id);
+    const handleUpdatedBid = (price) => {
+            setHighestBid((prevHighestBid) =>
+        price > prevHighestBid ? price : prevHighestBid
+      );
+    };
+    socket.on("updatedBid", handleUpdatedBid);
 
     return () => {
-      socket.off("updatedBid");
+      socket.off("updatedBid", handleUpdatedBid);
     };
-  }, [socket]);
-
-  useEffect(() => {
-    dispatch(loadFeaturedProducts());
-  }, []);
-
-  useEffect(() => {
-    socket.emit("createProdBidRoom", id);
-    console.log(socket);
   }, []);
 
   return (
@@ -84,7 +78,7 @@ const ProductPage = () => {
                 HIGHEST BID
               </div>
               <div className="flex justify-end h-9 size-buttons !text-red-700">
-                ₹ {highestBid ? highestBid : "--"}
+                ₹ {highestBid}
               </div>
             </div>
           </div>
