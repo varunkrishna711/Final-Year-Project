@@ -15,6 +15,7 @@ import {
 } from "../store/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/pages/productpage.scss";
+import socket from "../utils/socket";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const ProductPage = () => {
   const featuredProducts = useSelector(
     (state) => state.product.featuredProducts
   );
-  const [highestBid, setHighestBid] = useState(0);
+  const [highestBid, setHighestBid] = useState();
   // const [refresh,setRefresh]
   const { id } = useParams();
   useEffect(() => {
@@ -48,7 +49,23 @@ const ProductPage = () => {
   }, [id, reviewsCount]);
 
   useEffect(() => {
+    console.log("inside socket use effect");
+    socket.on("updatedBid", ({ message }) => {
+      console.log("updatedBid socket response : ", message);
+    });
+
+    return () => {
+      socket.off("updatedBid");
+    };
+  }, [socket]);
+
+  useEffect(() => {
     dispatch(loadFeaturedProducts());
+  }, []);
+
+  useEffect(() => {
+    socket.emit("createProdBidRoom", id);
+    console.log(socket);
   }, []);
 
   return (
@@ -67,7 +84,7 @@ const ProductPage = () => {
                 HIGHEST BID
               </div>
               <div className="flex justify-end h-9 size-buttons !text-red-700">
-                ₹ {highestBid}
+                ₹ {highestBid ? highestBid : "--"}
               </div>
             </div>
           </div>

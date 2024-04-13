@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   firstname: { type: String },
   lastname: { type: String },
   image: { type: String },
-  role: { type: String, default: "USER" },
+  role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
   location: { type: [Number] },
 });
 
@@ -32,6 +32,14 @@ const cartProductSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
 });
 
+const bidSchema = new mongoose.Schema({
+  vendorId: { type: mongoose.Schema.ObjectId },
+  email: { type: String },
+  selectedSize: { type: String },
+  count: { type: Number },
+  price: { type: Number },
+});
+
 const productSchema = new mongoose.Schema({
   images: [String],
   name: { type: String, required: true },
@@ -46,7 +54,7 @@ const productSchema = new mongoose.Schema({
   isBidding: { type: Boolean },
   bidStart: { type: Date },
   bidEnd: { type: Date },
-  bids: { type: Array },
+  bids: [bidSchema],
 });
 
 const categorySchema = new mongoose.Schema({

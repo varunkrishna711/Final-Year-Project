@@ -21,7 +21,7 @@ export const addCartProduct = async (
 };
 
 export const placeBid = async (args) => {
-  console.log(args);
+  // console.log(args);
   const { data } = await $host.put("api/product/bid", args);
   return data;
 };

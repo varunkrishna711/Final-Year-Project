@@ -556,11 +556,6 @@ class ProductService {
         categoryId,
       });
 
-      console.log(
-        "=====================================s",
-        productCategoryArray
-      );
-
       const productsIdArray = productCategoryArray.map(
         (item) => item.productId
       );

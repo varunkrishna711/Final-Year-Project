@@ -12,6 +12,7 @@ import { placingBid, localAddProductToCart } from "../../store/cartSlice";
 import { openSuccessSnackbar } from "../../store/modalSlice";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
+import socket from "../../utils/socket";
 
 const ProductAdd = () => {
   const dispatch = useDispatch();
@@ -25,9 +26,10 @@ const ProductAdd = () => {
   const productCount = useSelector((state) => state.product.productCount);
   const productName = useSelector((state) => state.product.productName);
   const isBidding = useSelector((state) => state.product?.product?.isBidding);
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const bidPrice = useSelector((state) => state.product?.bidPrice);
+
 
   useEffect(() => {
     dispatch(setTotalPrice(productCount * bidPrice));
@@ -45,7 +47,7 @@ const ProductAdd = () => {
 
   const placeBid = () => {
     if (!isBidding) return;
-    setIsLoading(true)
+    setIsLoading(true);
     if (isLogin) {
       dispatch(
         placingBid({
@@ -57,8 +59,8 @@ const ProductAdd = () => {
           price: bidPrice,
         })
       ).then((data) => {
-        setIsLoading(false)
-
+        setIsLoading(false);
+        socket.emit("bid", id);
         if (data.type === "cart/addProductToCart/fulfilled") {
           dispatch(openSuccessSnackbar("Prodduct added to cart!"));
         }

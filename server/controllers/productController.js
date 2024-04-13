@@ -666,7 +666,6 @@ class ProductController {
 
     try {
       const product = await ProductService.getOne(id);
-      console.log(product);
       return res.json(product);
     } catch (error) {
       return next(error);
@@ -682,7 +681,6 @@ class ProductController {
 
     try {
       const product = await ProductService.startBidding(id);
-      console.log(product);
       return res.json(product);
     } catch (error) {
       return next(error);
@@ -698,7 +696,6 @@ class ProductController {
 
     try {
       const product = await ProductService.stopBidding(id);
-      console.log(product);
       return res.json(product);
     } catch (error) {
       return next(error);
@@ -751,7 +748,9 @@ class ProductController {
       const product = await Product.findOneAndUpdate(
         { _id: productId },
         {
-          $push: { bids: { price, selectedCount, userId, email, count } },
+          $push: {
+            bids: { price, selectedCount, vendorId: userId, email, count },
+          },
         }
       );
       return res.json(product);

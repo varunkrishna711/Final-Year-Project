@@ -271,7 +271,7 @@ export const addNewProduct = createAsyncThunk(
   "admin/addNewProduct",
   async (arg) => {
     try {
-      console.log("image gallery api: " + arg.imageGallery);
+      // console.log("image gallery api: " + arg.imageGallery);
       const response = await createProduct(
         arg.categoriesId,
         arg.name,
