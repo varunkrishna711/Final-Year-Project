@@ -605,6 +605,7 @@ class ProductService {
       { _id: id },
       {
         isBidding: true,
+        bids: [],
         bidStart: Date.now(),
       }
     );

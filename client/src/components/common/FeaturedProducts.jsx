@@ -12,6 +12,7 @@ const FeaturedProducts = (props) => {
               key={product._id}
               product={product}
               productId={product._id}
+              isBidding={product.isBidding}
               productimage={product.images[0]}
               name={product.name}
               rating={product.rating}

@@ -10,7 +10,6 @@ const ProductListPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.admin.products);
-
   const [categoryId, setCategoryId] = useState(null);
   const [name, setName] = useState(null);
   const [page, setPage] = useState(null);

@@ -51,7 +51,7 @@ const ProductPage = () => {
     dispatch(loadFeaturedProducts());
     socket.emit("createProdBidRoom", id);
     const handleUpdatedBid = (price) => {
-            setHighestBid((prevHighestBid) =>
+      setHighestBid((prevHighestBid) =>
         price > prevHighestBid ? price : prevHighestBid
       );
     };

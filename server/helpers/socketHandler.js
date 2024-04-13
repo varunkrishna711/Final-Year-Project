@@ -10,6 +10,15 @@ const socketHandler = (io) => {
     socket.on("bid", (data) => {
       console.log("new bid created");
       io.in(data.productId).emit("updatedBid", data.price);
+      io.in(data.productId).emit("updatedBidAdmin", data);
+    });
+
+    socket.on("startBid", (id) => {
+      io.in(id).emit("startBid");
+    });
+
+    socket.on("stopBid", (id) => {
+      io.in(id).emit("stopBid");
     });
 
     socket.on("disconnect", () => {

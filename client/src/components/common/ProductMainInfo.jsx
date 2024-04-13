@@ -1,11 +1,14 @@
 import React from "react";
 import staricon from "../../assets/icons/star.svg";
-import { useSelector } from "react-redux";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import socket from "../../utils/socket";
+import { setIsBidding } from "../../store/productSlice";
 
 const ProductMainInfo = () => {
+  const dispatch = useDispatch();
   const product = useSelector((state) => state.product.product);
+  const isBidding = useSelector((state) => state.product.isBidding);
   const productName = useSelector((state) => state.product.productName);
   const categories = useSelector((state) => state.product.categories);
   const price = useSelector((state) => state.product.price);
@@ -27,13 +30,28 @@ const ProductMainInfo = () => {
     p: 4,
   };
 
+  useEffect(() => {
+    socket.emit("createProdBidRoom", product?._id);
+    socket.on("startBid", () => {
+      dispatch(setIsBidding(true));
+    });
+    socket.on("stopBid", () => {
+      dispatch(setIsBidding(false));
+    });
+
+    return () => {
+      socket.off("startBid");
+      socket.off("stopBid");
+    };
+  }, []);
+
   // console.log(product);
   return (
     <div className="productmaininfo">
       {/* <div className="text-vitamins">VITAMINS</div> */}
       <div className="flex flex-row items-center justify-between head">
         <h2>{productName}</h2>
-        {product?.isBidding && (
+        {isBidding && (
           <div className="live">
             <div
               onClick={handleOpen}

@@ -28,6 +28,7 @@ import Carousel from "react-material-ui-carousel";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
+import socket from "../../utils/socket";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -66,7 +67,23 @@ const ProductPage = () => {
         ?.slice()
         .sort((a, b) => b.price * b.count - a.price * a.count)
     );
-  }, [autoupdate]);
+  }, [productInfo, autoupdate]);
+
+  useEffect(() => {
+    socket.emit("createProdBidRoom", id);
+    const handleUpdatedBid = (data) => {
+      setBids((prev) => {
+        const updatedBids = [...prev, data];
+        updatedBids.sort((a, b) => b.price * b.count - a.price * a.count);
+        return updatedBids;
+      });
+    };
+    socket.on("updatedBidAdmin", handleUpdatedBid);
+
+    return () => {
+      socket.off("updatedBidAdmin", handleUpdatedBid);
+    };
+  }, []);
 
   const editProductInfo = () => {
     dispatch(
@@ -97,19 +114,21 @@ const ProductPage = () => {
   const startBidding = () => {
     console.log(selectedDate.toString());
     dispatch(startBid(id));
+    socket.emit("startBid", id);
     refresh(!autoupdate);
     handleClose();
   };
 
   const stopBidding = () => {
     dispatch(stopBid(id));
+    socket.emit("stopBid", id);
     refresh(!autoupdate);
   };
 
   const indicators = [];
   const imageGallery = [];
 
-  productInfo?.images.forEach((image) => {
+  productInfo?.images?.forEach((image) => {
     imageGallery.push(image);
     indicators.push(<img width="48px" src={image} />);
   });
@@ -198,6 +217,7 @@ const ProductPage = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
+                          {console.log(bids)}
                           {bids?.map((bid) => (
                             <TableRow
                               key={bid?.userId}
@@ -247,7 +267,9 @@ const ProductPage = () => {
                         <button
                           className="px-4 py-2 text-white bg-blue-500 rounded-md "
                           onClick={() => {
-                            if (window.confirm("Are you sure to start bidding?"))
+                            if (
+                              window.confirm("Are you sure to start bidding?")
+                            )
                               startBidding();
                           }}
                         >
