@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import OutOfStock from "../UI/OutOfStock";
 import star from "../../assets/icons/star.svg";
@@ -10,6 +10,7 @@ import { addProductToCart } from "../../store/cartSlice";
 import { localAddProductToCart } from "../../store/cartSlice";
 import { openSuccessSnackbar, openErrorSnackbar } from "../../store/modalSlice";
 import { getCategoryByValue } from "../../utils/categoriesEnum";
+import socket from "../../utils/socket";
 
 const ProductCard = (props) => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const ProductCard = (props) => {
   const productId = props.productId;
 
   const [selectedSize, setSelectedSize] = useState(null);
+  const [isBidding, setIsBidding] = useState(props.isBidding);
   const [selectSizeError, setSelectSizeError] = useState(null);
 
   const handleAddProduct = () => {
@@ -66,6 +68,21 @@ const ProductCard = (props) => {
     }
   };
 
+  useEffect(() => {
+    socket.emit("createProdBidRoom", props.productId);
+    socket.on("startBid", () => {
+      setIsBidding(true);
+    });
+    socket.on("stopBid", () => {
+      setIsBidding(false);
+    });
+
+    return () => {
+      socket.off("startBid");
+      socket.off("stopBid");
+    };
+  }, []);
+
   return (
     <div className="productcard">
       <div
@@ -81,8 +98,11 @@ const ProductCard = (props) => {
       <div className="productcard-info">
         {/* <div className="text-vitamins">VITAMINS</div> */}
 
-        <div className="flex flex-row items-center justify-center product-name" onClick={goToProductPage}>
-          {props.isBidding && (
+        <div
+          className="flex flex-row items-center justify-center product-name"
+          onClick={goToProductPage}
+        >
+          {isBidding && (
             <span class="relative flex h-4 w-4 mr-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-4 w-4 bg-red-700"></span>

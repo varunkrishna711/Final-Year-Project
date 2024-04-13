@@ -15,6 +15,7 @@ import {
 } from "../store/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/pages/productpage.scss";
+import socket from "../utils/socket";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
@@ -42,13 +43,23 @@ const ProductPage = () => {
     const bids = product?.product?.bids;
     let highestBid =
       bids?.length > 0 ? bids.slice().sort((a, b) => b.price - a.price) : null;
-    console.log(highestBid);
 
     setHighestBid(highestBid?.length > 0 && highestBid[0]?.price);
   }, [id, reviewsCount]);
 
   useEffect(() => {
     dispatch(loadFeaturedProducts());
+    socket.emit("createProdBidRoom", id);
+    const handleUpdatedBid = (price) => {
+      setHighestBid((prevHighestBid) =>
+        price > prevHighestBid ? price : prevHighestBid
+      );
+    };
+    socket.on("updatedBid", handleUpdatedBid);
+
+    return () => {
+      socket.off("updatedBid", handleUpdatedBid);
+    };
   }, []);
 
   return (

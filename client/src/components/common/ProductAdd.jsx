@@ -7,11 +7,13 @@ import {
   setProductCount,
   setTotalPrice,
   setBidPrice,
+  setIsBidding,
 } from "../../store/productSlice";
 import { placingBid, localAddProductToCart } from "../../store/cartSlice";
 import { openSuccessSnackbar } from "../../store/modalSlice";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
+import socket from "../../utils/socket";
 
 const ProductAdd = () => {
   const dispatch = useDispatch();
@@ -24,14 +26,29 @@ const ProductAdd = () => {
   const selectedSize = useSelector((state) => state.product.selectedSize);
   const productCount = useSelector((state) => state.product.productCount);
   const productName = useSelector((state) => state.product.productName);
-  const isBidding = useSelector((state) => state.product?.product?.isBidding);
-  const [isLoading,setIsLoading] = useState(false);
+  const isBidding = useSelector((state) => state.product?.isBidding);
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const bidPrice = useSelector((state) => state.product?.bidPrice);
 
   useEffect(() => {
     dispatch(setTotalPrice(productCount * bidPrice));
   }, [productCount, bidPrice]);
+
+  useEffect(() => {
+    socket.emit("createProdBidRoom", product?._id);
+    socket.on("startBid", () => {
+      dispatch(setIsBidding(true));
+    });
+    socket.on("stopBid", () => {
+      dispatch(setIsBidding(false));
+    });
+
+    return () => {
+      socket.off("startBid");
+      socket.off("stopBid");
+    };
+  }, []);
 
   const increaseCount = () => {
     dispatch(setProductCount(productCount + 1));
@@ -45,20 +62,19 @@ const ProductAdd = () => {
 
   const placeBid = () => {
     if (!isBidding) return;
-    setIsLoading(true)
+    setIsLoading(true);
     if (isLogin) {
-      dispatch(
-        placingBid({
-          userId,
-          email,
-          productId: id,
-          selectedSize,
-          count: productCount,
-          price: bidPrice,
-        })
-      ).then((data) => {
-        setIsLoading(false)
-
+      const bidData = {
+        userId,
+        email,
+        productId: id,
+        selectedSize,
+        count: productCount,
+        price: bidPrice,
+      };
+      dispatch(placingBid(bidData)).then((data) => {
+        setIsLoading(false);
+        socket.emit("bid", bidData);
         if (data.type === "cart/addProductToCart/fulfilled") {
           dispatch(openSuccessSnackbar("Prodduct added to cart!"));
         }

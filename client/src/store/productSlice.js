@@ -131,6 +131,9 @@ const productSlice = createSlice({
     setProductCount: (state, action) => {
       state.productCount = action.payload;
     },
+    setIsBidding: (state, action) => {
+      state.isBidding = action.payload;
+    },
     setTotalPrice: (state, action) => {
       state.totalPrice = action.payload;
     },
@@ -158,6 +161,8 @@ const productSlice = createSlice({
         state.description = action.payload.description;
         state.shortDescription = action.payload.shortDescription;
         state.instock = action.payload.instock;
+        state.isBidding = action.payload.isBidding;
+        state.bidPrice = action.payload.bidPrice;
         state.isLoading = false;
       })
       .addCase(loadOneProduct.rejected, (state, action) => {
@@ -191,6 +196,7 @@ export const {
   setProductId,
   setSelectedSize,
   setProductCount,
+  setIsBidding,
   setBidPrice,
   setTotalPrice,
   setReviewError,
