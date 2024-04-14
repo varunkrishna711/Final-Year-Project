@@ -5,18 +5,17 @@ import OrderTotal from "../components/common/OrderTotal";
 import OrderUserInfo from "../components/common/OrderUserInfo";
 import { useSelector, useDispatch } from "react-redux";
 import { loadOrderInfo } from "../../store/adminSlice";
-import '../styles/pages/orderinfopage.scss';
+import "../styles/pages/orderinfopage.scss";
 
 const OrderInfoPage = () => {
-
   const dispatch = useDispatch();
-  const orderInfo = useSelector(state => state.admin.orderInfo);
+  const orderInfo = useSelector((state) => state.admin.orderInfo);
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    dispatch(loadOrderInfo(id))
-  }, [])
+    dispatch(loadOrderInfo(id));
+  }, []);
 
   return (
     <div className="orderinfopage">
@@ -27,46 +26,41 @@ const OrderInfoPage = () => {
         <div className="order-content-wrapper">
           <div className="content-leftside-wrapper">
             <div>
-              {
-                orderInfo &&
-                <OrderItems 
-                  orderItems={orderInfo.orderedProducts}
-                />
-              }
+              {orderInfo && (
+                <OrderItems orderItems={orderInfo.orderedProducts} />
+              )}
             </div>
             <div>
-              {
-                orderInfo &&
-                <OrderTotal 
+              {orderInfo && (
+                <OrderTotal
                   total={orderInfo.total}
                   shippingCost={orderInfo.shippingCost}
                 />
-              }
+              )}
             </div>
           </div>
           <div className="content-rightside-wrapper">
-              {
-                orderInfo &&
-                <OrderUserInfo 
-                  userId={orderInfo.userId}
-                  firstName={orderInfo.firstName}
-                  lastName={orderInfo.lastName}
-                  email={orderInfo.email}
-                  phone={orderInfo.userId}
-                  city={orderInfo.city}
-                  state={orderInfo.state}
-                  country={orderInfo.country}
-                  zip={orderInfo.zip}
-                  addressLineOne={orderInfo.addressLineOne}
-                  addressLineTwo={orderInfo.addressLineTwo}
-                  notes={orderInfo.notes}
-                />
-              }
+            {orderInfo && (
+              <OrderUserInfo
+                userId={orderInfo.userId}
+                firstName={orderInfo.firstName}
+                lastName={orderInfo.lastName}
+                email={orderInfo.email}
+                phone={orderInfo.userId}
+                city={orderInfo.city}
+                state={orderInfo.state}
+                country={orderInfo.country}
+                zip={orderInfo.zip}
+                addressLineOne={orderInfo.addressLineOne}
+                addressLineTwo={orderInfo.addressLineTwo}
+                notes={orderInfo.notes}
+              />
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default OrderInfoPage;
