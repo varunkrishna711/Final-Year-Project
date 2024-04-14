@@ -34,6 +34,15 @@ class UserController {
     }
   }
 
+  async addMany(req, res, next) {
+    try {
+      const token = await UserService.addMany(req.body);
+      return res.json({ token });
+    } catch (error) {
+      return next(error);
+    }
+  }
+
   async login(req, res, next) {
     const { email, password } = req.body;
 
@@ -361,6 +370,21 @@ class UserController {
     try {
       const address = await UserService.getAddress(userId);
       return res.json(address);
+    } catch (error) {
+      return next(error.message);
+    }
+  }
+
+  async getUserInfo(req, res, next) {
+    let { userId } = req.params;
+
+    if (!userId) {
+      return next(ApiError.internal("User is not authorized"));
+    }
+
+    try {
+      const userInfo = await UserService.getUserInfo(userId);
+      return res.json(userInfo);
     } catch (error) {
       return next(error.message);
     }

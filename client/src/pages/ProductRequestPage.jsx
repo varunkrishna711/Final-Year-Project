@@ -12,7 +12,7 @@ import { setCurrentPosition } from "../store/mapSlice";
 import { useEffect } from "react";
 import { addProductRequest } from "../store/productSlice";
 
-const ProductRequestPage = () => {
+const ProductRequestPage = (props) => {
   const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   const [productName, setProductName] = useState("");

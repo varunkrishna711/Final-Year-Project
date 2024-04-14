@@ -20,6 +20,8 @@ import OrderListPage from "../adminpanel/pages/OrderListPage";
 import OrderInfoPage from "../adminpanel/pages/OrderInfoPage";
 import CategoryListPage from "../adminpanel/pages/CategoryListPage";
 import ScreenWidthErrorPage from "../adminpanel/pages/ScreenWidthErrorPage";
+import RequestListPage from "../adminpanel/pages/RequestListPage";
+import RequestedProductPage from "../adminpanel/pages/RequestedProductPage";
 import { useSelector } from "react-redux";
 import "../adminpanel/styles/globalstyles/adminpanel.scss";
 
@@ -70,6 +72,9 @@ const AdminRouter = () => {
         <Route path="promocodes" element={<PromoListPage />} />
         <Route path="promocodes/new" element={<PromoNewPage />} />
         <Route path="promocodes/edit/:promo" element={<PromoEditPage />} />
+        <Route path="requests" element={<RequestListPage />} />
+        <Route path="requests/:id" element={<RequestedProductPage />} />
+
         <Route path="orders" element={<OrderListPage />} />
         <Route path="orders/:id" element={<OrderInfoPage />} />
         <Route path="categories" element={<CategoryListPage />} />

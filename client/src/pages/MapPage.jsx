@@ -75,7 +75,7 @@ const MapPage = () => {
 
   return (
     <div className="flex items-center justify-center w-screen h-[600px]">
-      <div className="h-full producers-list w-[35%] max-w-[600px] py-4">
+      <div className="h-full producers-list w-[35%] max-w-[600px] py-4 overflow-y-auto">
         <div className="flex items-center justify-between px-4 my-4 head ">
           <span className="text-xl font-bold">Nearest Producers</span>
           <MyLocationIcon
