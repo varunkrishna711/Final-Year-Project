@@ -61,7 +61,7 @@ export default function RequestedProductPage() {
     try {
       setLocationLoading(true);
       const response = await fetch(
-        `http://localhost:8800/api/user/info/${adminInfo.id}`
+        `${process.env.REACT_APP_API_URL}/api/user/info/${adminInfo.id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch admin location");
@@ -178,7 +178,7 @@ export default function RequestedProductPage() {
             />
             <Marker position={position}>
               <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
+                Your Location
               </Popup>
             </Marker>
             {requestDetails && requestDetails.vendorLocation && (
