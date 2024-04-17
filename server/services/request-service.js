@@ -1,23 +1,5 @@
 const { VendorRequirement, User } = require("../db/models/models");
-
-// Utility function to calculate the distance between two points given in [longitude, latitude]
-function calculateDistance(coords1, coords2) {
-  const R = 6371e3; // Earth's radius in meters
-  const [lon1, lat1] = coords1.map((coord) => (coord * Math.PI) / 180);
-  const [lon2, lat2] = coords2.map((coord) => (coord * Math.PI) / 180);
-  const deltaLat = lat2 - lat1;
-  const deltaLon = lon2 - lon1;
-
-  const a =
-    Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-    Math.cos(lat1) *
-      Math.cos(lat2) *
-      Math.sin(deltaLon / 2) *
-      Math.sin(deltaLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c; // Distance in meters
-}
+const calculateDistance = require("../helpers/calculateDistance");
 
 class RequestService {
   async create(payload) {
@@ -25,11 +7,11 @@ class RequestService {
   }
 
   async get(id) {
-    return await VendorRequirement.find({ vendorId: id });
+    return await VendorRequirement.find({ vendor: id });
   }
 
   async getRequest(id) {
-    return await VendorRequirement.findOne({ _id: id });
+    return await VendorRequirement.findOne({ _id: id }).populate("vendor");
   }
 
   async updateRequest(id) {
@@ -63,12 +45,17 @@ class RequestService {
       throw new Error("Producer location not found");
     }
 
-    const requests = await VendorRequirement.find({});
+    const requests = await VendorRequirement.find().populate("vendor");
     // Filter requests where vendorLocation exists and is within 10 kilometers of the producer's location
     const filteredRequests = requests.filter((request) => {
       return (
         request.vendorLocation &&
-        calculateDistance(producer.location, request.vendorLocation) <= 100000
+        calculateDistance(
+          producer.location[0],
+          producer.location[1],
+          request.vendorLocation[0],
+          request.vendorLocation[1]
+        ) <= 10
       );
     });
 
