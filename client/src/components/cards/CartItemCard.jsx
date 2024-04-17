@@ -97,7 +97,7 @@ const CartItemCard = (props) => {
                 increaseCount={increaseCount}
                 decreaseCount={decreaseCount}
               />
-              <div className="cartitem-productprice">${props.price}.00</div>
+              <div className="cartitem-productprice">₹{props.price}.00</div>
             </div>
             <div className="cartitem-totalprice">₹{props.totalPrice}.00</div>
           </div>

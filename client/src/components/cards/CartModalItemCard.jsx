@@ -42,10 +42,10 @@ const CartModalItemCard = (props) => {
         <div className="cartmodalitem-count-price">
           <div className="cartmodalitem-count">
             <span className="item-count">{props.count}x</span>
-            <div className="cartmodalitem-productprice">${props.price}.00</div>
+            <div className="cartmodalitem-productprice">₹{props.price}.00</div>
           </div>
           <div className="cartmodalitem-totalprice">
-            ${props.totalPrice}.00
+            ₹{props.totalPrice}.00
           </div>
         </div>
       </div>

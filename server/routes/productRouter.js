@@ -14,6 +14,7 @@ router.put(
 router.put("/stop_bidding", checkRoleMiddleware, productController.stopBidding);
 router.put("/bid", productController.bid);
 router.get("/all", productController.getAll);
+router.get("/all/:producer_id", productController.getAllByProducerId);
 router.get("/all-admin", checkRoleMiddleware, productController.getAllAdmin);
 router.get("/product/:id", productController.getOne);
 router.get("/totalcount", productController.getTotalCount);

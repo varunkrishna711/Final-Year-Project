@@ -28,26 +28,26 @@ const CheckoutOrder = () => {
       <ul className="checkoutcard-items">
         <li className="checkoutcard-item">
           <div className="item-name">Subtotal</div>
-          <div className="item-value">${subTotal}.00</div>
+          <div className="item-value">₹{subTotal}.00</div>
         </li>
         <li className="checkoutcard-item">
           <div className="item-name">Shipping cost</div>
-          <div className="item-value">${isShippingFree ? "0" : "50"}.00</div>
+          <div className="item-value">₹{isShippingFree ? "0" : "50"}.00</div>
         </li>
         <li className="checkoutcard-item">
           <div className="item-name">Coupon</div>
-          <div className="item-value">-${discount}.00</div>
+          <div className="item-value">-₹{discount}.00</div>
         </li>
         <li className="checkoutcard-item">
           <div className="item-name">Total</div>
           <div className="item-value">
             {discount > 0 ? (
-              <span className="oldtotalprice">${total + discount}.00</span>
+              <span className="oldtotalprice">₹{total + discount}.00</span>
             ) : (
               ""
             )}
             <span className="totalprice">
-              ${isShippingFree ? total : total + 50}.00
+              ₹{isShippingFree ? total : total + 50}.00
             </span>
           </div>
         </li>
@@ -62,12 +62,12 @@ const CheckoutOrder = () => {
       {cartProducts?.length > 0 ? (
         <Link to="/checkout" className="link-to">
           <button className="checkout-btn">
-            Checkout<span>|</span>${isLogin ? total : subTotal}.00
+            Checkout<span>|</span>₹{isLogin ? total : subTotal}.00
           </button>
         </Link>
       ) : (
         <button className="btn-disabled">
-          Checkout<span>|</span>${isLogin ? total : subTotal}.00
+          Checkout<span>|</span>₹{isLogin ? total : subTotal}.00
         </button>
       )}
 

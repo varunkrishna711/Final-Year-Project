@@ -13,9 +13,11 @@ import DirectionsIcon from "@mui/icons-material/Directions";
 import MapIcon from "@mui/icons-material/Map";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const MapPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const nearbyProducers = useSelector((state) => state.map.nearbyProducers);
   const currentPosition = useSelector((state) => state.map.currentPosition);
   const selectedLocation = useSelector((state) => state.map.selectedLocation);
@@ -38,6 +40,11 @@ const MapPage = () => {
   }, []);
 
   const markerRefs = useRef(nearbyProducers.map(() => React.createRef()));
+
+  const handleProfilePage = (p) => {
+    console.log(p);
+    navigate(`/user/${p._id}`);
+  };
 
   const FlyToName = ({ coordinates }) => {
     const map = useMap();
@@ -96,7 +103,10 @@ const MapPage = () => {
             key={i}
           >
             <div className="flex flex-col">
-              <span className="flex items-center text-base decoration-inherit text-inherit hover:underline">
+              <span
+                className="flex items-center text-base decoration-inherit text-inherit hover:underline"
+                onClick={() => handleProfilePage(p)}
+              >
                 {p.firstname} {p.lastname}{" "}
               </span>
               <span className="text-sm text-slate-600">{p.email}</span>

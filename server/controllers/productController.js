@@ -630,6 +630,17 @@ class ProductController {
     }
   }
 
+  async getAllByProducerId(req, res, next) {
+    let { producer_id } = req.params;
+    try {
+      const products = await ProductService.getAllByProducerId(producer_id);
+      return res.json(products);
+    } catch (error) {
+      console.error(error);
+      return next(error);
+    }
+  }
+
   async getAllAdmin(req, res, next) {
     let { categoryId, name, page, limit, minPrice, maxPrice, inStock } =
       req.query;

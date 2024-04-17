@@ -121,7 +121,7 @@ const PlaceOrder = () => {
       <ul className="placeorder-items">
         <li className="placeorder-item">
           <div className="item-name">Subtotal</div>
-          <div className="item-value">${subTotal}.00</div>
+          <div className="item-value">₹{subTotal}.00</div>
         </li>
         <li className="placeorder-item">
           <div className="item-name">Shipping</div>
@@ -129,17 +129,17 @@ const PlaceOrder = () => {
         </li>
         <li className="placeorder-item">
           <div className="item-name">Shipping cost</div>
-          <div className="item-value">$50.00</div>
+          <div className="item-value">₹50.00</div>
         </li>
         <li className="placeorder-item">
           <div className="item-name">Coupon</div>
-          <div className="item-value">-${discount}.00</div>
+          <div className="item-value">-₹{discount}.00</div>
         </li>
         <li className="placeorder-item">
           <div className="item-name">Total</div>
           <div className="item-value">
             {discount > 0 ? <span className="oldtotalprice">${total + discount}.00</span> : ''}
-            <span className="totalprice">${isLogin ? total : subTotal}.00</span>
+            <span className="totalprice">₹{isLogin ? total : subTotal}.00</span>
           </div>
         </li>
       </ul>
@@ -174,7 +174,7 @@ const PlaceOrder = () => {
         >
           {isPlaceOrderLoading ? <ButtonLoader /> :
             <div>
-              Place Order<span>|</span>${isLogin ? total : subTotal}.00
+              Place Order<span>|</span>₹{isLogin ? total : subTotal}.00
             </div>
           }
         </button>
