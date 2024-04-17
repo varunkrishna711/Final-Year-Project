@@ -288,6 +288,7 @@ const cartSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loadCartProducts.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.cartProducts = action?.payload?.products;
         state.count = action.payload?.products?.length;
         state.subTotal = action?.payload?.subTotal;
