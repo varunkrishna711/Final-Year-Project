@@ -176,9 +176,6 @@ export const updateProduct = async (
   price,
   rating,
   sizes,
-  // effects,
-  // relieve,
-  // ingridients,
   description,
   shortDescription,
   instock,
@@ -192,9 +189,6 @@ export const updateProduct = async (
   formData.append("price", price);
   formData.append("rating", rating);
   formData.append("sizes", sizes);
-  // formData.append("effects", effects);
-  // formData.append("relieve", relieve);
-  // formData.append("ingridients", ingridients);
   formData.append("description", description);
   formData.append("shortDescription", shortDescription);
   formData.append("instock", instock);

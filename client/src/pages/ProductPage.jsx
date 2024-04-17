@@ -20,7 +20,7 @@ import socket from "../utils/socket";
 const ProductPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const reviewsCount = useSelector((state) => state.product.reviewsCount);
+  const bids = useSelector((state) => state.product.bids);
   const isLogin = useSelector((state) => state.user.isLogin);
   const product = useSelector((state) => state.product);
   const featuredProducts = useSelector(
@@ -40,12 +40,13 @@ const ProductPage = () => {
         navigate("/error");
       }
     });
-    const bids = product?.product?.bids;
+    // const bids = product?.product?.bids;
     let highestBid =
       bids?.length > 0 ? bids.slice().sort((a, b) => b.price - a.price) : null;
+    console.log(highestBid);
 
     setHighestBid(highestBid?.length > 0 && highestBid[0]?.price);
-  }, [id, reviewsCount]);
+  }, [id]);
 
   useEffect(() => {
     dispatch(loadFeaturedProducts());
