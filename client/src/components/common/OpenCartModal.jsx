@@ -24,7 +24,7 @@ const OpenCartModal = () => {
         onClick={openCart}
       >
         <div className="cart-subtotal">
-          ${cartSubTotal}.00
+          ₹{cartSubTotal}.00
         </div>
         <div className="cart-img-container">
           <img src={carticon} alt="carticon" />

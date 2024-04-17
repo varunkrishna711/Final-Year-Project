@@ -43,7 +43,7 @@ const CartModal = (props) => {
 
             <div className="cartmodal-total">
               <div className="total-text">TOTAL</div>
-              <div className="total-price">${cartSubTotal}.00</div>
+              <div className="total-price">₹{cartSubTotal}.00</div>
             </div>
 
             <div className="button-section">
