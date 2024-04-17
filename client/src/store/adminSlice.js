@@ -407,6 +407,7 @@ const adminSlice = createSlice({
       .addCase(adminSignIn.fulfilled, (state, action) => {
         state.isAdminLogin = true;
         state.isAdminLoginLoading = false;
+        state.adminInfo = action.payload;
       })
       .addCase(adminSignIn.rejected, (state, action) => {
         state.errorMessage = action.error.message;

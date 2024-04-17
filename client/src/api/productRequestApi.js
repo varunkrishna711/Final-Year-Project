@@ -1,14 +1,14 @@
 import { $host } from "./api";
 
 export const createProductRequest = async (
-  vendorId,
+  vendor,
   itemRequired,
   quantityRequired,
   toBeDeliveredOn,
   vendorLocation
 ) => {
   const { data } = await $host.post("api/product-request", {
-    vendorId,
+    vendor,
     itemRequired,
     quantityRequired,
     toBeDeliveredOn,

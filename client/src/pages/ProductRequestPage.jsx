@@ -53,7 +53,7 @@ const ProductRequestPage = (props) => {
   };
 
   const handleLocationSelect = (e) => {
-    setLocation(e.latlng);
+    setLocation([e.latlng.lat, e.latlng.lng]);
   };
 
   const MapEvents = () => {
