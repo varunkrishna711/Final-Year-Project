@@ -102,6 +102,7 @@ export default function RequestedProductPage() {
 
   const handleReject = () => {
     // Optionally, add any logic for reject action here
+    console.log(requestDetails.vendor.firstname);
   };
 
   const formatDate = (dateString) => {
@@ -121,6 +122,9 @@ export default function RequestedProductPage() {
           <p className="text-red-500">Error: {error}</p>
         ) : (
           <div className="space-y-4">
+            <p className="text-xl text-gray-700">
+              <strong>Vendor Name:</strong> {requestDetails?.vendor.firstname}
+            </p>
             <p className="text-xl text-gray-700">
               <strong>Item Required:</strong> {requestDetails?.itemRequired}
             </p>
@@ -179,16 +183,16 @@ export default function RequestedProductPage() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {/* <Marker position={position}>
+            <Marker position={position}>
               <Popup>Your Location</Popup>
-            </Marker> */}
-            {/* {requestDetails && requestDetails.vendorLocation && (
+            </Marker>
+            {requestDetails && requestDetails.vendorLocation && (
               <Marker position={requestDetails.vendorLocation}>
                 <Popup>
                   Vendor's location. <br /> {requestDetails.itemRequired}
                 </Popup>
               </Marker>
-            )} */}
+            )}
             {requestDetails && requestDetails.vendorLocation && (
               <RoutingMachine
                 key={JSON.stringify(position)}
