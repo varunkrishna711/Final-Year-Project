@@ -18,6 +18,7 @@ import ErrorPage from "../pages/ErrorPage";
 import { useSelector } from "react-redux";
 import ProductRequestPage from "../pages/ProductRequestPage";
 import ProductRequestHistoryPage from "../pages/ProductRequestHistoryPage";
+import UserProfilePage from "../pages/UserProfilePage";
 const UserRouter = () => {
   const isLogin = useSelector((state) => state.user.isLogin);
 
@@ -41,6 +42,8 @@ const UserRouter = () => {
         <Route path="/shop" element={<ShopPage />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/product-request" element={<ProductRequestPage />} />
+        <Route path="/user/:id" element={<UserProfilePage />} />
+
         <Route
           path="/product-request-history"
           element={<ProductRequestHistoryPage />}

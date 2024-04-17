@@ -540,6 +540,10 @@ class ProductService {
     return { count: products.length, rows: products };
   }
 
+  async getAllByProducerId(id) {
+    return await Product.find({ userId: id });
+  }
+
   async getAllAdmin(
     categoryId,
     name,
