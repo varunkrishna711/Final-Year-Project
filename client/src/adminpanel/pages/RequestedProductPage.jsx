@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import "../../styles/pages/mappage.scss";
 import { useSelector } from "react-redux";
 import L from "leaflet";
 
 // Import the images for Leaflet's default marker
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import RoutingMachine from "../../components/UI/RoutingMachine";
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
@@ -109,7 +110,7 @@ export default function RequestedProductPage() {
   };
 
   return (
-    <div className="container flex" style={{ height: "100vh" }}>
+    <div className="container flex h-[calc(100vh-60px)]">
       <div className="flex flex-col items-center justify-center w-1/2 p-6 rounded-lg shadow-xl bg-gradient-to-br from-gray-50 to-gray-100">
         <h1 className="mb-6 text-4xl font-bold text-gray-800">
           Request Details
@@ -135,28 +136,30 @@ export default function RequestedProductPage() {
               )}
             </p>
             <p className="text-xl text-gray-700">
-              <strong>Date Requested:</strong>
+              <strong>Date Requested: </strong>
               {formatDate(requestDetails?.createdDate)}
             </p>
             <p className="text-xl text-gray-700">
-              <strong>Date To Deliver:</strong>
+              <strong>Date To Deliver: </strong>
               {formatDate(requestDetails?.toBeDeliveredOn)}
             </p>
-            <div className="flex space-x-4">
-              <button
-                onClick={handleAccept}
-                disabled={updateLoading}
-                className="px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-green-500 rounded-lg shadow hover:bg-green-600"
-              >
-                Accept
-              </button>
-              <button
-                onClick={handleReject}
-                className="px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-red-500 rounded-lg shadow hover:bg-red-600"
-              >
-                Reject
-              </button>
-            </div>
+            {!requestDetails?.isFullfilled && (
+              <div className="flex space-x-4">
+                <button
+                  onClick={handleAccept}
+                  disabled={updateLoading}
+                  className="px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-green-500 rounded-lg shadow hover:bg-green-600"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={handleReject}
+                  className="px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-red-500 rounded-lg shadow hover:bg-red-600"
+                >
+                  Reject
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -176,17 +179,22 @@ export default function RequestedProductPage() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
-              <Popup>
-                Your Location
-              </Popup>
-            </Marker>
-            {requestDetails && requestDetails.vendorLocation && (
+            {/* <Marker position={position}>
+              <Popup>Your Location</Popup>
+            </Marker> */}
+            {/* {requestDetails && requestDetails.vendorLocation && (
               <Marker position={requestDetails.vendorLocation}>
                 <Popup>
                   Vendor's location. <br /> {requestDetails.itemRequired}
                 </Popup>
               </Marker>
+            )} */}
+            {requestDetails && requestDetails.vendorLocation && (
+              <RoutingMachine
+                key={JSON.stringify(position)}
+                from={position}
+                to={requestDetails.vendorLocation}
+              />
             )}
           </MapContainer>
         )}
