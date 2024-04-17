@@ -22,6 +22,7 @@ const initialState = {
   sizes: ["", "", ""],
   selectedSize: null,
   bidPrice: null,
+  bids: [],
   productCount: 1,
   shortDescription: "",
   description: "",
@@ -163,6 +164,7 @@ const productSlice = createSlice({
         state.instock = action.payload.instock;
         state.isBidding = action.payload.isBidding;
         state.bidPrice = action.payload.bidPrice;
+        state.bids = action.payload.bids;
         state.isLoading = false;
       })
       .addCase(loadOneProduct.rejected, (state, action) => {

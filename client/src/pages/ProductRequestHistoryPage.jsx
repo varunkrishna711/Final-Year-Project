@@ -11,7 +11,7 @@ export default function ProductRequestHistoryPage() {
   useEffect(() => {
     const fetchData = async (vendorId) => {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/product-request/${vendorId}`
+        `${process.env.REACT_APP_API_URL}/api/product-request/vendor-id/${vendorId}`
       );
       const data = await response.json();
 
@@ -35,8 +35,9 @@ export default function ProductRequestHistoryPage() {
 
   if (requests.length === 0) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <img src={NoData} alt="No requests" />
+      <div className="flex flex-col gap-1 items-center justify-center min-h-[500px]">
+        <img src={NoData} alt="No requests" className="w-auto h-[200px]" />
+        <span className="opacity-80">No Data Available</span>
       </div>
     );
   }

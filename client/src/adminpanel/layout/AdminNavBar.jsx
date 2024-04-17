@@ -24,6 +24,11 @@ const AdminNavBar = () => {
     navigate("dashboard");
   };
 
+  const goToRequestList = () => {
+    setCurrentLocation("/admin/requests");
+    navigate("requests");
+  };
+
   const goToOrderList = () => {
     setCurrentLocation("/admin/orders");
     navigate("orders");
@@ -144,6 +149,27 @@ const AdminNavBar = () => {
               <span>Promocodes</span>
             </div>
           </li> */}
+
+          <li className="list-item" onClick={goToRequestList}>
+            <div
+              className={
+                currentLocation === "/admin/requests" ? "left-mark" : ""
+              }
+            ></div>
+            <div
+              className={
+                currentLocation === "/admin/requests"
+                  ? "item-content-active"
+                  : "item-content"
+              }
+            >
+              <div className="icon-wrapper">
+                <BallotIcon fontSize="24" />
+              </div>
+              <span>Requests</span>
+            </div>
+          </li>
+
           <li className="list-item" onClick={goToOrderList}>
             <div
               className={currentLocation === "/admin/orders" ? "left-mark" : ""}

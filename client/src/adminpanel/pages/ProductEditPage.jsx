@@ -23,8 +23,6 @@ const ProductEditPage = () => {
   const [price, setPrice] = useState(null);
   const [rating, setRating] = useState(5);
   const [sizes, setSizes] = useState(null);
-  const [effects, setEffects] = useState(null);
-  const [relieve, setRelieve] = useState(null);
   const [ingridients, setIngridients] = useState(null);
   const [description, setDescription] = useState(null);
   const [shortDescription, setShortDescription] = useState(null);
@@ -44,9 +42,6 @@ const ProductEditPage = () => {
         price: price,
         rating: rating,
         sizes: sizes,
-        effects: effects,
-        relieve: relieve,
-        ingridients: ingridients,
         description: description,
         shortDescription: shortDescription,
         instock: instock,

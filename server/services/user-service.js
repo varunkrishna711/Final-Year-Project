@@ -563,6 +563,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User, Cart, Address } = require("../db/models/models");
 const { Types } = require("mongoose");
+const calculateDistance = require("../helpers/calculateDistance");
 
 const generateJwt = (id, email, role) => {
   return jwt.sign({ id, email, role }, process.env.SECRET_KEY, {
@@ -574,36 +575,6 @@ const generateAdminJwt = (id, email, role) => {
   return jwt.sign({ id, email, role }, process.env.ADMIN_SECRET_KEY, {
     expiresIn: "24h",
   });
-};
-
-const calculateDistance = (lat1, lon1, lat2, lon2) => {
-  // Radius of the Earth in kilometers
-  const R = 6371;
-
-  // Convert latitude and longitude from degrees to radians
-  const radLat1 = (Math.PI / 180) * lat1;
-  const radLon1 = (Math.PI / 180) * lon1;
-  const radLat2 = (Math.PI / 180) * lat2;
-  const radLon2 = (Math.PI / 180) * lon2;
-
-  // Differences between coordinates
-  const dLat = radLat2 - radLat1;
-  const dLon = radLon2 - radLon1;
-
-  // Haversine formula
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(radLat1) *
-      Math.cos(radLat2) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  // Distance in kilometers
-  const distance = R * c;
-
-  return distance;
 };
 
 class UserService {
@@ -624,6 +595,24 @@ class UserService {
     const token = generateJwt(user._id.toString(), user.email, user.role);
 
     return token;
+  }
+
+  async addMany(data) {
+    await data.map(async (d) => {
+      const userExists = await User.findOne({ email: d.email });
+      if (userExists) {
+        return;
+      }
+      const hashPassword = await bcrypt.hash(d.password, 5);
+      const user = await User.create({
+        email: d.email,
+        password: hashPassword,
+        role: d.role,
+        location: d.location,
+        firstname: d.firstname,
+        lastname: d.lastname,
+      });
+    });
   }
 
   async login(email, password) {
@@ -867,15 +856,6 @@ class UserService {
 
   async getProducersNearby(lat, lgt) {
     const producers = await User.find({ role: "ADMIN" }, {}, { lean: true });
-    // var sortedList = producers.sort(
-    //   (a, b) =>
-    //     calculateDistance(lat, lgt, a.location[0], a.location[1]) -
-    //     calculateDistance(lat, lgt, b.location[0], b.location[1])
-    // );
-    // var sortedListDist = sortedList.map((s) => ({
-    //   ...s,
-    //   distance: calculateDistance(lat, lgt, s.location[0], s.location[1]),
-    // }));
     const sortedListDist = producers
       .map((s) => ({
         ...s,

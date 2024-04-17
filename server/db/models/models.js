@@ -21,15 +21,27 @@ const addressSchema = new mongoose.Schema({
   zip: { type: String, required: true },
 });
 
-const cartSchema = new mongoose.Schema({
-  subTotal: { type: Number, default: 0 },
-});
-
 const cartProductSchema = new mongoose.Schema({
   count: { type: Number, required: true, default: 1 },
   selectedSize: { type: String, required: true },
   price: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+  },
+  cartId: { type: mongoose.Schema.Types.ObjectId },
+});
+
+const cartSchema = new mongoose.Schema({
+  products: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CartProduct",
+    },
+  ],
+  subTotal: { type: Number, default: 0 },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 const bidSchema = new mongoose.Schema({
@@ -50,7 +62,7 @@ const productSchema = new mongoose.Schema({
   shortDescription: { type: String, required: true },
   instock: { type: Boolean, default: true },
   categoriesId: [{ type: Number }],
-  userId: { type: mongoose.Schema.ObjectId },
+  userId: { type: mongoose.Schema.Types.ObjectId },
   isBidding: { type: Boolean },
   bidStart: { type: Date },
   bidEnd: { type: Date },

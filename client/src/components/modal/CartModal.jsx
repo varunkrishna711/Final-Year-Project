@@ -26,12 +26,13 @@ const CartModal = (props) => {
         ) : (
           <>
             <div className="cartmodal-cards">
+              {console.log(cartProducts)}
               {cartProducts?.map((cartProduct) => (
                 <CartModalItemCard
                   key={cartProduct.id}
                   cartProductId={cartProduct.id}
-                  image={cartProduct.product.images[0]}
-                  name={cartProduct.product.name}
+                  image={cartProduct.product?.images[0]}
+                  name={cartProduct.product?.name}
                   size={cartProduct.selectedSize}
                   price={cartProduct.product.price}
                   totalPrice={cartProduct.totalPrice}
