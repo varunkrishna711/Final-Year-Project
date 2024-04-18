@@ -16,7 +16,7 @@ export default function ProductRequestHistoryPage() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8800/api/product-request/${adminInfo.id}`
+          `${process.env.REACT_APP_API_URL}/api/product-request/${adminInfo.id}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");

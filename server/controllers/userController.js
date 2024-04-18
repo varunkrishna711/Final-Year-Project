@@ -1,6 +1,7 @@
 const ApiError = require("../error/ApiError");
 const UserService = require("../services/user-service");
 const { validateEmail } = require("../helpers/validateEmail");
+const axios = require("axios");
 
 class UserController {
   async registration(req, res, next) {
@@ -232,27 +233,26 @@ class UserController {
     const imgBuffer = req.files.userImage.data;
     const imgBase64 = imgBuffer.toString("base64");
 
-    const formData = new FormData();
-    formData.append("key", process.env.IMAGE_HOSTING_API_KEY);
-    formData.append("source", imgBase64);
-    formData.append("format", "json");
+    // const formData = new FormData();
+    // formData.append("key", process.env.IMAGE_HOSTING_API_KEY);
+    // formData.append("source", imgBase64);
+    // formData.append("format", "json");
 
-    const { data } = await axios.post(
+    let response = await axios.post(
       process.env.IMAGE_API_UPLOAD_URL,
-      formData,
+      { image: imgBase64 },
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.IMAGE_HOSTING_API_KEY}`,
         },
       }
     );
-
-    if (data.status_code !== 200) {
+    if (response.data.status !== 200) {
       return next(ApiError.internal(data.error.message));
     }
 
-    let imageurl = data.image.url;
-
+    let imageurl = response.data.data.link;
     try {
       const newImageUrl = await UserService.updateUserImage(userId, imageurl);
       return res.json(newImageUrl);
