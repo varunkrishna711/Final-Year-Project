@@ -7,12 +7,15 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPosition } from "../store/mapSlice";
 import { useEffect } from "react";
 import { addProductRequest } from "../store/productSlice";
+import { openErrorSnackbar, openSuccessSnackbar } from "../store/modalSlice";
 
 const ProductRequestPage = (props) => {
+  const navigate = useNavigate();
   const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   const [productName, setProductName] = useState("");
@@ -24,13 +27,13 @@ const ProductRequestPage = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log({
-      userId,
-      productName,
-      quantity,
-      deliveryDate,
-      location,
-    });
+    // console.log({
+    //   userId,
+    //   productName,
+    //   quantity,
+    //   deliveryDate,
+    //   location,
+    // });
 
     dispatch(
       addProductRequest({
@@ -40,16 +43,16 @@ const ProductRequestPage = (props) => {
         deliveryDate,
         location,
       })
-    ).then((data) => {
-      if (data.type === "product/addRequest/fulfilled") {
-        // dispatch(openSuccessSnackbar("Request added succesfully!"));
+    )
+      .then((data) => {
+        dispatch(openSuccessSnackbar("Request added succesfully!"));
+        navigate("/product-request-history");
         console.log("Success");
-      }
-      if (data.type === "product/addRequest/rejected") {
-        // dispatch(openErrorSnackbar(data.error.message));
-        console.log("failed");
-      }
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(openErrorSnackbar(err.message));
+      });
   };
 
   const handleLocationSelect = (e) => {
