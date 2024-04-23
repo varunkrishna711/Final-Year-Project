@@ -26,6 +26,8 @@ class RequestService {
 
       // Set isFullfilled to true
       request.isFullfilled = true;
+      request.acceptedProducerId = req.body.acceptedProducerId;
+      request.acceptedProducerName = req.body.acceptedProducerName;
 
       // Save the updated request
       await request.save();
