@@ -143,8 +143,8 @@ const vendorRequirement = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     default: [],
   },
-  acceptedProducersName: { type: String },
-  acceptedProducersId: { type: mongoose.Schema.Types.ObjectId },
+  acceptedProducerName: { type: String },
+  acceptedProducerId: { type: mongoose.Schema.Types.ObjectId },
 });
 
 // Create Mongoose Models

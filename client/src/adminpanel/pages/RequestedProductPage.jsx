@@ -23,6 +23,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function RequestedProductPage() {
   const adminInfo = useSelector((state) => state.admin.adminInfo);
+  const admin = useSelector((state) => state.admin);
 
   const { id } = useParams();
   const [requestDetails, setRequestDetails] = useState(null);
@@ -36,9 +37,11 @@ export default function RequestedProductPage() {
 
   useEffect(() => {
     fetchRequestDetails();
-    if (adminInfo?.id) {
+    if (adminInfo?._id) {
       fetchAdminLocation();
     }
+
+    console.log(admin);
   }, [id, adminInfo.id]);
 
   const fetchRequestDetails = async () => {
@@ -62,7 +65,7 @@ export default function RequestedProductPage() {
     try {
       setLocationLoading(true);
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/user/info/${adminInfo.id}`
+        `${process.env.REACT_APP_API_URL}/api/user/info/${adminInfo._id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch admin location");
@@ -86,7 +89,11 @@ export default function RequestedProductPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ isFullfilled: true }),
+          body: JSON.stringify({
+            isFullfilled: true,
+            acceptedProducerId: adminInfo._id,
+            acceptedProducerName: adminInfo.firstname,
+          }),
         }
       );
       if (!response.ok) {

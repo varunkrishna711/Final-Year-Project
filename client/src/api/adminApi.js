@@ -7,7 +7,7 @@ export const adminLogin = async (email, password) => {
     password,
   });
   localStorage.setItem("adminToken", data.token);
-  return jwt_decode(data.token);
+  return data;
 };
 
 export const adminCheck = async () => {

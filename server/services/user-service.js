@@ -73,7 +73,9 @@ class UserService {
     const user = await User.findOne({
       email,
       role: { $in: ["ADMIN", "TESTADMIN"] },
-    });
+    })
+      .lean()
+      .exec();
 
     if (!user) {
       throw new Error("User is not admin");
@@ -85,8 +87,8 @@ class UserService {
     }
 
     const token = generateAdminJwt(user._id.toString(), user.email, user.role);
-
-    return token;
+    const { password: removePass, ...returnData } = { token, ...user };
+    return returnData;
   }
 
   async check(userId, userEmail, userRole) {
