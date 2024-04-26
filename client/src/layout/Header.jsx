@@ -5,7 +5,6 @@ import Search from "../components/common/Search";
 import LoginToggle from "../components/common/LoginToggle";
 import OpenCartModal from "../components/common/OpenCartModal.jsx";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import logo from "../assets/images/logo.png";
 import { useSelector } from "react-redux";
 
 const Header = () => {
@@ -39,7 +38,7 @@ const Header = () => {
               onClick={handleClickLogo}
             /> */}
             <span
-              className="font-bold text-5x text-green-800"
+              className="font-bold text-green-800 text-5x"
               onClick={handleClickLogo}
             >
               StreetNet

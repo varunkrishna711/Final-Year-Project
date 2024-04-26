@@ -13,7 +13,9 @@ function App() {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userId);
   const cartSubTotal = useSelector((state) => state.cart.subTotal);
-  const isLoading = useSelector((state) => state.user.isLoading);
+  const cartLoading = useSelector((state) => state.cart.isLoading);
+  const userLoading = useSelector((state) => state.user.isLoading);
+  const isLoading = cartLoading || userLoading;
   const isLogin = useSelector((state) => state.user.isLogin);
 
   useEffect(() => {

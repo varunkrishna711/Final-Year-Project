@@ -46,6 +46,17 @@ const NavBarMobile = ({ closeNavBarModal }) => {
             link="/shop"
             closeNavBarModal={closeNavBarModal}
           />
+          <NavlinkMobile
+            value="Map"
+            link="/map"
+            closeNavBarModal={closeNavBarModal}
+          />
+          <NavlinkMobile
+            value="Request Product"
+            link="/product-request"
+            closeNavBarModal={closeNavBarModal}
+          />
+
           <NavDropdownMobile
             title="Categories"
             items={[
