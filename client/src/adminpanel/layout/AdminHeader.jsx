@@ -1,6 +1,5 @@
 import React from "react";
 import AdminDropdown from "../components/common/AdminDropdown";
-import logo from "../../assets/images/logo.png";
 
 const AdminHeader = () => {
   return (

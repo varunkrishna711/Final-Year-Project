@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import AdminPanelInput from "../components/UI/AdminPanelInput";
-import logo from "../../assets/images/logo.png";
 import { useSelector, useDispatch } from "react-redux";
 import { adminSignIn } from "../../store/adminSlice";
 import { openSuccessSnackbar, openErrorSnackbar } from "../../store/modalSlice";
@@ -46,7 +45,7 @@ const LoginPage = () => {
       <div className="login-container">
         <div className="login-image">
           {/* <img src={logo} alt="logo" /> */}
-          <span className="font-bold text-3xl">StreetNet</span>
+          <span className="text-3xl font-bold">StreetNet</span>
         </div>
         <div className="login-inputs">
           <div>

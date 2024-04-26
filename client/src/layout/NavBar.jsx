@@ -21,35 +21,6 @@ const NavBar = () => {
             { text: "Others", link: "/shop?category_id=5" },
           ]}
         />
-        {/* <Navlink 
-          value='Best offers' 
-          link='/shop?order=rating'
-        />
-        <Navlink 
-          value='For men' 
-          link='/shop?category_id=1'
-        />
-        <Navlink 
-          value='For women' 
-          link='/shop?category_id=2'
-        /> */}
-        {/* <Navlink 
-          value='Kids' 
-          link='/shop?category_id=3'
-        />
-        <NavDropdown
-          title='Vitamins'
-          items={[
-            {text: 'Vitamin A', link: '/shop?category_id=5'},
-            {text: 'Vitamin B', link: '/shop?category_id=6'}, 
-            {text: 'Vitamin C', link: '/shop?category_id=7'},
-            {text: 'Vitamin D', link: '/shop?category_id=8'}
-          ]}
-        /> */}
-        {/* <Navlink 
-          value='Omega' 
-          link='/shop?category_id=9'
-        /> */}
       </ul>
 
       <OpenCartModal />
