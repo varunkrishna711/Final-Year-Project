@@ -138,7 +138,7 @@ class UserService {
   }
 
   async getUserInfo(userId) {
-    const user = await User.findById(userId);
+    const { password, ...user } = await User.findById(userId).lean().exec();
     return user;
   }
 

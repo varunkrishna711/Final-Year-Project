@@ -11,6 +11,7 @@ const NavBar = () => {
         <Navlink value="Shop All" link="/shop" />
         <Navlink value="Map" link="/map" />
         <Navlink value="Request Product" link="/product-request" />
+        <Navlink value="Chat" link="/chats" />
         <NavDropdown
           title="Categories"
           items={[

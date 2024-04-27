@@ -10,6 +10,7 @@ import promoSlice from "./promoSlice";
 import searchSlice from "./searchSlice";
 import adminSlice from "./adminSlice";
 import mapSlice from "./mapSlice";
+import chatSlice from "./chatSlice";
 
 export default configureStore({
   reducer: {
@@ -24,5 +25,6 @@ export default configureStore({
     admin: adminSlice,
     promo: promoSlice,
     search: searchSlice,
+    chat: chatSlice,
   },
 });
