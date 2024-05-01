@@ -31,7 +31,13 @@ const AccountDropdown = () => {
       >
         <div className="myacc-text">My account</div>
         <div className="image-wrapper">
-          <img src={userImage ? userImage : defaultphoto} alt="userphoto" />
+          <img
+            src={
+              userImage ??
+              `https://api.dicebear.com/5.x/avataaars/svg?seed=${firstName}`
+            }
+            alt="userphoto"
+          />
         </div>
       </button>
       <div className="z-20 dropdown-container">

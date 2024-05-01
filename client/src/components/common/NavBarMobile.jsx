@@ -56,6 +56,11 @@ const NavBarMobile = ({ closeNavBarModal }) => {
             link="/product-request"
             closeNavBarModal={closeNavBarModal}
           />
+          <NavlinkMobile
+            value="Chat"
+            link="/chats"
+            closeNavBarModal={closeNavBarModal}
+          />
 
           <NavDropdownMobile
             title="Categories"

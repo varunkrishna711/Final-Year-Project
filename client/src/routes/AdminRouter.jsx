@@ -24,6 +24,8 @@ import RequestListPage from "../adminpanel/pages/RequestListPage";
 import RequestedProductPage from "../adminpanel/pages/RequestedProductPage";
 import { useSelector } from "react-redux";
 import "../adminpanel/styles/globalstyles/adminpanel.scss";
+import ChatPage from "../pages/ChatPage";
+import ChatList from "../pages/ChatList";
 
 const AdminRouter = () => {
   const isAdminLogin = useSelector((state) => {
@@ -63,7 +65,7 @@ const AdminRouter = () => {
       >
         <Route path="/" element={<DashboardPage />} />
         {/* <Route path='login' element={<LoginPage/>} /> */}
-        <Route path="products" element={<ProductListPage />} />
+        <Route path="/products" element={<ProductListPage />} />
         <Route path="products/new" element={<ProductNewPage />} />
         <Route path="products/:id" element={<ProductPage />} />
         <Route path="products/edit/:id" element={<ProductEditPage />} />
@@ -78,6 +80,8 @@ const AdminRouter = () => {
         <Route path="orders" element={<OrderListPage />} />
         <Route path="orders/:id" element={<OrderInfoPage />} />
         <Route path="categories" element={<CategoryListPage />} />
+        <Route path="chat/:id" element={<ChatPage isAdmin={true} />} />
+        <Route path="chats" element={<ChatList isAdmin={true} />} />
         <Route path="*" element={<Navigate to="/admin" replace />} />
       </Route>
     </Routes>

@@ -1,5 +1,4 @@
 const { User } = require("../db/models/models");
-const ApiError = require("../error/ApiError");
 const RequestService = require("../services/request-service");
 
 class RequestController {

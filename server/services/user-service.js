@@ -97,8 +97,11 @@ class UserService {
   }
 
   async adminCheck(adminId, adminEmail, adminRole) {
+    const user = await User.findOne({ _id: adminId }, { password: 0 })
+      .lean()
+      .exec();
     const token = generateAdminJwt(adminId, adminEmail, adminRole);
-    return token;
+    return { ...user, token };
   }
 
   async getAll(userId, name, email, limit, offset) {
@@ -138,7 +141,7 @@ class UserService {
   }
 
   async getUserInfo(userId) {
-    const user = await User.findById(userId);
+    const { password, ...user } = await User.findById(userId).lean().exec();
     return user;
   }
 
@@ -305,6 +308,22 @@ class UserService {
       .sort((a, b) => a.distance - b.distance)
       .filter((a) => a.distance <= 10);
     return sortedListDist;
+  }
+
+  async getVendorsNearby(lat, lgt) {
+    const vendors = await User.find({ role: "USER" }, {}, { lean: true });
+    const sortedListDist = vendors
+      .map((s) => ({
+        ...s,
+        distance: calculateDistance(lat, lgt, s.location[0], s.location[1]),
+      }))
+      .sort((a, b) => a.distance - b.distance);
+
+    let filteredList = sortedListDist.filter((a) => a.distance <= 10);
+    if (filteredList.length === 0)
+      filteredList = sortedListDist.filter((a) => a.distance <= 50);
+
+    return filteredList;
   }
 
   async deleteUser(userId) {

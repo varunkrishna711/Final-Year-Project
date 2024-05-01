@@ -1,5 +1,6 @@
 import React from "react";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { Avatar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { adminLogout, adminLoginCheck } from "../../../store/adminSlice";
 
@@ -20,7 +21,13 @@ const AdminDropdown = () => {
           {adminInfo.role === "TESTADMIN" ? "DEMO ADMIN" : "ADMIN"}
         </div>
         <div className="admin-logo">
-          <AdminPanelSettingsIcon fontSize="medium" />
+          <Avatar
+            alt={adminInfo.firstname}
+            src={
+              adminInfo.image ??
+              `https://api.dicebear.com/5.x/avataaars/svg?seed=${adminInfo.firstname}`
+            }
+          />
         </div>
       </div>
 

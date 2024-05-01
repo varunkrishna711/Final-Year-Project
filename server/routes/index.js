@@ -9,6 +9,7 @@ const promoRouter = require("./promoRouter");
 const searchRouter = require("./searchRouter");
 const reviewRouter = require("./reviewRouter");
 const vendorRequestRoute = require("./vendorRequestRoute");
+const chatRouter = require("./chatRouter");
 
 const router = new Router();
 
@@ -21,5 +22,6 @@ router.use("/promo", promoRouter);
 router.use("/review", reviewRouter);
 router.use("/search", searchRouter);
 router.use("/product-request", vendorRequestRoute);
+router.use("/chat", chatRouter);
 
 module.exports = router;

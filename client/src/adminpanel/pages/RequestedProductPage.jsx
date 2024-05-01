@@ -42,7 +42,7 @@ export default function RequestedProductPage() {
     }
 
     console.log(admin);
-  }, [id, adminInfo.id]);
+  }, [id, adminInfo._id]);
 
   const fetchRequestDetails = async () => {
     try {

@@ -147,6 +147,26 @@ const vendorRequirement = new mongoose.Schema({
   acceptedProducerId: { type: mongoose.Schema.Types.ObjectId },
 });
 
+const chatSchema = new mongoose.Schema(
+  {
+    from: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    to: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    isUnread: { type: Boolean, default: true },
+    time: { type: Date },
+    type: {
+      type: String,
+      enum: ["BROADCAST", "REQUEST", "BID", "TEXT"],
+    },
+    /**
+     * BROADCAST : PRODUCER => VENDOR
+     * REQUEST : VENDOR => PRODUCER
+     * BID : PRODUCER => VENDOR
+     */
+    message: { type: Object },
+  },
+  { timestamps: true }
+);
+
 // Create Mongoose Models
 const User = mongoose.model("User", userSchema);
 const Address = mongoose.model("Address", addressSchema);
@@ -162,6 +182,7 @@ const PromoCode = mongoose.model("PromoCode", promoCodeSchema);
 const UsedPromo = mongoose.model("UsedPromo", usedPromoSchema);
 const ProductCategory = mongoose.model("ProductCategory", productCategory);
 const VendorRequirement = mongoose.model("UserRequirement", vendorRequirement);
+const Chat = mongoose.model("Chat", chatSchema);
 
 module.exports = {
   User,
@@ -178,4 +199,5 @@ module.exports = {
   PromoCode,
   UsedPromo,
   VendorRequirement,
+  Chat,
 };

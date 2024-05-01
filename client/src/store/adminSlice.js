@@ -27,7 +27,7 @@ import {
 } from "../api/adminApi";
 
 const initialState = {
-  isAdminLogin: false,
+  isAdminLogin: localStorage.getItem("adminToken") ? true : false,
   adminInfo: null,
   orderStatistic: [],
   saleStatistic: [],

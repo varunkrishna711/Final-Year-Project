@@ -135,12 +135,8 @@ class UserController {
     }
 
     try {
-      const token = await UserService.adminCheck(
-        adminId,
-        adminEmail,
-        adminRole
-      );
-      return res.json({ token });
+      const user = await UserService.adminCheck(adminId, adminEmail, adminRole);
+      return res.json(user);
     } catch (error) {
       return next(error);
     }

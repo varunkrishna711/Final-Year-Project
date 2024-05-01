@@ -19,6 +19,8 @@ import { useSelector } from "react-redux";
 import ProductRequestPage from "../pages/ProductRequestPage";
 import ProductRequestHistoryPage from "../pages/ProductRequestHistoryPage";
 import UserProfilePage from "../pages/UserProfilePage";
+import ChatList from "../pages/ChatList";
+import ChatPage from "../pages/ChatPage";
 const UserRouter = () => {
   const isLogin = useSelector((state) => state.user.isLogin);
 
@@ -57,6 +59,8 @@ const UserRouter = () => {
           element={isLogin ? <MyAccountPage /> : <Navigate to="/shop" />}
         />
         <Route path="/error" element={<ErrorPage />} />
+        <Route path="/chat/:id" element={<ChatPage />} />
+        <Route path="/chats" element={<ChatList />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
