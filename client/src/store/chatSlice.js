@@ -20,7 +20,11 @@ export const loadChatList = createAsyncThunk(
     try {
       let response = await fetchChatList(arg.userId);
       if (response.length === 0)
-        response = await fetchChatListFromLocation(arg.latitude, arg.longitude);
+        response = await fetchChatListFromLocation(
+          arg.latitude,
+          arg.longitude,
+          arg.isAdmin
+        );
       return response;
     } catch (error) {
       throw error.response.data;
@@ -101,6 +105,7 @@ const chatSlice = createSlice({
   },
 });
 
-export const { setLoading, setSelectedChat, setChats } = chatSlice.actions;
+export const { setLoading, setSelectedChat, setChats, setChatList } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

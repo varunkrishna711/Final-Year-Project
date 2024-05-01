@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const { Chat, User } = require("../db/models/models");
 
 class ChatService {
@@ -5,13 +6,32 @@ class ChatService {
     return await Chat.create(payload);
   }
 
-  async getChatList({ id }) {
-    return await Chat.find({ $or: [{ from: id }, { to: id }] })
+  async getAdminChatList(id) {
+    const recieved = await Chat.find({ from: id }, { to: 1 })
       .sort({
         createdAt: 1,
       })
+      .populate({
+        path: "to",
+        select: "-password",
+      })
       .lean()
       .exec();
+    return recieved;
+  }
+
+  async getChatList(id) {
+    const recieved = await Chat.find({ from: id }, { to: 1 })
+      .sort({
+        createdAt: 1,
+      })
+      .populate({
+        path: "to",
+        select: "-password",
+      })
+      .lean()
+      .exec();
+    return recieved;
   }
 
   async markAsRead(id) {

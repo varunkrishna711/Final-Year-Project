@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProgressBar from "../components/MUI/ProgressBar";
@@ -14,27 +14,53 @@ import axios from "axios";
 import { TextMessage } from "../components/chat/Message";
 import "../styles/pages/chat.scss";
 import { fetchUserInfo } from "../api/userApi";
+import AnnouncementIcon from "@mui/icons-material/Announcement";
+import { openLoginModal, openSignUpModal } from "../store/modalSlice";
 
-const ChatPage = () => {
+const ChatPage = ({ isAdmin }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const containerRef = useRef(null);
   const dispatch = useDispatch();
   const [message, setMessage] = useState("");
   const isLoading = useSelector((state) => state.chat.isLoading);
   const chats = useSelector((state) => state.chat.chats);
   const selectedUserChat = useSelector((state) => state.chat.selectedChat);
   const userId = useSelector((state) => state.user.userId);
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const isAdminLogin = useSelector((state) => state.admin.isAdminLogin);
+  const adminId = useSelector((state) => state.admin.adminInfo?._id);
+
+  const toLogin = () => {
+    dispatch(openLoginModal());
+  };
+
+  const toSignUp = () => {
+    dispatch(openSignUpModal());
+  };
 
   const send = () => {
-    dispatch(sendTextMessage({ userId, id, message })).then(() => {
+    dispatch(
+      sendTextMessage({ userId: isAdmin ? adminId : userId, id, message })
+    ).then(() => {
       fetchMessages();
       setMessage("");
     });
   };
 
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  };
+
   const fetchMessages = () => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/api/chat/${userId}/${id}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/api/chat/${
+          isAdmin ? adminId : userId
+        }/${id}`
+      )
       .then(async ({ data }) => {
         const body = await fetchUserInfo(id);
         dispatch(setSelectedChat(body));
@@ -49,28 +75,75 @@ const ChatPage = () => {
     // dispatch(loadMessages(args));
 
     /* TEMPORARY FIX */
-    fetchMessages();
-  }, [id, userId]);
+    if (isAdmin ? isAdminLogin : isLogin) fetchMessages();
+    chats && scrollToBottom();
+    return () => {
+      dispatch(setSelectedChat(null));
+      dispatch(setChats([]));
+    };
+  }, [id, isAdmin ? adminId : userId]);
 
-  if (isLoading) return <ProgressBar />;
-  return (
-    <div className="sm:h-[650px] flex flex-col justify-center items-center">
-      <div className="header w-9/12 min-w-[300px] h-12 my-4 bg-green-100 p-4 rounded-2xl flex items-center">
-        <Avatar
-          alt={selectedUserChat.firstname}
-          src={
-            selectedUserChat.image ??
-            `https://api.dicebear.com/5.x/avataaars/svg?seed=${selectedUserChat.firstname}`
-          }
-        />
-        <div
-          onClick={() => navigate(`../../user/${selectedUserChat._id}`)}
-          className="ml-2 cursor-pointer hover:text-green-900"
-        >
-          {selectedUserChat.firstname} {selectedUserChat.lastname}
+  useEffect(() => {
+    scrollToBottom();
+  }, [chats]);
+
+  console.log(isAdmin ? adminId : userId, isAdmin);
+
+  if (isLoading)
+    return (
+      <div className="sm:h-[650px] flex flex-col justify-center items-center">
+        <ProgressBar />
+      </div>
+    );
+
+  if (isAdmin ? !isAdminLogin : !isLogin)
+    return (
+      <div className="min-h-[600px] flex flex-col items-center justify-center">
+        <div>
+          <span onClick={toLogin} className="text-green-700 cursor-pointer">
+            Login
+          </span>{" "}
+          or{" "}
+          <span onClick={toSignUp} className="text-green-700 cursor-pointer">
+            Sign Up
+          </span>{" "}
+          access chat
         </div>
       </div>
-      <div className="message-container h-auto p-8 overflow-auto chat-container w-9/12 min-w-[300px] ">
+    );
+  return (
+    <div
+      className={`${
+        isAdmin ? "h-full" : "sm:h-[650px]"
+      } flex flex-col justify-center items-center`}
+    >
+      {selectedUserChat && (
+        <div className="header w-9/12 min-w-[300px] h-12 my-4 bg-green-100 p-4 rounded-2xl flex items-center">
+          <Avatar
+            alt={selectedUserChat.firstname}
+            src={
+              selectedUserChat.image ??
+              `https://api.dicebear.com/5.x/avataaars/svg?seed=${selectedUserChat.firstname}`
+            }
+          />
+          <div
+            onClick={() => navigate(`../../user/${selectedUserChat._id}`)}
+            className="ml-2 cursor-pointer hover:text-green-900"
+          >
+            {selectedUserChat.firstname} {selectedUserChat.lastname}
+          </div>
+        </div>
+      )}
+      <div
+        className="message-container h-full p-8 overflow-auto chat-container w-9/12 min-w-[300px] "
+        ref={containerRef}
+      >
+        {chats.length === 0 && (
+          <div className="absolute flex items-center content-center gap-1 text-slate-600 top-1/2 left-1/2">
+            <AnnouncementIcon />
+            Such Empty
+          </div>
+        )}
         {chats?.map((chat) => {
           switch (chat.type) {
             case "":
@@ -80,7 +153,7 @@ const ChatPage = () => {
                 <TextMessage
                   id={chat._id}
                   message={chat.message.message}
-                  isSent={chat.from._id == userId}
+                  isSent={chat.from._id == (isAdmin ? adminId : userId)}
                   from={chat.from}
                   to={chat.to}
                   time={chat.createdAt}

@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { Avatar } from "@mui/material";
-import { CheckCircle, CheckCircleOutline } from "@mui/icons-material";
+import DoneIcon from "@mui/icons-material/Done";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 
-const TextMessage = ({ id, message, from, to, time, read, isSent }) => {
-  console.log({ message, from, to, time, read, isSent });
+const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
+  console.log({ message, from, to, time, unread, isSent });
 
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
   const messageContainerClass = isSent ? "bg-green-200" : "bg-gray-200";
@@ -31,11 +32,15 @@ const TextMessage = ({ id, message, from, to, time, read, isSent }) => {
           }
         />
       )}
-      {console.log(from.firstname)}
       <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
         <p>{message}</p>
         <small className="mr-2">{convertDateFormat(time)}</small>
-        {isSent && (read ? <CheckCircle /> : <CheckCircleOutline />)}
+        {isSent &&
+          (!unread ? (
+            <DoneAllIcon className="!text-[18px]" />
+          ) : (
+            <DoneIcon className="!text-[18px]" />
+          ))}
       </div>
       {isSent && (
         <Avatar
@@ -75,7 +80,7 @@ const ProductRequestMessage = ({
       <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
         <p>{`${from.firstname} requested: ${productRequest}`}</p>
         <small>{time}</small>
-        {read ? <CheckCircle /> : <CheckCircleOutline />}
+        {read ? <DoneAllIcon /> : <DoneIcon />}
       </div>
       {isSent && (
         <Avatar

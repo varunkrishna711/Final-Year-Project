@@ -6,12 +6,14 @@ import { loadChatList } from "../store/chatSlice";
 import { openLoginModal, openSignUpModal } from "../store/modalSlice";
 import "../styles/pages/chat.scss";
 
-const ChatList = () => {
+const ChatList = ({ isAdmin }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogin = useSelector((state) => state.user.isLogin);
+  const isAdminLogin = useSelector((state) => state.admin.isAdminLogin);
   const userId = useSelector((state) => state.user.userId);
   const chatList = useSelector((state) => state.chat.chatList);
+  const adminId = useSelector((state) => state.admin.adminInfo?._id);
 
   const toLogin = () => {
     dispatch(openLoginModal());
@@ -22,11 +24,18 @@ const ChatList = () => {
   };
 
   useEffect(() => {
-    if (isLogin) {
+    if (isAdmin ? isAdminLogin : isLogin) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          dispatch(loadChatList({ latitude, longitude, userId }));
+          dispatch(
+            loadChatList({
+              latitude,
+              longitude,
+              userId: isAdmin ? adminId : userId,
+              isAdmin,
+            })
+          );
         },
         (error) => {
           console.error("Error getting geolocation:", error.message);
@@ -35,7 +44,7 @@ const ChatList = () => {
     }
   }, []);
 
-  if (!isLogin)
+  if (isAdmin ? !isAdminLogin : !isLogin)
     return (
       <div className="min-h-[600px] flex flex-col items-center justify-center">
         <div>

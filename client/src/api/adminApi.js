@@ -13,7 +13,7 @@ export const adminLogin = async (email, password) => {
 export const adminCheck = async () => {
   const { data } = await $authAdminHost.get("api/user/auth-admin");
   localStorage.setItem("adminToken", data.token);
-  return jwt_decode(data.token);
+  return data;
 };
 
 export const startBidding = async (id) => {

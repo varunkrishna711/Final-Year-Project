@@ -50,7 +50,7 @@ export default function ProductRequestHistoryPage() {
     return () => {
       isMounted = false; // Cleanup function to set the flag to false when the component unmounts
     };
-  }, [adminInfo.id]); // Ensure useEffect re-runs if adminInfo.id changes
+  }, [adminInfo._id]); // Ensure useEffect re-runs if adminInfo.id changes
 
   if (error) {
     return <div>Error: {error}</div>;
