@@ -11,7 +11,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import axios from "axios";
-import { TextMessage } from "../components/chat/Message";
+import {
+  BidConfirmationMessage,
+  TextMessage,
+} from "../components/chat/Message";
 import "../styles/pages/chat.scss";
 import { fetchUserInfo } from "../api/userApi";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
@@ -147,7 +150,14 @@ const ChatPage = ({ isAdmin }) => {
         {chats?.map((chat) => {
           switch (chat.type) {
             case "":
-            case "":
+            case "BID":
+              return (
+                <BidConfirmationMessage
+                  chat={chat}
+                  id={chat._id}
+                  isSent={chat.from._id == (isAdmin ? adminId : userId)}
+                />
+              );
             default:
               return (
                 <TextMessage

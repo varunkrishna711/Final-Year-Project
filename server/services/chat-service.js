@@ -1,5 +1,5 @@
 const { default: mongoose } = require("mongoose");
-const { Chat, User } = require("../db/models/models");
+const { Chat, User, Product } = require("../db/models/models");
 
 class ChatService {
   async create(payload) {
@@ -57,7 +57,23 @@ class ChatService {
       .lean()
       .exec();
 
-    const messagesWithDirection = messages.map((message) => {
+    const populatedMessage = await Promise.all(
+      messages.map(async (message) => {
+        if (message.type === "BID")
+          message.message.bid.product = await Product.findOne(
+            {
+              _id: message.message.bid.product,
+            },
+            { _id: 1, images: 1, name: 1, price: 1, rating: 1,userId:1 }
+          )
+            .lean()
+            .exec();
+
+        return message;
+      })
+    );
+
+    const messagesWithDirection = populatedMessage.map((message) => {
       if (message.from === from && message.to === to) {
         return { ...message, isSend: true };
       } else {

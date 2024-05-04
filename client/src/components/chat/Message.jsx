@@ -106,13 +106,73 @@ const BroadcastMessage = ({ message, time }) => {
   );
 };
 
-const BidConfirmationMessage = ({ message, time }) => {
+const BidConfirmationMessage = ({ id, chat, isSent }) => {
+  const { from, to, time, isUnread, message } = chat;
+  const messageClass = isSent ? "flex justify-end" : "flex justify-start";
+  const messageContainerClass = isSent ? "bg-green-200" : "bg-gray-200";
+  const markAsRead = async () => {
+    if (!isSent)
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
+      );
+  };
+
+  useEffect(() => {
+    markAsRead();
+  }, []);
+
   return (
-    <div className="flex justify-end mb-2">
-      <div className="p-2 text-black bg-green-300 rounded-lg">
-        <p>{message}</p>
-        <small>{time}</small>
+    <div className={`flex items-start mb-2 ${messageClass}`}>
+      {!isSent && (
+        <Avatar
+          alt={from.firstname}
+          src={
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
+          }
+        />
+      )}
+      <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
+        <div className="p-2 rounded-lg">
+          <strong>Bid Confirmation</strong>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div>
+              <img
+                src={message.bid.product.images[0]}
+                alt={message.bid.product.name}
+                className="object-cover w-20 h-20 rounded-lg"
+              />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold">
+                {message.bid.product.name}
+              </h3>
+              <p className="text-gray-500">
+                Bid Price {`$${message.bid.price}`}
+              </p>
+            </div>
+          </div>
+          <p>{message.bid.product.description}</p>
+        </div>
+
+        <small className="mr-2">{convertDateFormat(time)}</small>
+        {isSent &&
+          (!isUnread ? (
+            <DoneAllIcon className="!text-[18px]" />
+          ) : (
+            <DoneIcon className="!text-[18px]" />
+          ))}
       </div>
+      {isSent && (
+        <Avatar
+          alt={to.firstname}
+          src={
+            to.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${to.firstname}`
+          }
+        />
+      )}
+      {console.log(to.firstname)}
     </div>
   );
 };
