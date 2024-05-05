@@ -5,18 +5,10 @@ export const fetchMessages = async (from, to) => {
   return data;
 };
 
-export const fetchChatList = async (id) => {
-  const { data } = await $host.get(`api/chat/chat-list/${id}`);
-  return data;
-};
-
-export const fetchChatListFromLocation = async (lat, lgt, isAdmin) => {
-  let data;
-  if (isAdmin)
-    ({ data } = await $host.get(`api/chat/chat-list/${lat}/${lgt}`, {
-      params: { isAdmin },
-    }));
-  else ({ data } = await $host.get(`api/chat/chat-list/${lat}/${lgt}`));
+export const fetchChatList = async (id, lat, lgt, isAdmin) => {
+  const { data } = await $host.get(`api/chat/chat-list/${id}`, {
+    params: { isAdmin, lat, lgt },
+  });
   return data;
 };
 

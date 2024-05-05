@@ -25,10 +25,13 @@ class ChatService {
     return recieved;
   }
 
-  async getChatList(id) {
-    const recieved = await Chat.find({ from: id }, { to: 1 })
+  async getChatList(userId) {
+    const sent = await Chat.find(
+      { from: userId },
+      { to: 1, _id: 0, createdAt: 1 }
+    )
       .sort({
-        createdAt: 1,
+        createdAt: -1,
       })
       .populate({
         path: "to",
@@ -36,7 +39,54 @@ class ChatService {
       })
       .lean()
       .exec();
-    return recieved;
+
+    const toObjects = distinctToObjects(sent);
+
+    // const received = await Chat.find({ to: userId }, { from: 1, _id: 0 })
+    //   .sort({
+    //     createdAt: 1,
+    //   })
+    //   .populate({
+    //     path: "from",
+    //     select: "-password",
+    //   })
+    //   .lean()
+    //   .exec();
+
+    const rec = await Chat.aggregate([
+      { $match: { to: new mongoose.Types.ObjectId(userId) } },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "from",
+          foreignField: "_id",
+          as: "fromUser",
+        },
+      },
+      { $unwind: "$fromUser" },
+      {
+        $group: {
+          _id: "$fromUser._id",
+          countUnread: {
+            $sum: { $cond: [{ $eq: ["$isUnread", true] }, 1, 0] },
+          },
+          fromUser: { $first: "$fromUser" },
+          createdAt: { $first: "$createdAt" },
+        },
+      },
+      {
+        $project: {
+          from: "$_id",
+          countUnread: 1,
+          _id: 0,
+          fromUser: 1,
+          createdAt: 1,
+        },
+      },
+    ]);
+
+    return { sent: toObjects, received: rec };
   }
 
   async markAsRead(id) {
@@ -103,5 +153,16 @@ const requestMessages = (messages) =>
   messages.filter((m) => m.type === "REQUEST");
 
 const textMessages = (messages) => messages.filter((m) => m.type === "TEXT");
+
+const distinctToObjects = (sent) => {
+  const uniqueToObjects = sent.reduce((acc, { to, createdAt }) => {
+    if (to && to._id && !acc[to._id.toString()]) {
+      acc[to._id.toString()] = { to, createdAt };
+    }
+    return acc;
+  }, {});
+
+  return Object.values(uniqueToObjects);
+};
 
 module.exports = new ChatService();

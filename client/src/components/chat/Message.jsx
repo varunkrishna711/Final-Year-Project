@@ -45,10 +45,10 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
       </div>
       {isSent && (
         <Avatar
-          alt={to.firstname}
+          alt={from.firstname}
           src={
-            to.image ??
-            `https://api.dicebear.com/5.x/avataaars/svg?seed=${to.firstname}`
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
           }
         />
       )}
@@ -117,10 +117,10 @@ const ProductRequestMessage = ({ id, chat, isSent }) => {
       </div>
       {isSent && (
         <Avatar
-          alt={to.firstname}
+          alt={from.firstname}
           src={
-            to.image ??
-            `https://api.dicebear.com/5.x/avataaars/svg?seed=${to.firstname}`
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
           }
         />
       )}{" "}
@@ -201,14 +201,13 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
       </div>
       {isSent && (
         <Avatar
-          alt={to.firstname}
+          alt={from.firstname}
           src={
-            to.image ??
-            `https://api.dicebear.com/5.x/avataaars/svg?seed=${to.firstname}`
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
           }
         />
       )}
-      {console.log(to.firstname)}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   setSelectedChat,
   setChats,
   sendTextMessage,
+  setIsLoading,
 } from "../store/chatSlice";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
@@ -20,6 +21,7 @@ import "../styles/pages/chat.scss";
 import { fetchUserInfo } from "../api/userApi";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import { openLoginModal, openSignUpModal } from "../store/modalSlice";
+import PageLoader from "../components/loaders/PageLoader";
 
 const ChatPage = ({ isAdmin }) => {
   const { id } = useParams();
@@ -45,6 +47,18 @@ const ChatPage = ({ isAdmin }) => {
 
   const send = () => {
     dispatch(
+      setChats([
+        ...chats,
+        {
+          from: { _id: isAdmin ? adminId : userId },
+          to: { _id: id },
+          createdAt: new Date(),
+          message: { message },
+          isUnread: true,
+        },
+      ])
+    );
+    dispatch(
       sendTextMessage({ userId: isAdmin ? adminId : userId, id, message })
     ).then(() => {
       fetchMessages();
@@ -69,6 +83,11 @@ const ChatPage = ({ isAdmin }) => {
         const body = await fetchUserInfo(id);
         dispatch(setSelectedChat(body));
         dispatch(setChats(data));
+        dispatch(setIsLoading(false));
+      })
+      .catch((err) => {
+        dispatch(setIsLoading(false));
+        console.log(err);
       });
   };
 
@@ -79,6 +98,7 @@ const ChatPage = ({ isAdmin }) => {
     // dispatch(loadMessages(args));
 
     /* TEMPORARY FIX */
+    dispatch(setIsLoading(true));
     if (isAdmin ? isAdminLogin : isLogin) fetchMessages();
     chats && scrollToBottom();
     return () => {
@@ -96,7 +116,8 @@ const ChatPage = ({ isAdmin }) => {
   if (isLoading)
     return (
       <div className="sm:h-[650px] flex flex-col justify-center items-center">
-        <ProgressBar />
+        {/* <ProgressBar /> */}
+        <PageLoader />
       </div>
     );
 

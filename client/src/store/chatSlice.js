@@ -1,14 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  fetchMessages,
-  fetchChatList,
-  fetchChatListFromLocation,
-  postTextMessage,
-} from "../api/chatsApi";
+import { fetchMessages, fetchChatList, postTextMessage } from "../api/chatsApi";
 
 const initialState = {
   isLoading: false,
-  chatList: [],
+  chatList: { history: [], location: [] },
   totalCount: 0,
   selectedChat: null,
   chats: [],
@@ -18,13 +13,12 @@ export const loadChatList = createAsyncThunk(
   "chat/loadChatList",
   async (arg) => {
     try {
-      let response = await fetchChatList(arg.userId);
-      if (response.length === 0)
-        response = await fetchChatListFromLocation(
-          arg.latitude,
-          arg.longitude,
-          arg.isAdmin
-        );
+      let response = await fetchChatList(
+        arg.userId,
+        arg.latitude,
+        arg.longitude,
+        arg.isAdmin
+      );
       return response;
     } catch (error) {
       throw error.response.data;
@@ -74,11 +68,15 @@ const chatSlice = createSlice({
     setChats: (state, action) => {
       state.chats = action.payload;
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loadChatList.pending, (state) => {
         state.isLoading = true;
+        state.chatList = { history: [], location: [] };
       })
       .addCase(loadChatList.fulfilled, (state, action) => {
         state.chatList = action.payload;
@@ -87,6 +85,7 @@ const chatSlice = createSlice({
       })
       .addCase(loadChatList.rejected, (state, action) => {
         state.isLoading = false;
+        state.chatList = { history: [], location: [] };
       })
       .addCase(loadMessages.pending, (state, action) => {
         state.isLoading = true;
@@ -105,7 +104,12 @@ const chatSlice = createSlice({
   },
 });
 
-export const { setLoading, setSelectedChat, setChats, setChatList } =
-  chatSlice.actions;
+export const {
+  setLoading,
+  setSelectedChat,
+  setChats,
+  setChatList,
+  setIsLoading,
+} = chatSlice.actions;
 
 export default chatSlice.reducer;
