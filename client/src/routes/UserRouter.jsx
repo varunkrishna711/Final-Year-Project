@@ -60,7 +60,7 @@ const UserRouter = () => {
         />
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/chat/:id" element={<ChatPage />} />
-        <Route path="/chats" element={<ChatList />} />
+        <Route path="/chats" element={<ChatList isAdmin={false} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

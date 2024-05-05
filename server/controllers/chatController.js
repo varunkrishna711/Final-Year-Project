@@ -18,33 +18,12 @@ class ChatController {
 
   async getChatList(req, res, next) {
     try {
-      const chats = await ChatService.getChatList(req.params.id);
-      const chatList = ToChatList(chats);
-      return res.json(chatList);
-    } catch (error) {
-      console.log(error);
-      return next(error);
-    }
-  }
-
-  async getChatListFromLocation(req, res, next) {
-    if (req.params.lat == "null" || req.params.lgt == "null") {
-      return next(ApiError.badRequest("location cannot be null"));
-    }
-
-    try {
-      let nearByUsers;
-      if (req.query.isAdmin)
-        nearByUsers = await UserService.getVendorsNearby(
-          req.params.lat,
-          req.params.lgt
-        );
-      else
-        nearByUsers = await UserService.getProducersNearby(
-          req.params.lat,
-          req.params.lgt
-        );
-      const chatList = NearByUsersToChatList(nearByUsers, req.query.isAdmin);
+      const userId = req.params.id;
+      const { lat, lgt } = req.query;
+      const isAdmin = req.query.isAdmin === "true";
+      const historyChatList = await ChatService.getChatList(userId);
+      const locationChatList = await getChatListFromLocation(isAdmin, lat, lgt);
+      const chatList = ToChatList(historyChatList, locationChatList, isAdmin);
       return res.json(chatList);
     } catch (error) {
       console.log(error);
@@ -79,7 +58,65 @@ class ChatController {
   }
 }
 
-const ToChatList = (chats) => {};
+const getChatListFromLocation = async (isAdmin, lat, lgt) => {
+  try {
+    let nearByUsers;
+    if (isAdmin) nearByUsers = await UserService.getVendorsNearby(lat, lgt);
+    else nearByUsers = await UserService.getProducersNearby(lat, lgt);
+    const chatList = NearByUsersToChatList(nearByUsers, isAdmin);
+    return chatList;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const ToChatList = (historyChatList, locationChatList, isAdmin) => {
+  let historyIds = new Set([
+    ...historyChatList.sent.map((s) => s.to._id.toString()),
+    ...historyChatList.received.map((r) => r.from.toString()),
+  ]);
+
+  let chatlist = { location: [], history: [] };
+
+  locationChatList.forEach((item) => {
+    if (!historyIds.has(item.userId.toString())) chatlist.location.push(item);
+  });
+
+  historyChatList.received.forEach((item) => {
+    if (historyIds.has(item.from.toString())) {
+      chatlist.history.push(
+        ChatListMapper(item.fromUser, item.countUnread, isAdmin, item.createdAt)
+      );
+      historyIds.delete(item.from.toString());
+    }
+  });
+
+  historyChatList.sent.forEach((item) => {
+    if (historyIds.has(item.to._id.toString())) {
+      chatlist.history.push(
+        ChatListMapper(item.to, 0, isAdmin, item.createdAt)
+      );
+      historyIds.delete(item.to._id.toString());
+    }
+  });
+
+  return chatlist;
+};
+
+const ChatListMapper = (user, countUnread, isAdmin, createdAt) => ({
+  userId: user._id,
+  avatar:
+    user.image ??
+    `https://api.dicebear.com/5.x/avataaars/svg?seed=${user.firstname}`,
+  alt: user.firstname,
+  title: user.firstname + " " + user.lastname,
+  subtitle: isAdmin
+    ? "Sell products, accept bids & more!"
+    : "Buy products, send requests & more!",
+  date: new Date(createdAt),
+  unread: countUnread,
+});
+
 const NearByUsersToChatList = (user, isAdmin) =>
   user.map((p) => ({
     userId: p._id,
@@ -91,7 +128,7 @@ const NearByUsersToChatList = (user, isAdmin) =>
     subtitle: isAdmin
       ? "Sell products, accept bids & more!"
       : "Buy products, send requests & more!",
-    date: new Date(),
+    date: null,
     unread: 0,
   }));
 

@@ -3,7 +3,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 
 const AppLoader = () => {
   return (
-    <div className="apploader min-w-[300px] max-w-[700px] w-1/2 h-screen absolute top-1/2 left-1/2 -translate-x-1/2">
+    <div className="apploader min-w-[300px] max-w-[700px] w-1/2 h-auto absolute left-1/2 top-1/2 -translate-x-1/2">
       <div className="loader-wrapper">
         <LinearProgress
           thickness={20}

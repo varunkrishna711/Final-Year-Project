@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import ChatIcon from "@mui/icons-material/Chat";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import "../styles/pages/mappage.scss";
@@ -55,6 +56,15 @@ const UserProfilePage = () => {
         </p>
         <p className="mt-1 mb-1 text-green-700">#{userData._id}</p>
         <p>{userData.email}</p>
+        <div
+          className="flex flex-row items-center justify-center gap-2 px-3 py-1 my-4 border-2 border-green-800 cursor-pointer rounded-2xl chat"
+          onClick={() => navigate(`../chat/${userData._id}`)}
+        >
+          <ChatIcon className="text-green-800" fontSize="medium" />
+          <span className="text-[#466749] text-[14px] font-[500]">
+            Go to Chats
+          </span>
+        </div>
       </div>
       <div className="flex flex-col items-center content-center w-full mt-8">
         {userData.location && (

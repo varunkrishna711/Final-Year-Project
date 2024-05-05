@@ -23,7 +23,8 @@
 
       .pagecontent-wrapper {
         width: 100%;
-        min-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
+        overflow: auto;
       }
     }
   }
@@ -40,7 +41,8 @@
 
       .pagecontent-wrapper {
         width: 100%;
-        min-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
+        overflow: auto;
       }
     }
   }
@@ -66,7 +68,8 @@
       .pagecontent-wrapper {
         margin-left: 230px;
         width: calc(100vw - 230px);
-        min-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
+        overflow: auto;
       }
     }
   }

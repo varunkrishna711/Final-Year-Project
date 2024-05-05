@@ -3,12 +3,13 @@ import axios from "axios";
 import { Avatar } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import { useNavigate } from "react-router-dom";
 
 const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
-  console.log({ message, from, to, time, unread, isSent });
-
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
-  const messageContainerClass = isSent ? "bg-green-200" : "bg-gray-200";
+  const messageContainerClass = isSent
+    ? "bg-green-200 rounded-ee-none"
+    : "bg-gray-200 rounded-ss-none";
 
   const markAsRead = async () => {
     if (!isSent)
@@ -32,7 +33,7 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
           }
         />
       )}
-      <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
+      <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
         <p>{message}</p>
         <small className="mr-2">{convertDateFormat(time)}</small>
         {isSent &&
@@ -44,28 +45,40 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
       </div>
       {isSent && (
         <Avatar
-          alt={to.firstname}
+          alt={from.firstname}
           src={
-            to.image ??
-            `https://api.dicebear.com/5.x/avataaars/svg?seed=${to.firstname}`
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
           }
         />
       )}
-      {console.log(to.firstname)}
     </div>
   );
 };
 
-const ProductRequestMessage = ({
-  productRequest,
-  from,
-  to,
-  time,
-  read,
-  isSent,
-}) => {
+const ProductRequestMessage = ({ id, chat, isSent }) => {
+  const { from, to, time, isUnread, message } = chat;
+  const navigate = useNavigate();
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
-  const messageContainerClass = isSent ? "bg-green-200" : "bg-gray-200";
+  const messageContainerClass = isSent
+    ? "bg-green-200 rounded-ee-none"
+    : "bg-gray-200 rounded-ss-none";
+
+  const navigateToRequestPage = () => {
+    if (isSent) navigate("../product-request-history");
+    else navigate(`../requests/${message.request._id}`);
+  };
+
+  const markAsRead = async () => {
+    if (!isSent)
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
+      );
+  };
+
+  useEffect(() => {
+    markAsRead();
+  }, []);
   return (
     <div className={`flex items-start mb-2 ${messageClass}`}>
       {!isSent && (
@@ -77,17 +90,37 @@ const ProductRequestMessage = ({
           }
         />
       )}{" "}
-      <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
-        <p>{`${from.firstname} requested: ${productRequest}`}</p>
-        <small>{time}</small>
-        {read ? <DoneAllIcon /> : <DoneIcon />}
+      <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
+        <strong className="text-gray-600">Product Request</strong>
+        <div>
+          <h3 className="text-lg font-semibold">
+            {message.request.itemRequired}
+          </h3>
+          <p className="text-gray-500">{`Quantity: ${message.request.quantityRequired}`}</p>
+          <p className="text-gray-500">{`Delivery Date: ${message.request.toBeDeliveredOn}`}</p>
+        </div>
+        <small className="mr-2">
+          {convertDateFormat(time ?? chat.createdAt)}
+        </small>
+        {isSent &&
+          (!isUnread ? (
+            <DoneAllIcon className="!text-[18px]" />
+          ) : (
+            <DoneIcon className="!text-[18px]" />
+          ))}{" "}
+        <div
+          className="my-1 text-blue-600 cursor-pointer link"
+          onClick={navigateToRequestPage}
+        >
+          {isSent ? "View request history" : "View request details"}
+        </div>
       </div>
       {isSent && (
         <Avatar
-          alt={to.firstname}
+          alt={from.firstname}
           src={
-            to.image ??
-            `https://api.dicebear.com/5.x/avataaars/svg?seed=${to.firstname}`
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
           }
         />
       )}{" "}
@@ -106,13 +139,75 @@ const BroadcastMessage = ({ message, time }) => {
   );
 };
 
-const BidConfirmationMessage = ({ message, time }) => {
+const BidConfirmationMessage = ({ id, chat, isSent }) => {
+  const { from, to, time, isUnread, message } = chat;
+  const messageClass = isSent ? "flex justify-end" : "flex justify-start";
+  const messageContainerClass = isSent
+    ? "bg-green-200 rounded-ee-none"
+    : "bg-gray-200 rounded-ss-none";
+
+  const markAsRead = async () => {
+    if (!isSent)
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
+      );
+  };
+
+  useEffect(() => {
+    markAsRead();
+  }, []);
+
   return (
-    <div className="flex justify-end mb-2">
-      <div className="p-2 text-black bg-green-300 rounded-lg">
-        <p>{message}</p>
-        <small>{time}</small>
+    <div className={`flex items-start mb-2 ${messageClass}`}>
+      {!isSent && (
+        <Avatar
+          alt={from.firstname}
+          src={
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
+          }
+        />
+      )}
+      <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
+        <div className="p-2 rounded-lg">
+          <strong className="text-gray-600">Bid Confirmation</strong>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div>
+              <img
+                src={message.bid.product.images[0]}
+                alt={message.bid.product.name}
+                className="object-cover w-20 h-20 rounded-lg"
+              />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold">
+                {message.bid.product.name}
+              </h3>
+              <p className="text-gray-500">
+                Bid Price {`$${message.bid.price}`}
+              </p>
+            </div>
+          </div>
+          <p>{message.bid.product.description}</p>
+        </div>
+
+        <small className="mr-2">{convertDateFormat(time)}</small>
+        {isSent &&
+          (!isUnread ? (
+            <DoneAllIcon className="!text-[18px]" />
+          ) : (
+            <DoneIcon className="!text-[18px]" />
+          ))}
       </div>
+      {isSent && (
+        <Avatar
+          alt={from.firstname}
+          src={
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
+          }
+        />
+      )}
     </div>
   );
 };
