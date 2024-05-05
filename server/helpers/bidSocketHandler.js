@@ -1,9 +1,7 @@
-const socketHandler = (io) => {
-  // io.of("/bid-socket").on("connection", (socket) => {
-  io.on("connection", (socket) => {
+const bidSocketHandler = (io) => {
+  io.of("/bid-socket").on("connection", (socket) => {
     console.log(`🔥 ${socket.id} user just connected!`);
 
-    //#region Bid Socket handler
     socket.on("createProdBidRoom", (prod_id) => {
       console.log("createRoom request", prod_id);
       socket.join(prod_id);
@@ -31,8 +29,7 @@ const socketHandler = (io) => {
     socket.on("time-msg", (time) => {
       console.log(time);
     });
-    //#endregion
   });
 };
 
-module.exports = socketHandler;
+module.exports = bidSocketHandler;

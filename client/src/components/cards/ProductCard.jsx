@@ -10,6 +10,7 @@ import { addProductToCart } from "../../store/cartSlice";
 import { localAddProductToCart } from "../../store/cartSlice";
 import { openSuccessSnackbar, openErrorSnackbar } from "../../store/modalSlice";
 import { getCategoryByValue } from "../../utils/categoriesEnum";
+// import { bidSocket as socket } from "../../utils/socket";
 import socket from "../../utils/socket";
 
 const ProductCard = (props) => {

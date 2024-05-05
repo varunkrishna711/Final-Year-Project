@@ -589,11 +589,19 @@ class ProductService {
   async getOne(id) {
     const product = await Product.findById(id);
 
+    // var test = await Product.aggregate([
+    //   { $match: { _id: new mongoose.Types.ObjectId(id) } },
+    //   { $unwind: "$bids" },
+    //   { $sort: { "bids.price": -1 } },
+    //   { $group: { _id: "$_id", bids: { $push: "$bids" } } },
+    // ]);
+
     if (!product) {
       throw ApiError.badRequest("Product does not exist");
     }
 
     return product;
+    // return test[0];
   }
 
   async search(text) {

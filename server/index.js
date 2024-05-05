@@ -5,6 +5,8 @@ const fileUpload = require("express-fileupload");
 const router = require("./routes/index");
 const errorHandler = require("./middleware/errorHandlingMiddleware");
 const { default: mongoose } = require("mongoose");
+const bidSocketHandler = require("./helpers/bidSocketHandler");
+const chatSocketHandler = require("./helpers/chatSocketHandler");
 const socketHandler = require("./helpers/socketHandler");
 const PORT = process.env.PORT || 8800;
 
@@ -32,4 +34,9 @@ const server = app.listen(PORT || 8800, () => {
 });
 
 const io = require("socket.io")(server);
+// const bidIO = require("socket.io")(server);
+// const chatIO = require("socket.io")(server);
+
+// bidSocketHandler(bidIO);
+// chatSocketHandler(chatIO);
 socketHandler(io);

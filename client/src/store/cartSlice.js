@@ -51,15 +51,6 @@ export const addProductToCart = createAsyncThunk(
   }
 );
 
-export const placingBid = createAsyncThunk("cart/placingBid", async (arg) => {
-  try {
-    const response = await placeBid(arg);
-    return response;
-  } catch (error) {
-    throw error.response.data;
-  }
-});
-
 export const changeCartProductCount = createAsyncThunk(
   "cart/changeCartProductCount",
   async (arg) => {
@@ -295,7 +286,7 @@ const cartSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(addProductToCart.pending, (state) => {
-        state.isLoading = true;
+        // state.isLoading = true;
         state.isAddToCartLoading = true;
       })
       .addCase(addProductToCart.fulfilled, (state, action) => {
@@ -306,20 +297,6 @@ const cartSlice = createSlice({
         state.isAddToCartLoading = false;
       })
       .addCase(addProductToCart.rejected, (state, action) => {
-        state.isAddToCartLoading = false;
-      })
-      .addCase(placingBid.pending, (state) => {
-        state.isLoading = true;
-        state.isAddToCartLoading = true;
-      })
-      .addCase(placingBid.fulfilled, (state, action) => {
-        state.cartProducts = action.payload?.products;
-        state.count = action.payload?.products?.length;
-        state.subTotal = action.payload?.subTotal;
-        state.isLoading = false;
-        state.isAddToCartLoading = false;
-      })
-      .addCase(placingBid.rejected, (state, action) => {
         state.isAddToCartLoading = false;
       })
       .addCase(removeCartProduct.fulfilled, (state, action) => {

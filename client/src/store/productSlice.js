@@ -6,6 +6,7 @@ import {
   fetchProducts,
 } from "../api/productsApi";
 import { createProductRequest } from "../api/productRequestApi";
+import { placeBid } from "../api/cartApi";
 
 const initialState = {
   product: null,
@@ -21,7 +22,7 @@ const initialState = {
   ingridients: "",
   sizes: ["", "", ""],
   selectedSize: null,
-  bidPrice: null,
+  bidPrice: 0,
   bids: [],
   productCount: 1,
   shortDescription: "",
@@ -116,6 +117,15 @@ export const loadFeaturedProducts = createAsyncThunk(
   }
 );
 
+export const placingBid = createAsyncThunk("cart/placingBid", async (arg) => {
+  try {
+    const response = await placeBid(arg);
+    return response;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -163,7 +173,6 @@ const productSlice = createSlice({
         state.shortDescription = action.payload.shortDescription;
         state.instock = action.payload.instock;
         state.isBidding = action.payload.isBidding;
-        state.bidPrice = action.payload.bidPrice;
         state.bids = action.payload.bids;
         state.isLoading = false;
       })
@@ -190,6 +199,17 @@ const productSlice = createSlice({
       })
       .addCase(loadFeaturedProducts.fulfilled, (state, action) => {
         state.featuredProducts = action.payload.rows;
+      })
+      .addCase(placingBid.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(placingBid.fulfilled, (state, action) => {
+        state.count = action.payload?.products?.length;
+        state.subTotal = action.payload?.subTotal;
+        state.isLoading = false;
+      })
+      .addCase(placingBid.rejected, (state, action) => {
+        state.isLoading = false;
       });
   },
 });
