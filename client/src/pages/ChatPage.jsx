@@ -13,6 +13,7 @@ import { Avatar } from "@mui/material";
 import axios from "axios";
 import {
   BidConfirmationMessage,
+  ProductRequestMessage,
   TextMessage,
 } from "../components/chat/Message";
 import "../styles/pages/chat.scss";
@@ -149,7 +150,14 @@ const ChatPage = ({ isAdmin }) => {
         )}
         {chats?.map((chat) => {
           switch (chat.type) {
-            case "":
+            case "REQUEST":
+              return (
+                <ProductRequestMessage
+                  chat={chat}
+                  id={chat._id}
+                  isSent={chat.from._id == (isAdmin ? adminId : userId)}
+                />
+              );
             case "BID":
               return (
                 <BidConfirmationMessage

@@ -53,7 +53,7 @@ export default function ProductRequestHistoryPage() {
             {request.itemRequired}
           </h2>
           <div className="flex justify-between mb-2 text-green-800">
-            <div>
+            <div className="flex flex-col items-start justify-center">
               <span>
                 Quantity Required: <strong>{request.quantityRequired}</strong>
               </span>

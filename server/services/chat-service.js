@@ -1,5 +1,10 @@
 const { default: mongoose } = require("mongoose");
-const { Chat, User, Product } = require("../db/models/models");
+const {
+  Chat,
+  User,
+  Product,
+  VendorRequirement,
+} = require("../db/models/models");
 
 class ChatService {
   async create(payload) {
@@ -57,20 +62,14 @@ class ChatService {
       .lean()
       .exec();
 
-    const populatedMessage = await Promise.all(
-      messages.map(async (message) => {
-        if (message.type === "BID")
-          message.message.bid.product = await Product.findOne(
-            {
-              _id: message.message.bid.product,
-            },
-            { _id: 1, images: 1, name: 1, price: 1, rating: 1,userId:1 }
-          )
-            .lean()
-            .exec();
+    var populatedMessage = await Promise.all([
+      ...bidMessages(messages),
+      ...requestMessages(messages),
+      ...textMessages(messages),
+    ]);
 
-        return message;
-      })
+    populatedMessage = populatedMessage.sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
     );
 
     const messagesWithDirection = populatedMessage.map((message) => {
@@ -84,5 +83,25 @@ class ChatService {
     return messagesWithDirection;
   }
 }
+
+const bidMessages = (messages) =>
+  messages
+    .filter((m) => m.type === "BID")
+    .map(async (message) => {
+      message.message.bid.product = await Product.findOne(
+        {
+          _id: message.message.bid.product,
+        },
+        { _id: 1, images: 1, name: 1, price: 1, rating: 1, userId: 1 }
+      )
+        .lean()
+        .exec();
+      return message;
+    });
+
+const requestMessages = (messages) =>
+  messages.filter((m) => m.type === "REQUEST");
+
+const textMessages = (messages) => messages.filter((m) => m.type === "TEXT");
 
 module.exports = new ChatService();

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Avatar } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import { useNavigate } from "react-router-dom";
 
 const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
   console.log({ message, from, to, time, unread, isSent });
@@ -51,21 +52,31 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
           }
         />
       )}
-      {console.log(to.firstname)}
     </div>
   );
 };
 
-const ProductRequestMessage = ({
-  productRequest,
-  from,
-  to,
-  time,
-  read,
-  isSent,
-}) => {
+const ProductRequestMessage = ({ id, chat, isSent }) => {
+  const { from, to, time, isUnread, message } = chat;
+  const navigate = useNavigate();
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
   const messageContainerClass = isSent ? "bg-green-200" : "bg-gray-200";
+
+  const navigateToRequestPage = () => {
+    if (isSent) navigate("../product-request-history");
+    else navigate(`../requests/${message.request._id}`);
+  };
+
+  const markAsRead = async () => {
+    if (!isSent)
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
+      );
+  };
+
+  useEffect(() => {
+    markAsRead();
+  }, []);
   return (
     <div className={`flex items-start mb-2 ${messageClass}`}>
       {!isSent && (
@@ -78,9 +89,25 @@ const ProductRequestMessage = ({
         />
       )}{" "}
       <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
-        <p>{`${from.firstname} requested: ${productRequest}`}</p>
-        <small>{time}</small>
-        {read ? <DoneAllIcon /> : <DoneIcon />}
+        <strong className="text-gray-600">Product Request</strong>
+        <div>
+          <h3 className="text-lg font-semibold">
+            {message.request.itemRequired}
+          </h3>
+          <p className="text-gray-500">{`Quantity: ${message.request.quantityRequired}`}</p>
+          <p className="text-gray-500">{`Delivery Date: ${message.request.toBeDeliveredOn}`}</p>
+        </div>
+
+        <small className="mr-2">
+          {convertDateFormat(time ?? chat.createdAt)}
+        </small>
+        {!isUnread ? <DoneAllIcon /> : <DoneIcon />}
+        <div
+          className="my-1 text-blue-600 cursor-pointer link"
+          onClick={navigateToRequestPage}
+        >
+          {isSent ? "View request history" : "View request details"}
+        </div>
       </div>
       {isSent && (
         <Avatar
@@ -134,7 +161,7 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
       )}
       <div className={`p-2 rounded-lg ml-2 ${messageContainerClass}`}>
         <div className="p-2 rounded-lg">
-          <strong>Bid Confirmation</strong>
+          <strong className="text-gray-600">Bid Confirmation</strong>
           <div className="flex items-center justify-between gap-2 mb-2">
             <div>
               <img

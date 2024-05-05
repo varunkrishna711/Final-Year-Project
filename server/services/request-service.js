@@ -1,9 +1,35 @@
 const { VendorRequirement, User } = require("../db/models/models");
 const calculateDistance = require("../helpers/calculateDistance");
+const chatService = require("./chat-service");
+const userService = require("./user-service");
 
 class RequestService {
   async create(payload) {
-    return await VendorRequirement.create(payload);
+    const res = await VendorRequirement.create(payload);
+    const nearByProducers = await userService.getProducersNearby(
+      payload.vendorLocation[0],
+      payload.vendorLocation[1]
+    );
+    const messageData = {
+      from: payload.vendor,
+      type: "REQUEST",
+      message: {
+        request: {
+          _id: res._id,
+          itemRequired: payload.itemRequired,
+          toBeDeliveredOn: payload.toBeDeliveredOn,
+          quantityRequired: payload.quantityRequired,
+        },
+      },
+    };
+
+    var messagePayload = nearByProducers.map((n) => ({
+      ...messageData,
+      to: n._id,
+    }));
+
+    await chatService.create(messagePayload);
+    return res;
   }
 
   async get(id) {
