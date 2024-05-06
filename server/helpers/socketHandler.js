@@ -1,5 +1,4 @@
 const socketHandler = (io) => {
-  // io.of("/bid-socket").on("connection", (socket) => {
   io.on("connection", (socket) => {
     console.log(`🔥 ${socket.id} user just connected!`);
 
@@ -23,15 +22,33 @@ const socketHandler = (io) => {
       io.in(id).emit("stopBid");
     });
 
-    socket.on("disconnect", () => {
-      socket.disconnect();
-      console.log(`🔥: ${socket.id} user disconnected`);
-    });
-
     socket.on("time-msg", (time) => {
       console.log(time);
     });
     //#endregion
+
+    //#region Chat Socket handler
+    socket.on("createChatRoom", (id) => {
+      console.log("createChatRoom request", id);
+      socket.join(id);
+    });
+
+    socket.on("message", ({ data, roomId }) => {
+      console.log("new message");
+      io.in(roomId).emit("newMessage", data);
+    });
+
+    socket.on("unread", (id) => {
+      console.log("unread");
+      io.in(id).emit("setRead");
+    });
+
+    //#endregion
+
+    socket.on("disconnect", () => {
+      socket.disconnect();
+      console.log(`🔥: ${socket.id} user disconnected`);
+    });
   });
 };
 

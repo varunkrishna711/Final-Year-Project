@@ -22,6 +22,7 @@ import { fetchUserInfo } from "../api/userApi";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import { openLoginModal, openSignUpModal } from "../store/modalSlice";
 import PageLoader from "../components/loaders/PageLoader";
+import socket from "../utils/socket";
 
 const ChatPage = ({ isAdmin }) => {
   const { id } = useParams();
@@ -46,18 +47,18 @@ const ChatPage = ({ isAdmin }) => {
   };
 
   const send = () => {
-    dispatch(
-      setChats([
-        ...chats,
-        {
-          from: { _id: isAdmin ? adminId : userId },
-          to: { _id: id },
-          createdAt: new Date(),
-          message: { message },
-          isUnread: true,
-        },
-      ])
-    );
+    const msgData = {
+      from: { _id: isAdmin ? adminId : userId },
+      to: { _id: id },
+      createdAt: new Date().getUTCDate(),
+      message: { message },
+      isUnread: true,
+    };
+    socket.emit("message", {
+      data: msgData,
+      roomId: isAdmin ? adminId + id : id + userId,
+    });
+    dispatch(setChats([...chats, msgData]));
     dispatch(
       sendTextMessage({ userId: isAdmin ? adminId : userId, id, message })
     ).then(() => {
@@ -73,6 +74,7 @@ const ChatPage = ({ isAdmin }) => {
   };
 
   const fetchMessages = () => {
+    // console.log("fetching messages ===================================");
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/api/chat/${
@@ -91,6 +93,22 @@ const ChatPage = ({ isAdmin }) => {
       });
   };
 
+  const handleNewMessage = (data) => {
+    fetchMessages();
+  };
+
+  useEffect(() => {
+    isAdmin
+      ? adminId
+      : userId &&
+        socket.emit("createChatRoom", isAdmin ? adminId + id : id + userId);
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
+
   useEffect(() => {
     /* USING REDUX */
     // const args = { from: userId, to: id };
@@ -99,7 +117,8 @@ const ChatPage = ({ isAdmin }) => {
 
     /* TEMPORARY FIX */
     dispatch(setIsLoading(true));
-    if (isAdmin ? isAdminLogin : isLogin) fetchMessages();
+    if (isAdmin ? isAdminLogin : isLogin && isAdmin ? adminId : userId)
+      fetchMessages();
     chats && scrollToBottom();
     return () => {
       dispatch(setSelectedChat(null));
@@ -111,7 +130,7 @@ const ChatPage = ({ isAdmin }) => {
     scrollToBottom();
   }, [chats]);
 
-  console.log(isAdmin ? adminId : userId, isAdmin);
+  // console.log(, isAdmin);
 
   if (isLoading)
     return (

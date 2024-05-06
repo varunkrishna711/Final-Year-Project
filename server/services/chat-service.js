@@ -89,6 +89,15 @@ class ChatService {
     return { sent: toObjects, received: rec };
   }
 
+  async delete(id1, id2) {
+    return await Chat.deleteMany({
+      $or: [
+        { $and: [{ from: id1 }, { to: id2 }] },
+        { $and: [{ from: id2 }, { to: id1 }] },
+      ],
+    });
+  }
+
   async markAsRead(id) {
     return await Chat.findOneAndUpdate({ _id: id }, { isUnread: false });
   }

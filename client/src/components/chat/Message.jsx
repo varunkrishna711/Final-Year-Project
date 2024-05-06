@@ -1,25 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Avatar } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { useNavigate } from "react-router-dom";
+import socket from "../../utils/socket";
 
 const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
   const messageContainerClass = isSent
     ? "bg-green-200 rounded-ee-none"
     : "bg-gray-200 rounded-ss-none";
+  const [isUnread, setUnRead] = useState(unread);
 
   const markAsRead = async () => {
     if (!isSent)
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
-      );
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnRead(false);
   };
 
   useEffect(() => {
     markAsRead();
+
+    id && socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
   }, []);
 
   return (
@@ -36,8 +50,10 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
       <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
         <p>{message}</p>
         <small className="mr-2">{convertDateFormat(time)}</small>
+        {console.log("=============================", isUnread)}
+
         {isSent &&
-          (!unread ? (
+          (!isUnread ? (
             <DoneAllIcon className="!text-[18px]" />
           ) : (
             <DoneIcon className="!text-[18px]" />
@@ -69,15 +85,29 @@ const ProductRequestMessage = ({ id, chat, isSent }) => {
     else navigate(`../requests/${message.request._id}`);
   };
 
+  const [unread, setUnread] = useState(isUnread);
+
   const markAsRead = async () => {
     if (!isSent)
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
-      );
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnread(false);
   };
 
   useEffect(() => {
     markAsRead();
+
+    socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
   }, []);
   return (
     <div className={`flex items-start mb-2 ${messageClass}`}>
@@ -103,7 +133,7 @@ const ProductRequestMessage = ({ id, chat, isSent }) => {
           {convertDateFormat(time ?? chat.createdAt)}
         </small>
         {isSent &&
-          (!isUnread ? (
+          (!unread ? (
             <DoneAllIcon className="!text-[18px]" />
           ) : (
             <DoneIcon className="!text-[18px]" />
@@ -146,15 +176,29 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
     ? "bg-green-200 rounded-ee-none"
     : "bg-gray-200 rounded-ss-none";
 
+  const [unread, setUnRead] = useState(isUnread);
+
   const markAsRead = async () => {
     if (!isSent)
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
-      );
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnRead(false);
   };
 
   useEffect(() => {
     markAsRead();
+
+    socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
   }, []);
 
   return (
@@ -193,7 +237,7 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
 
         <small className="mr-2">{convertDateFormat(time)}</small>
         {isSent &&
-          (!isUnread ? (
+          (!unread ? (
             <DoneAllIcon className="!text-[18px]" />
           ) : (
             <DoneIcon className="!text-[18px]" />

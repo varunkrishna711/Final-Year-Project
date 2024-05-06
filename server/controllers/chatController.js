@@ -31,6 +31,16 @@ class ChatController {
     }
   }
 
+  async delete(req, res, next) {
+    try {
+      const result = await ChatService.delete(req.params.id1, req.params.id2);
+      return res.json(result);
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
+  }
+
   async getChats(req, res, next) {
     if (req.params.from == "null") {
       return next(ApiError.badRequest("From id cannot be null"));
