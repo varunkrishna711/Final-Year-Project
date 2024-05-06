@@ -98,10 +98,8 @@ const ChatPage = ({ isAdmin }) => {
   };
 
   useEffect(() => {
-    isAdmin
-      ? adminId
-      : userId &&
-        socket.emit("createChatRoom", isAdmin ? adminId + id : id + userId);
+    (isAdmin ? adminId : userId) &&
+      socket.emit("createChatRoom", isAdmin ? adminId + id : id + userId);
     socket.on("newMessage", handleNewMessage);
 
     return () => {
