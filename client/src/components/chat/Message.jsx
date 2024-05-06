@@ -50,7 +50,6 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
       <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
         <p>{message}</p>
         <small className="mr-2">{convertDateFormat(time)}</small>
-        {console.log("=============================", isUnread)}
 
         {isSent &&
           (!isUnread ? (

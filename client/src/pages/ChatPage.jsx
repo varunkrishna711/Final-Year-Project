@@ -54,14 +54,15 @@ const ChatPage = ({ isAdmin }) => {
       message: { message },
       isUnread: true,
     };
-    socket.emit("message", {
-      data: msgData,
-      roomId: isAdmin ? adminId + id : id + userId,
-    });
+
     dispatch(setChats([...chats, msgData]));
     dispatch(
       sendTextMessage({ userId: isAdmin ? adminId : userId, id, message })
     ).then(() => {
+      socket.emit("message", {
+        data: msgData,
+        roomId: isAdmin ? adminId + id : id + userId,
+      });
       fetchMessages();
       setMessage("");
     });
@@ -74,7 +75,6 @@ const ChatPage = ({ isAdmin }) => {
   };
 
   const fetchMessages = () => {
-    // console.log("fetching messages ===================================");
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/api/chat/${
@@ -82,9 +82,9 @@ const ChatPage = ({ isAdmin }) => {
         }/${id}`
       )
       .then(async ({ data }) => {
+        dispatch(setChats(data));
         const body = await fetchUserInfo(id);
         dispatch(setSelectedChat(body));
-        dispatch(setChats(data));
         dispatch(setIsLoading(false));
       })
       .catch((err) => {
@@ -93,7 +93,7 @@ const ChatPage = ({ isAdmin }) => {
       });
   };
 
-  const handleNewMessage = (data) => {
+  const handleNewMessage = () => {
     fetchMessages();
   };
 
@@ -169,7 +169,9 @@ const ChatPage = ({ isAdmin }) => {
             }
           />
           <div
-            onClick={() => navigate(`../../user/${selectedUserChat._id}`)}
+            onClick={() =>
+              !isAdmin && navigate(`../../user/${selectedUserChat._id}`)
+            }
             className="ml-2 cursor-pointer hover:text-green-900"
           >
             {selectedUserChat.firstname} {selectedUserChat.lastname}
