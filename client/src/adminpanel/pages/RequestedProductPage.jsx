@@ -148,7 +148,7 @@ export default function RequestedProductPage() {
             </p>
             <p className="text-xl text-gray-700">
               <strong>Date Requested: </strong>
-              {formatDate(requestDetails?.createdDate)}
+              {formatDate(requestDetails?.createdAt)}
             </p>
             <p className="text-xl text-gray-700">
               <strong>Date To Deliver: </strong>
