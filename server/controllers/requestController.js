@@ -47,7 +47,11 @@ class RequestController {
   async updateRequest(req, res, next) {
     try {
       const requestId = req.params.id;
-      const updatedRequest = await RequestService.updateRequest(requestId);
+      const updatedRequest = await RequestService.updateRequest(
+        requestId,
+        req.body.acceptedProducerId,
+        req.body.acceptedProducerName
+      );
 
       return res.json(updatedRequest);
     } catch (error) {

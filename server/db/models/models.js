@@ -131,22 +131,25 @@ const productCategory = new mongoose.Schema({
   productId: { type: mongoose.Schema.Types.ObjectId },
 });
 
-const vendorRequirement = new mongoose.Schema({
-  vendor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  vendorName: { type: String },
-  vendorDescirption: { type: String },
-  itemRequired: { type: String },
-  quantityRequired: { type: Number },
-  toBeDeliveredOn: { type: Date },
-  vendorLocation: { type: [Number] },
-  isFullfilled: { type: Boolean, default: false },
-  rejectedProducersId: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: [],
+const vendorRequirement = new mongoose.Schema(
+  {
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    vendorName: { type: String },
+    vendorDescirption: { type: String },
+    itemRequired: { type: String },
+    quantityRequired: { type: Number },
+    toBeDeliveredOn: { type: Date },
+    vendorLocation: { type: [Number] },
+    isFullfilled: { type: Boolean, default: false },
+    rejectedProducersId: {
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+    },
+    acceptedProducerName: { type: String },
+    acceptedProducerId: { type: mongoose.Schema.Types.ObjectId },
   },
-  acceptedProducerName: { type: String },
-  acceptedProducerId: { type: mongoose.Schema.Types.ObjectId },
-});
+  { timestamps: true }
+);
 
 const chatSchema = new mongoose.Schema(
   {

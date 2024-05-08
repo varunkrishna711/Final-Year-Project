@@ -40,26 +40,29 @@ class RequestService {
     return await VendorRequirement.findOne({ _id: id }).populate("vendor");
   }
 
-  async updateRequest(id) {
+  async updateRequest(id, acceptedProducerId, acceptedProducerName) {
     try {
       // Find the request by its ID
-      const request = await VendorRequirement.findOne({ _id: id });
+      const response = await VendorRequirement.findOneAndUpdate(
+        { _id: id },
+        { isFullfilled: true, acceptedProducerId, acceptedProducerName }
+      );
 
       // Check if the request was found
-      if (!request) {
-        throw new Error("Request not found");
-      }
+      // if (!request) {
+      //   throw new Error("Request not found");
+      // }
 
       // Set isFullfilled to true
-      request.isFullfilled = true;
-      request.acceptedProducerId = req.body.acceptedProducerId;
-      request.acceptedProducerName = req.body.acceptedProducerName;
+      // request.isFullfilled = true;
+      // request.acceptedProducerId = req.body.acceptedProducerId;
+      // request.acceptedProducerName = req.body.acceptedProducerName;
 
       // Save the updated request
-      await request.save();
+      // await request.save();
 
       // Return the updated request
-      return request;
+      return response;
     } catch (error) {
       // Handle errors (e.g., request not found, database errors)
       console.error("Error updating the request:", error);
