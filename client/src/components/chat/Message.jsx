@@ -226,7 +226,7 @@ const BroadcastMessage = ({ id, chat, isSent }) => {
               >
                 {product.name}
               </h3>
-              <p className="text-gray-500">Price {`$${product.price}`}</p>
+              <p className="text-gray-500">Price {`₹${product.price}`}</p>
             </div>
           </div>
           <p className="max-w-xs">{product.shortDescription}</p>
@@ -312,7 +312,7 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
                 {message.bid.product.name}
               </h3>
               <p className="text-gray-500">
-                Bid Price {`$${message.bid.price}`}
+                Bid Price {`₹${message.bid.price}`}
               </p>
             </div>
           </div>
