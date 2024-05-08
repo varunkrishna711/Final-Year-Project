@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import { deleteProduct } from "../../../store/adminSlice";
+import { deleteProduct, loadProducts } from "../../../store/adminSlice";
 import {
   openSuccessSnackbar,
   openErrorSnackbar,
@@ -26,6 +26,17 @@ const ProductListCard = (props) => {
     dispatch(deleteProduct(props._id)).then((data) => {
       if (data.type === "admin/deleteProduct/fulfilled") {
         dispatch(openSuccessSnackbar("Product successfully deleted"));
+        dispatch(
+          loadProducts({
+            categoryId: null,
+            name: null,
+            page: 1,
+            limit: 10,
+            minPrice: 0,
+            maxPrice: 1000,
+            inStock: null,
+          })
+        );
         dispatch(closeAdminModal());
       }
       if (data.type === "admin/deleteProduct/rejected") {

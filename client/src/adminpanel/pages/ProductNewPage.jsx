@@ -10,9 +10,11 @@ import {
   closeAdminModal,
 } from "../../store/modalSlice";
 import "../styles/pages/productnewpage.scss";
+import { useNavigate } from "react-router-dom";
 
 const ProductNewPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [categoriesId, setCategoriesId] = useState(null);
   const [name, setName] = useState(null);
@@ -26,7 +28,7 @@ const ProductNewPage = () => {
   const [shortDescription, setShortDescription] = useState(null);
   const [instock, setInstock] = useState(true);
   const [imageGallery, setImageGallery] = useState(null);
-  const { id: userId } = useSelector((state) => state.admin.adminInfo);
+  const { _id: userId } = useSelector((state) => state.admin.adminInfo);
 
   const createNewProduct = () => {
     dispatch(
@@ -49,6 +51,7 @@ const ProductNewPage = () => {
       }
       if (data.type === "admin/addNewProduct/rejected") {
         dispatch(openErrorSnackbar(data.error.message));
+        navigate("..");
         dispatch(closeAdminModal());
       }
     });

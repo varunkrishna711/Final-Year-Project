@@ -14,6 +14,7 @@ import { Avatar } from "@mui/material";
 import axios from "axios";
 import {
   BidConfirmationMessage,
+  BroadcastMessage,
   ProductRequestMessage,
   TextMessage,
 } from "../components/chat/Message";
@@ -201,6 +202,14 @@ const ChatPage = ({ isAdmin }) => {
             case "BID":
               return (
                 <BidConfirmationMessage
+                  chat={chat}
+                  id={chat._id}
+                  isSent={chat.from._id == (isAdmin ? adminId : userId)}
+                />
+              );
+            case "BROADCAST":
+              return (
+                <BroadcastMessage
                   chat={chat}
                   id={chat._id}
                   isSent={chat.from._id == (isAdmin ? adminId : userId)}

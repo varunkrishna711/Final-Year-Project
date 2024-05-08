@@ -125,6 +125,7 @@ class ChatService {
       ...bidMessages(messages),
       ...requestMessages(messages),
       ...textMessages(messages),
+      ...broadcastMessages(messages),
     ]);
 
     populatedMessage = populatedMessage.sort(
@@ -152,6 +153,28 @@ const bidMessages = (messages) =>
           _id: message.message.bid.product,
         },
         { _id: 1, images: 1, name: 1, price: 1, rating: 1, userId: 1 }
+      )
+        .lean()
+        .exec();
+      return message;
+    });
+
+const broadcastMessages = (messages) =>
+  messages
+    .filter((m) => m.type === "BROADCAST")
+    .map(async (message) => {
+      message.message.broadcast.product = await Product.findOne(
+        {
+          _id: message.message.broadcast.product,
+        },
+        {
+          _id: 1,
+          images: 1,
+          name: 1,
+          price: 1,
+          userId: 1,
+          shortDescription: 1,
+        }
       )
         .lean()
         .exec();
