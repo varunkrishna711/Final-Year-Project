@@ -133,7 +133,7 @@ const ProductPage = () => {
 
   async function handleAcceptClick(id) {
     const acceptedBid = await axios.put(
-      `http://localhost:8800/api/product/bid/${id}`
+      `${process.env.REACT_APP_API_URL}/api/product/bid/${id}`
     );
 
     dispatch(openSuccessSnackbar("Bid accepted successfully!!"));
