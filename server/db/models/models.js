@@ -50,6 +50,7 @@ const bidSchema = new mongoose.Schema({
   selectedSize: { type: String },
   count: { type: Number },
   price: { type: Number },
+  isAccepted: { type: Boolean, default: false },
 });
 
 const productSchema = new mongoose.Schema({

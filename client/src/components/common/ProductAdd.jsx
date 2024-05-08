@@ -74,6 +74,7 @@ const ProductAdd = () => {
         selectedSize,
         count: productCount,
         price: bidPrice,
+        isAccepted: false
       };
       dispatch(placingBid(bidData)).then((data) => {
         setIsLoading(false);

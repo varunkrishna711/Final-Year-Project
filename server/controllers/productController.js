@@ -356,6 +356,7 @@ const ApiError = require("../error/ApiError");
 const ProductService = require("../services/product-service");
 const { Product, ProductCategory } = require("../db/models/models");
 const axios = require("axios");
+const chatService = require("../services/chat-service");
 
 class ProductController {
   async create(req, res, next) {
@@ -753,20 +754,73 @@ class ProductController {
     }
   }
   async bid(req, res, next) {
-    const { price, productId, selectedCount, userId, email, count } = req.body;
+    const {
+      price,
+      productId,
+      selectedCount,
+      userId,
+      email,
+      count,
+      isAccepted,
+    } = req.body;
 
     try {
       const product = await Product.findOneAndUpdate(
         { _id: productId },
         {
           $push: {
-            bids: { price, selectedCount, vendorId: userId, email, count },
+            bids: {
+              price,
+              selectedCount,
+              vendorId: userId,
+              email,
+              count,
+              isAccepted,
+            },
           },
         }
       );
       return res.json(product);
     } catch (error) {
       return next(error);
+    }
+  }
+
+  async acceptBid(req, res, next) {
+    const bidId = req.params.id;
+    try {
+      const product = await Product.findOneAndUpdate(
+        { "bids._id": bidId },
+        { $set: { "bids.$.isAccepted": true } },
+        { new: true } // Return the modified document
+      );
+      if (!product) {
+        return res.status(404).json({ error: "Product not found" });
+      }
+      const updatedBid = product.bids.find(
+        (bid) => bid._id.toString() === bidId && bid.isAccepted === true
+      );
+      if (!updatedBid) {
+        return res.status(404).json({ error: "Updated bid not found" });
+      }
+      const messageData = {
+        from: product.userId,
+        type: "BID",
+        to: updatedBid.vendorId,
+        message: {
+          bid: {
+            _id: updatedBid._id,
+            product: product._id,
+            count: updatedBid.count,
+            price: updatedBid.price,
+          },
+        },
+      };
+      await chatService.create(messageData);
+      return res.json(updatedBid);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 }

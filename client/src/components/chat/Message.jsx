@@ -254,7 +254,7 @@ const BroadcastMessage = ({ id, chat, isSent }) => {
 };
 
 const BidConfirmationMessage = ({ id, chat, isSent }) => {
-  const { from, to, time, isUnread, message } = chat;
+  const { from, to, createdAt, isUnread, message } = chat;
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
   const messageContainerClass = isSent
     ? "bg-green-200 rounded-ee-none"
@@ -319,7 +319,7 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
           {/* <p>{message.bid.product.description}</p> */}
         </div>
 
-        <small className="mr-2">{convertDateFormat(time)}</small>
+        <small className="mr-2">{convertDateFormat(createdAt)}</small>
         {isSent &&
           (!unread ? (
             <DoneAllIcon className="!text-[18px]" />
