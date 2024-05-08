@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -17,6 +18,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { StaticDateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import {
   openSuccessSnackbar,
   openErrorSnackbar,
@@ -34,12 +37,14 @@ import socket from "../../utils/socket";
 const ProductPage = () => {
   const dispatch = useDispatch();
   const productInfo = useSelector((state) => state.admin.productInfo);
+  const adminInfo = useSelector((state) => state.admin.adminInfo);
 
   const { id } = useParams();
 
   const [selectedDate, handleDateChange] = useState(dayjs());
   const [name, setName] = useState(null);
   const [bids, setBids] = useState([]);
+  const [isAccepted, setIsAccepted] = useState(false);
   const [isBidding, setIsBidding] = useState(false);
   const [autoupdate, refresh] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -61,7 +66,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     dispatch(loadProductInfo(id));
-    console.log(productInfo);
+    // console.log(productInfo);
     setIsBidding(productInfo?.isBidding);
     setBids(
       productInfo?.bids
@@ -125,6 +130,15 @@ const ProductPage = () => {
     socket.emit("stopBid", id);
     refresh(!autoupdate);
   };
+
+  async function handleAcceptClick(id) {
+    const acceptedBid = await axios.put(
+      `http://localhost:8800/api/product/bid/${id}`
+    );
+
+    dispatch(openSuccessSnackbar("Bid accepted successfully!!"));
+    stopBidding();
+  }
 
   const indicators = [];
   const imageGallery = [];
@@ -215,10 +229,11 @@ const ProductPage = () => {
                             <TableCell align="center">Price</TableCell>
                             <TableCell align="center">Quantity</TableCell>
                             <TableCell align="center">Total</TableCell>
+                            <TableCell align="center">Accept</TableCell>
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {console.log(bids)}
+                          {/* {console.log(bids)} */}
                           {bids?.map((bid) => (
                             <TableRow
                               key={bid?.userId}
@@ -235,6 +250,16 @@ const ProductPage = () => {
                               <TableCell align="center">{bid?.count}</TableCell>
                               <TableCell align="center">
                                 {bid?.count * bid?.price}
+                              </TableCell>
+                              <TableCell align="center">
+                                <IconButton
+                                  size="medium"
+                                  color="success"
+                                  aria-label="tick"
+                                  onClick={() => handleAcceptClick(bid?._id)}
+                                >
+                                  <CheckCircleOutlineIcon fontSize="inherit" />
+                                </IconButton>
                               </TableCell>
                             </TableRow>
                           ))}

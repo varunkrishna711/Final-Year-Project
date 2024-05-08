@@ -13,6 +13,7 @@ router.put(
 );
 router.put("/stop_bidding", checkRoleMiddleware, productController.stopBidding);
 router.put("/bid", productController.bid);
+router.put("/bid/:id", productController.acceptBid);
 router.get("/all", productController.getAll);
 router.get("/all/:producer_id", productController.getAllByProducerId);
 router.get("/all-admin", checkRoleMiddleware, productController.getAllAdmin);
