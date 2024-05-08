@@ -73,18 +73,23 @@ const ChatList = ({ isAdmin }) => {
     );
   return (
     <div className="py-4 px-8 min-h-[600px]">
-      {chatList?.history.map((chat) => (
-        <ChatItem
-          id={chat.userId}
-          avatar={chat.avatar}
-          alt={chat.alt}
-          title={chat.title}
-          subtitle={chat.subtitle}
-          date={chat.date}
-          unread={chat.unread}
-          onClick={() => navigate(`../chat/${chat.userId}`)}
-        />
-      ))}
+      {chatList?.history.length > 0 && (
+        <>
+          <h3 className="my-2">Recent</h3>
+          {chatList?.history.map((chat) => (
+            <ChatItem
+              id={chat.userId}
+              avatar={chat.avatar}
+              alt={chat.alt}
+              title={chat.title}
+              subtitle={chat.subtitle}
+              date={chat.date}
+              unread={chat.unread}
+              onClick={() => navigate(`../chat/${chat.userId}`)}
+            />
+          ))}
+        </>
+      )}
 
       {chatList?.location.length > 0 && (
         <>

@@ -1,5 +1,6 @@
 import React from "react";
-import { useState, useRef } from "react";
+import ButtonLoader from "../components/loaders/ButtonLoader";
+import { useState, useEffect } from "react";
 import {
   MapContainer,
   Marker,
@@ -10,12 +11,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPosition } from "../store/mapSlice";
-import { useEffect } from "react";
 import { addProductRequest } from "../store/productSlice";
 import { openErrorSnackbar, openSuccessSnackbar } from "../store/modalSlice";
 
 const ProductRequestPage = (props) => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const userId = useSelector((state) => state.user.userId);
   const dispatch = useDispatch();
   const [productName, setProductName] = useState("");
@@ -26,14 +27,7 @@ const ProductRequestPage = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // console.log({
-    //   userId,
-    //   productName,
-    //   quantity,
-    //   deliveryDate,
-    //   location,
-    // });
+    setIsLoading(true);
 
     dispatch(
       addProductRequest({
@@ -47,10 +41,11 @@ const ProductRequestPage = (props) => {
       .then((data) => {
         dispatch(openSuccessSnackbar("Request added succesfully!"));
         navigate("/product-request-history");
-        console.log("Success");
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
         dispatch(openErrorSnackbar(err.message));
       });
   };
@@ -173,7 +168,7 @@ const ProductRequestPage = (props) => {
             type="submit"
             className="w-full px-4 py-2 font-bold text-white bg-green-500 rounded focus:outline-none focus:shadow-outline"
           >
-            Request
+            {isLoading ? <ButtonLoader /> : "Request"}
           </button>
         </form>
       </div>

@@ -28,6 +28,7 @@ import Carousel from "react-material-ui-carousel";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
+// import { bidSocket as socket } from "../../utils/socket";
 import socket from "../../utils/socket";
 
 const ProductPage = () => {

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ProductImages from "../components/common/ProductImages";
 import ProductMainInfo from "../components/common/ProductMainInfo";
-// import ProductEffects from '../components/common/ProductEffects';
 import ProductShortDescription from "../components/common/ProductShortDescription";
 import ProductSizes from "../components/common/ProductSizes";
 import ProductAdd from "../components/common/ProductAdd";
@@ -15,6 +14,7 @@ import {
 } from "../store/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 import "../styles/pages/productpage.scss";
+// import { bidSocket as socket } from "../utils/socket";
 import socket from "../utils/socket";
 
 const ProductPage = () => {
@@ -41,15 +41,17 @@ const ProductPage = () => {
       }
     });
     // const bids = product?.product?.bids;
-    let highestBid =
-      bids?.length > 0 ? bids.slice().sort((a, b) => b.price - a.price) : null;
-    console.log(highestBid);
-
-    setHighestBid(highestBid?.length > 0 && highestBid[0]?.price);
   }, [id]);
 
   useEffect(() => {
-    dispatch(loadFeaturedProducts());
+    dispatch(loadFeaturedProducts()).then(() => {
+      let price =
+        bids.length > 0
+          ? bids.slice().sort((a, b) => b.price - a.price)[0].price
+          : null;
+
+      setHighestBid(price);
+    });
     socket.emit("createProdBidRoom", id);
     const handleUpdatedBid = (price) => {
       setHighestBid((prevHighestBid) =>

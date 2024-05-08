@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import socket from "../../utils/socket";
 import { setIsBidding } from "../../store/productSlice";
+// import { bidSocket as socket } from "../../utils/socket";
 
 const ProductMainInfo = () => {
   const dispatch = useDispatch();

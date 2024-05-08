@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ProgressBar from "../components/MUI/ProgressBar";
 import {
   loadMessages,
@@ -14,6 +15,7 @@ import { Avatar } from "@mui/material";
 import axios from "axios";
 import {
   BidConfirmationMessage,
+  BroadcastMessage,
   ProductRequestMessage,
   TextMessage,
 } from "../components/chat/Message";
@@ -22,6 +24,7 @@ import { fetchUserInfo } from "../api/userApi";
 import AnnouncementIcon from "@mui/icons-material/Announcement";
 import { openLoginModal, openSignUpModal } from "../store/modalSlice";
 import PageLoader from "../components/loaders/PageLoader";
+import socket from "../utils/socket";
 
 const ChatPage = ({ isAdmin }) => {
   const { id } = useParams();
@@ -46,21 +49,22 @@ const ChatPage = ({ isAdmin }) => {
   };
 
   const send = () => {
-    dispatch(
-      setChats([
-        ...chats,
-        {
-          from: { _id: isAdmin ? adminId : userId },
-          to: { _id: id },
-          createdAt: new Date(),
-          message: { message },
-          isUnread: true,
-        },
-      ])
-    );
+    const msgData = {
+      from: { _id: isAdmin ? adminId : userId },
+      to: { _id: id },
+      createdAt: new Date().getUTCDate(),
+      message: { message },
+      isUnread: true,
+    };
+
+    dispatch(setChats([...chats, msgData]));
     dispatch(
       sendTextMessage({ userId: isAdmin ? adminId : userId, id, message })
     ).then(() => {
+      socket.emit("message", {
+        data: msgData,
+        roomId: isAdmin ? adminId + id : id + userId,
+      });
       fetchMessages();
       setMessage("");
     });
@@ -80,9 +84,9 @@ const ChatPage = ({ isAdmin }) => {
         }/${id}`
       )
       .then(async ({ data }) => {
+        dispatch(setChats(data));
         const body = await fetchUserInfo(id);
         dispatch(setSelectedChat(body));
-        dispatch(setChats(data));
         dispatch(setIsLoading(false));
       })
       .catch((err) => {
@@ -90,6 +94,21 @@ const ChatPage = ({ isAdmin }) => {
         console.log(err);
       });
   };
+
+  const handleNewMessage = () => {
+    fetchMessages();
+  };
+
+  useEffect(() => {
+    (isAdmin ? adminId : userId) &&
+      socket.emit("createChatRoom", isAdmin ? adminId + id : id + userId);
+      socket.on("newMessage", handleNewMessage);
+      scrollToBottom();
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, []);
 
   useEffect(() => {
     /* USING REDUX */
@@ -99,8 +118,8 @@ const ChatPage = ({ isAdmin }) => {
 
     /* TEMPORARY FIX */
     dispatch(setIsLoading(true));
-    if (isAdmin ? isAdminLogin : isLogin) fetchMessages();
-    chats && scrollToBottom();
+    if (isAdmin ? isAdminLogin : isLogin && isAdmin ? adminId : userId)
+      fetchMessages();
     return () => {
       dispatch(setSelectedChat(null));
       dispatch(setChats([]));
@@ -111,7 +130,7 @@ const ChatPage = ({ isAdmin }) => {
     scrollToBottom();
   }, [chats]);
 
-  console.log(isAdmin ? adminId : userId, isAdmin);
+  // console.log(, isAdmin);
 
   if (isLoading)
     return (
@@ -144,6 +163,10 @@ const ChatPage = ({ isAdmin }) => {
     >
       {selectedUserChat && (
         <div className="header w-9/12 min-w-[300px] h-12 my-4 bg-green-100 p-4 rounded-2xl flex items-center">
+          <ArrowBackIcon
+            className="cursor-pointer"
+            onClick={() => navigate("../chats")}
+          />
           <Avatar
             alt={selectedUserChat.firstname}
             src={
@@ -152,8 +175,10 @@ const ChatPage = ({ isAdmin }) => {
             }
           />
           <div
-            onClick={() => navigate(`../../user/${selectedUserChat._id}`)}
-            className="ml-2 cursor-pointer hover:text-green-900"
+            onClick={() =>
+              !isAdmin && navigate(`../../user/${selectedUserChat._id}`)
+            }
+            className="ml-2 cursor-pointer hover:text-green-900 hover:underline"
           >
             {selectedUserChat.firstname} {selectedUserChat.lastname}
           </div>
@@ -182,6 +207,14 @@ const ChatPage = ({ isAdmin }) => {
             case "BID":
               return (
                 <BidConfirmationMessage
+                  chat={chat}
+                  id={chat._id}
+                  isSent={chat.from._id == (isAdmin ? adminId : userId)}
+                />
+              );
+            case "BROADCAST":
+              return (
+                <BroadcastMessage
                   chat={chat}
                   id={chat._id}
                   isSent={chat.from._id == (isAdmin ? adminId : userId)}

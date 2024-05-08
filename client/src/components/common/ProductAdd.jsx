@@ -2,17 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProductCounter from "./ProductCounter";
 import ButtonLoader from "../loaders/ButtonLoader";
-import checkicon from "../../assets/icons/check.svg";
 import {
   setProductCount,
   setTotalPrice,
   setBidPrice,
   setIsBidding,
+  placingBid,
 } from "../../store/productSlice";
-import { placingBid, localAddProductToCart } from "../../store/cartSlice";
-import { openSuccessSnackbar } from "../../store/modalSlice";
+import { localAddProductToCart } from "../../store/cartSlice";
+import { openErrorSnackbar, openSuccessSnackbar } from "../../store/modalSlice";
 import { useSelector, useDispatch } from "react-redux";
 import TextField from "@mui/material/TextField";
+// import { bidSocket as socket } from "../../utils/socket";
 import socket from "../../utils/socket";
 
 const ProductAdd = () => {
@@ -29,7 +30,7 @@ const ProductAdd = () => {
   const isBidding = useSelector((state) => state.product?.isBidding);
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
-  const bidPrice = useSelector((state) => state.product?.bidPrice);
+  const bidPrice = useSelector((state) => state.product.bidPrice);
 
   useEffect(() => {
     dispatch(setTotalPrice(productCount * bidPrice));
@@ -63,6 +64,8 @@ const ProductAdd = () => {
   const placeBid = () => {
     if (!isBidding) return;
     setIsLoading(true);
+    if (!bidPrice || bidPrice <= 0)
+      dispatch(openErrorSnackbar("Bid Price cannot be Empty"));
     if (isLogin) {
       const bidData = {
         userId,
@@ -74,6 +77,7 @@ const ProductAdd = () => {
       };
       dispatch(placingBid(bidData)).then((data) => {
         setIsLoading(false);
+        dispatch(openSuccessSnackbar("Bid Placed"));
         socket.emit("bid", bidData);
         if (data.type === "cart/addProductToCart/fulfilled") {
           dispatch(openSuccessSnackbar("Prodduct added to cart!"));

@@ -1,25 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Avatar } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import { useNavigate } from "react-router-dom";
+import socket from "../../utils/socket";
 
 const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
   const messageClass = isSent ? "flex justify-end" : "flex justify-start";
   const messageContainerClass = isSent
     ? "bg-green-200 rounded-ee-none"
     : "bg-gray-200 rounded-ss-none";
+  const [isUnread, setUnRead] = useState(unread);
 
   const markAsRead = async () => {
     if (!isSent)
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
-      );
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnRead(false);
   };
 
   useEffect(() => {
     markAsRead();
+
+    id && socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
   }, []);
 
   return (
@@ -36,8 +50,9 @@ const TextMessage = ({ id, message, from, to, time, unread, isSent }) => {
       <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
         <p>{message}</p>
         <small className="mr-2">{convertDateFormat(time)}</small>
+
         {isSent &&
-          (!unread ? (
+          (!isUnread ? (
             <DoneAllIcon className="!text-[18px]" />
           ) : (
             <DoneIcon className="!text-[18px]" />
@@ -69,15 +84,29 @@ const ProductRequestMessage = ({ id, chat, isSent }) => {
     else navigate(`../requests/${message.request._id}`);
   };
 
+  const [unread, setUnread] = useState(isUnread);
+
   const markAsRead = async () => {
     if (!isSent)
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
-      );
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnread(false);
   };
 
   useEffect(() => {
     markAsRead();
+
+    socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
   }, []);
   return (
     <div className={`flex items-start mb-2 ${messageClass}`}>
@@ -103,7 +132,7 @@ const ProductRequestMessage = ({ id, chat, isSent }) => {
           {convertDateFormat(time ?? chat.createdAt)}
         </small>
         {isSent &&
-          (!isUnread ? (
+          (!unread ? (
             <DoneAllIcon className="!text-[18px]" />
           ) : (
             <DoneIcon className="!text-[18px]" />
@@ -128,13 +157,98 @@ const ProductRequestMessage = ({ id, chat, isSent }) => {
   );
 };
 
-const BroadcastMessage = ({ message, time }) => {
+const BroadcastMessage = ({ id, chat, isSent }) => {
+  const { from, to, createdAt: time, isUnread, message } = chat;
+  const product = message.broadcast.product;
+  const messageClass = isSent ? "flex justify-end" : "flex justify-start";
+  const messageContainerClass = isSent
+    ? "bg-green-200 rounded-ee-none"
+    : "bg-gray-200 rounded-ss-none";
+  const navigate = useNavigate();
+
+  const [unread, setUnRead] = useState(isUnread);
+
+  const markAsRead = async () => {
+    if (!isSent)
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnRead(false);
+  };
+
+  const handleClick = () => {
+    isSent
+      ? navigate(`../products/${product._id}`)
+      : navigate(`../product/${product._id}`);
+  };
+
+  useEffect(() => {
+    markAsRead();
+
+    socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
+  }, []);
+
   return (
-    <div className="flex justify-end mb-2">
-      <div className="p-2 text-black bg-green-300 rounded-lg">
-        <p>{message}</p>
-        <small>{time}</small>
+    <div className={`flex items-start mb-2 ${messageClass}`}>
+      {!isSent && (
+        <Avatar
+          alt={from.firstname}
+          src={
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
+          }
+        />
+      )}
+      <div className={`p-2 rounded-2xl ml-2 ${messageContainerClass}`}>
+        <div className="p-2 rounded-lg">
+          <strong className="text-gray-600">Broadcast Message</strong>
+          <div className="flex items-center justify-start gap-2 mb-2">
+            <div>
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className="object-cover w-20 h-20 rounded-lg"
+              />
+            </div>
+            <div>
+              <h3
+                className="text-lg font-semibold cursor-pointer hover:underline"
+                onClick={handleClick}
+              >
+                {product.name}
+              </h3>
+              <p className="text-gray-500">Price {`$${product.price}`}</p>
+            </div>
+          </div>
+          <p className="max-w-xs">{product.shortDescription}</p>
+        </div>
+
+        <small className="mr-2">{convertDateFormat(time)}</small>
+        {isSent &&
+          (!unread ? (
+            <DoneAllIcon className="!text-[18px]" />
+          ) : (
+            <DoneIcon className="!text-[18px]" />
+          ))}
       </div>
+      {isSent && (
+        <Avatar
+          alt={from.firstname}
+          src={
+            from.image ??
+            `https://api.dicebear.com/5.x/avataaars/svg?seed=${from.firstname}`
+          }
+        />
+      )}
     </div>
   );
 };
@@ -146,15 +260,29 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
     ? "bg-green-200 rounded-ee-none"
     : "bg-gray-200 rounded-ss-none";
 
+  const [unread, setUnRead] = useState(isUnread);
+
   const markAsRead = async () => {
     if (!isSent)
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`
-      );
+      await axios
+        .put(`${process.env.REACT_APP_API_URL}/api/chat/mark-as-read/${id}`)
+        .then(() => socket.emit("unread", id))
+        .catch(() => console.log("mark as read api failed"));
+  };
+
+  const setRead = () => {
+    setUnRead(false);
   };
 
   useEffect(() => {
     markAsRead();
+
+    socket.emit("createChatRoom", id);
+    socket.on("setRead", setRead);
+
+    return () => {
+      socket.off("setRead", setRead);
+    };
   }, []);
 
   return (
@@ -188,12 +316,12 @@ const BidConfirmationMessage = ({ id, chat, isSent }) => {
               </p>
             </div>
           </div>
-          <p>{message.bid.product.description}</p>
+          {/* <p>{message.bid.product.description}</p> */}
         </div>
 
         <small className="mr-2">{convertDateFormat(time)}</small>
         {isSent &&
-          (!isUnread ? (
+          (!unread ? (
             <DoneAllIcon className="!text-[18px]" />
           ) : (
             <DoneIcon className="!text-[18px]" />
