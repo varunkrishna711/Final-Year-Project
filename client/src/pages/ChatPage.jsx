@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ProgressBar from "../components/MUI/ProgressBar";
 import {
   loadMessages,
@@ -101,7 +102,8 @@ const ChatPage = ({ isAdmin }) => {
   useEffect(() => {
     (isAdmin ? adminId : userId) &&
       socket.emit("createChatRoom", isAdmin ? adminId + id : id + userId);
-    socket.on("newMessage", handleNewMessage);
+      socket.on("newMessage", handleNewMessage);
+      scrollToBottom();
 
     return () => {
       socket.off("newMessage", handleNewMessage);
@@ -118,7 +120,6 @@ const ChatPage = ({ isAdmin }) => {
     dispatch(setIsLoading(true));
     if (isAdmin ? isAdminLogin : isLogin && isAdmin ? adminId : userId)
       fetchMessages();
-    chats && scrollToBottom();
     return () => {
       dispatch(setSelectedChat(null));
       dispatch(setChats([]));
@@ -162,6 +163,10 @@ const ChatPage = ({ isAdmin }) => {
     >
       {selectedUserChat && (
         <div className="header w-9/12 min-w-[300px] h-12 my-4 bg-green-100 p-4 rounded-2xl flex items-center">
+          <ArrowBackIcon
+            className="cursor-pointer"
+            onClick={() => navigate("../chats")}
+          />
           <Avatar
             alt={selectedUserChat.firstname}
             src={
@@ -173,7 +178,7 @@ const ChatPage = ({ isAdmin }) => {
             onClick={() =>
               !isAdmin && navigate(`../../user/${selectedUserChat._id}`)
             }
-            className="ml-2 cursor-pointer hover:text-green-900"
+            className="ml-2 cursor-pointer hover:text-green-900 hover:underline"
           >
             {selectedUserChat.firstname} {selectedUserChat.lastname}
           </div>
